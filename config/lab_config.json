@@ -1,0 +1,9 @@
+{
+    "email_reminder":{
+        "sender":"senderemail@xxx.xxx",
+        "password":"Your password or authorization coder",
+        "sever":"smtp.xxx.xxx",
+        "port":25,
+        "receiver":"receivermail@xxx.xxx"
+    }
+}
