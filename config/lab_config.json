@@ -5,5 +5,15 @@
         "sever":"smtp.xxx.xxx",
         "port":25,
         "receiver":"receivermail@xxx.xxx"
+    },
+    "constant":{
+        "use_amp_true":{
+            "eps":1e-7,
+            "mask_to_value":-1e+4
+        },
+        "use_amp_false":{
+            "eps":1e-10,
+            "mask_to_value":-1e+10
+        }
     }
 }
