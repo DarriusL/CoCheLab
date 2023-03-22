@@ -2,11 +2,121 @@
 
 Code for the edge cache algorithm.
 
-## Content
+## Environment configuration
 
-[TOC]
+```shell
+cd CacheLab
+conda env create -f environment.yml
+conda activate cachelab
+```
 
+## Framework file structure
 
+```
+CacheLab
+├── cache
+│	├── logger
+│	│	└── logger.log
+│	└── unsaved_data
+├── config
+│	├── cl4srec
+│	│	└── cl4srec_ml1m.json
+│	├── duo4srec
+│	│	└── duo4srec_ml1m.json
+│	├── ec4srec
+│	│	└── ec4srec_ml1m.json
+│	└── psac
+│		└── psac_gen_ml1m.json
+├── data
+│	├── augmentation.py
+│	├── datasets
+│	│	├── meta
+│	│	│	├── appliances
+│	│	│	│	├── Appliances.json
+│	│	│	│	└── Appliances_lite.json
+│	│	│	├── beauty
+│	│	│	│	├── All_Beauty.json
+│	│	│	│	└── All_Beauty_lite.json
+│	│	│	├── kindle
+│	│	│	│	├── Kindle_Store.json
+│	│	│	│	└── Kindle_Store_lite.json
+│	│	│	├── ml-1m
+│	│	│	│	├── movies.dat
+│	│	│	│	├── ratings.dat
+│	│	│	│	├── README
+│	│	│	│	└── users.dat
+│	│	│	└── music
+│	│	│		├── Digital_Music.json
+│	│	│		└── Digital_Music_lite.json
+│	│	└── process
+│	│		├── complete
+│	│		│	├── All_Beauty.data
+│	│		│	├── Appliances.data
+│	│		│	├── Digital_Music.data
+│	│		│	├── Kindle_Store.data
+│	│		│	└── ml.data
+│	│		└── lite
+│	│			├── All_Beauty_lite.data
+│	│			├── Appliances_lite.data
+│	│			├── Digital_Music_lite.data
+│	│			├── Kindle_Store_lite.data
+│	│			└── ml.data
+│	├── generator.py
+│	├── processor.py
+│	├── saved
+│	│	├── cl4srec
+│	│	│	└── ml1m
+│	│	│		└── pre_64_2048_2_2
+│	│	│			├── loss.png
+│	│	│			├── model.model
+│	│	│			└── test_result.json
+│	│	├── duo4srec
+│	│	│	└── ml1m
+│	│	│		└── pre_64_2048_2_2
+│	│	└── ec4srec
+│	│		└── ml1m
+│	│			├── post_64_2048_2_2
+│	│			└── pre_64_2048_2_2
+│	└── __init__.py
+|
+├── executor.py
+├── lib
+│	├── callback.py
+│	├── glb_var.py
+│	├── graph_util.py
+│	├── json_util.py
+│	└── util.py
+|
+├── model
+│	├── attnet.py
+│	├── framework
+│	│	├── cl4srec.py
+│	│	├── duo4srec.py
+│	│	├── ec4srec.py
+│	│	└── psac.py
+│	├── loss.py
+│	├── __init__.py
+│	└── __pycache__
+│		├── attnet.cpython-310.pyc
+│		├── loss.cpython-310.pyc
+│		└── __init__.cpython-310.pyc
+├── README.md
+└── Room
+	├── officer.py
+	├── work.py
+	└── __init__.py
+
+```
+
+**Dataset acquisition:**
+
+---
+
+[ML-1M](https://grouplens.org/datasets/movielens/1m/)
+
+[Amazon review lite](https://nijianmo.github.io/amazon/)
+
+[Amazon review](https://cseweb.ucsd.edu/~jmcauley/datasets/amazon_v2/) 
 
 **Algorithms that have been implemented and algorithms that will be supported soon:**
 
@@ -14,15 +124,13 @@ Code for the edge cache algorithm.
 
 CL-based: 
 
-- [x] CL4SRec[[1]](#ref1)
+- [x] CL4SRec[[1]](#ref1)	
 - [x] Duo4SRec(DuoSRec)[[2]](#ref2)
 - [x] EC4SRec[[3]](#ref3)
 
 DL-based:
 
-- [x] PSAC_gen
-
-
+- [x] PSAC_gen[[4]](#ref4)
 
 
 
@@ -36,6 +144,8 @@ DL-based:
 {
 	"net":{},
 	"seed":{},
+    "linux_fast_num_workers":{},
+    "email_reminder":{},
 	"augmentation":{},
 	"dataset":{},
 	"train":{},
@@ -43,54 +153,47 @@ DL-based:
 }
 ```
 
-Except for the network and augmentation configuration, other configurations are similar, benchmark uses the same other configuration for the same dataset
+seed: random seed
+
+linux_fast_num_workers: num_workers for dataloader, work when system is Linux 
+
+
+
+**Except for the network and augmentation configuration, other configurations are similar, benchmark uses the same other configuration for the same dataset**.
 
 @benchmark configuration for dataset ML-1M on other configuration
 
 ```json
 {
 	...
-    //Random seed for runtime setting
     "seed": 5566,
+    "linux_fast_num_workers": 4,
+    "email_reminder":true,
     "dataset": {
-        //dataset type, easy to identify, does not work in the program
         "type": "ml1m",
-        //path to the dataset
         "path": "./data/datasets/process/complete/ml.data",
-        //Whether to limit the length of each sequence in the dataset
         "crop_or_fill": true,
-        //When the length of the sequence is limited, the mask filled when the length does not reach the limited length,works when crop_or_fill is true
         "fill_mask": 0,
-        //The length of the sequence limit, works when crop_or_fill is true
         "limit_length": 100
     },
     "train": {
-        //The batch size used by an epoch
         "batch_size": 256,
-        //The total number of epochs for training
-        "max_epoch": 100,
-        //Validation is performed every valid_step
+        "max_epoch": 200,
         "valid_step": 10,
-        //Whether to use gpu during training
         "gpu_is_available": true,
-        //Optimizer for model parameters during training
-        //Adam and AdamW is currently supported
+        "use_amp": true,
         "optimizer_type": "adam",
-        //initial learning rate
-        "learning_rate": 0.001,
-        //weight_decay for regularization
+        "learning_rate": 5e-05,
         "weight_decay": 0.001,
         "betas": [
             0.9,
             0.999
         ],
-        //whether to use lr schedule, OneCycleLR for here
         "use_lr_schedule": true,
-        "lr_max": 0.001,
-        //Training trend of the loss function
+        "lr_max": 0.0001,
         "metric_less": true,
         "save": true,
-        "model_save_path": "./data/saved/cl4srec/ml1m/pre_64_512_2_1/model.model"
+        "model_save_path": "./data/saved/cl4srec/ml1m/pre_64_2048_2_2/model.model"
     },
     "test": {
         "batch_size": 256,
@@ -132,20 +235,19 @@ Network and augmentation configuration for CL4SRec on dataset ML-1M
     "net": {
         "type": "CL4SRec",
         "is_norm_fist": true,
+        "is_net_manual_init": false,
+        "is_cl_method": true,
         "d": 64,
-        "d_q": 32,
-        "d_k": 32,
-        "d_v": 32,
-        "d_fc": 32,
+        "d_fc": 2048,
         "n_heads": 2,
         "n_layers": 2,
         "posenc_buffer_size": 200,
-        "input_types": 3549,
+        "input_types": 3608,
         "mask_item": [
             0
         ],
-        "lambda_cl": 0.2,
-        "lambda_cls": 0.5
+        "lambda_cl": 0.1,
+        "lambda_cls": 0.1
     },
     "augmentation": {
         "type": "Basic",
@@ -155,9 +257,9 @@ Network and augmentation configuration for CL4SRec on dataset ML-1M
             "reorder"
         ],
         "scale": [
-            0.5,
-            0.5,
-            0.5
+            0.4,
+            0.4,
+            0.4
         ],
         "opr_sample_num": 2,
         "mask_to": 0
@@ -283,31 +385,24 @@ process dataset
 
 ```
 python executor.py --data_process=lite
+python executor.py --data_process=complete
 ```
 
-
-
-train and test CL4SRec on dataset(ml-1m)
+CL4SRec on dataset(ml-1m)
 
 ```shell
+python executor.py -cfg='./config/cl4srec/cl4srec_ml1m.json' --mode=train
 python executor.py -cfg='./config/cl4srec/cl4srec_ml1m.json' --mode=train_and_test
+python executor.py -sm='./data/saved/cl4srec/ml1m/pre_64_2048_2_2/model.model' --mode=test
 ```
 
-test
-
-```shell
-python executor.py -sm='./data/saved/cl4srec/ml1m/pre_64_2048_2_1/model.model' --mode=test
-```
-
-train and test Duo4SRec on dataset(ml-1m)
+Duo4SRec on dataset(ml-1m)
 
 ```shell
 python executor.py -cfg='./config/duo4srec/duo4srec_ml1m.json' --mode=train_and_test
 ```
 
-
-
-train and test EC4SRec on dataset(ml-1m)
+EC4SRec on dataset(ml-1m)
 
 ```
 python executor.py -cfg='./config/ec4srec/ec4srec_ml1m.json' --mode=train_and_test
@@ -321,5 +416,4 @@ python executor.py -cfg='./config/ec4srec/ec4srec_ml1m.json' --mode=train_and_te
 1. <spin id='ref2'></spin>Qiu R, Huang Z, Yin H, et al. Contrastive learning for representation degeneration problem in sequential recommendation[C]//Proceedings of the fifteenth ACM international conference on web search and data mining. 2022: 813-823.
 1. <spin id='ref3'></spin>Wang L, Lim E P, Liu Z, et al. Explanation guided contrastive learning for sequential recommendation[C]//Proceedings of the 31st ACM International Conference on Information & Knowledge Management. 2022: 2017-2027.
 1. <spin id='ref4'></spin>Zhang Y, Li Y, Wang R, et al. PSAC: Proactive sequence-aware content caching via deep learning at the network edge[J]. IEEE Transactions on Network Science and Engineering, 2020, 7(4): 2145-2154.
-
 
