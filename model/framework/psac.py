@@ -1,70 +1,6 @@
 import torch
 from lib import glb_var, util
-
-class VrtConv(torch.nn.Module):
-    ''' Vertical Convolutional Network for PSAC_gen
-
-    Parameters:
-    -----------
-
-    d: int
-        The length of the vector to which the embedding is converted
-    
-    num_kernels: int, optional
-        the numbers of the kernels
-        default: 16
-    
-    L: int, optional
-        the part of the sliding_window length
-        default: 3
-    
-    Methods:
-    --------
-
-    forward(self, Ec):
-        argin:
-            -Ec: (batch_size, slide_len, L, d)
-        argout:
-            -output: (batch_size, slide_len, 1, num_kernels)
-
-    '''
-    def __init__(self, d, batch_size, num_kernels = 16, L = 3) -> None:
-        super().__init__();
-        self.L = L;
-        self.num_kernels = num_kernels;
-        #calculate h repeat times
-        rpt = num_kernels//L;
-        endptr = num_kernels%L;
-        h = list(range(1, L + 1));
-        #create conv layers
-        #   take default parameter as example
-        #   there're 3 kind of height of kernels(h): 1, 2, 3
-        #   output: (L-h+1, 1), so 3 maxpool is need
-        layers = [torch.nn.Conv2d(batch_size, batch_size, (h[j], d)) for _ in range(rpt) for j in range(L)];
-        for i in range(endptr):
-            layers.append(torch.nn.Conv2d(batch_size, batch_size, (h[i], d)));
-        self.convlayers = torch.nn.ModuleList(layers);
-        #create maxpool layers
-        h = list(map(lambda x: L-x+1, h));
-        self.maxpool_layers = torch.nn.ModuleList([torch.nn.MaxPool2d((h[j], 1), stride = 1) for j in range(L)]);
-        #activation function
-        self.relu = torch.nn.ReLU();
-    
-    def forward(self, Ec):
-        #officeal format: (batch, channal, height, width)
-        
-        #Ec: (batch_size, slide_len, L, d)
-        #transpose Ec to (slide_len, batch_size, L, d)
-        Ec = Ec.clone().transpose(0, 1);
-        slide_len = Ec.shape[0];
-        batch_size = Ec.shape[1];
-        #output:(slide_len, batch_size, num_kernels, 1)
-        output = torch.zeros((slide_len, batch_size, self.num_kernels, 1)).to(glb_var.get_value('device'));
-        for idx, layer in enumerate(self.convlayers):
-            ptr = idx%self.L;
-            output[:, :, idx, :] = self.relu(self.maxpool_layers[ptr](layer(Ec)))[:, :, 0, :];
-        #returned output:(batch_size, slide_len, num_kernels, 1) -> (batch_size, slide_len, 1, num_kernels)
-        return output.transpose(0, 1).transpose(-1, -2);
+from model.cnnnet import VerticalConv
 
 class AttnNet(torch.nn.Module):
     ''' Attention Network for PSAC_gen
@@ -163,12 +99,13 @@ class LSTFcNet(torch.nn.Module):
         self.relu = torch.nn.ReLU();
         self.softmax = torch.nn.Softmax(dim = -1);
         self.fc2 = torch.nn.Linear(2 * d, req_set_len);
+        self.dropout = torch.nn.Dropout(0.1);
     
     def forward(self, conv_output, attn, Eu):
         #conv_output:(batch_size, slide_len, 1, n)
         #attn:(batch_size, slide_len, 1, L*d)
         #fc1_input:(batch_size, slide_len, 1, n + L*d)
-        fc1_input = torch.cat((conv_output, attn), dim = -1);
+        fc1_input = self.dropout(torch.cat((conv_output, attn), dim = -1));
         #fc1_output:(batch_size, slide_len, 1, d)
         fc1_output = self.relu(self.fc1(fc1_input));
         #Eu:(batch_size, 1, d)
@@ -184,9 +121,9 @@ class LSTFcNet(torch.nn.Module):
         #u_attn:  (batch_size, slide_len, d, d) -sum-> (batch_size, slide_len, d)
         u_attn = (alpha * fc1_output.repeat(1, 1, d, 1)).sum(dim = -1);
 
-        #fc2_intput: (batch_size, slide_len, 2 * d) -> (batch_size, 2 * d)
-        fc2_intput = torch.cat((Eu.repeat(1, slide_len, 1), u_attn), dim = -1).mean(dim = 1);
-        #fc2_output: (batch_size, req_set_len) -> (batch_size, req_set_len)
+        #fc2_intput: (batch_size, slide_len, 2 * d)
+        fc2_intput = torch.cat((Eu.repeat(1, slide_len, 1), u_attn), dim = -1);
+        #fc2_output: (batch_size, slide_len, req_set_len)
         fc2_output = self.fc2(fc2_intput);
 
         return fc2_output;
@@ -221,27 +158,54 @@ class PSAC_gen(torch.nn.Module):
         super().__init__();
         util.set_attr(self, net_cfg_dict);
         self.encoder = torch.nn.Embedding(self.input_types, self.d);
-        self.VrtConv = VrtConv(self.d, batch_size, self.n_kernels, self.L);
+        #self.VrtConv = VrtConv(self.d, batch_size, self.n_kernels, self.L);
+        self.VrtConv = VerticalConv(batch_size, self.L, self.d, self.n_kernels)
         self.self_attn = AttnNet(self.d);
         self.LSTFcNet = LSTFcNet(self.d, self.input_types, self.n_kernels, self.L);
+        if net_cfg_dict['is_embed_net_manual_init']:
+            self.apply(self._init_para);
+    
+    def _init_para(self, module):
+        if isinstance(module, torch.nn.Embedding):
+            module.weight.data.normal_(mean=0.0, std=1/self.encoder.embedding_dim)
+        if isinstance(module, torch.nn.Linear):
+            module.weight.data.normal_()
+            if module.bias is not None:
+                module.bias.data.zero_()
     
     def forward(self, su):
-        #su: (batch_size, req_len)
+        #su: (batch_size, slide_len, L)
         #Ec: (batch_size, slide_len, L, d)
-        Ec = self.encoder(su.unfold(-1, self.L, self.L));
+        Ec = self.encoder(su);
         #Eu: (batch_size, 1, d)
-        Eu = self.encoder(su).mean(dim = 1).unsqueeze(1);
+        Eu = self.encoder(su.reshape(su.shape[0], -1)).mean(dim = 1).unsqueeze(1);
         #o: (batch_size, slide_len, 1, n)
-        o = self.VrtConv(Ec);
+        o = self.VrtConv(Ec.transpose(0,1)).transpose(0,1).transpose(-1, -2);
         #attn: (batch_size, slide_len, 1, L*d)
         attn = self.self_attn(Ec);
-        #pro_logits: (batch_size, slide_len, T, req_set_len)
+        #pro_logits: (batch_size, slide_len, req_set_len)
         pro_logits = self.LSTFcNet(o, attn, Eu);
         return pro_logits
     
     def cal_loss(self, su, next_item):
         '''Calculate loss for PSAC_gen
+        Parameters:
+        -----------
+        su:torch.Tensor
+        (batch_size, slide_len, L)
+
+        next_item:torch.Tensor
+        (batch_size, slide_len)
         '''
-        #logits: (1, slide_len, T, req_types)
-        logits = self.forward(su);
-        return torch.nn.CrossEntropyLoss(ignore_index = self.mask_item[0])(logits.reshape(-1, logits.shape[-1]), next_item);
+        #pos_logits: (batch_size, slide_len, req_types)
+        pos_logits = self.forward(su);
+        loss = torch.nn.CrossEntropyLoss(ignore_index = self.mask_item[0])(pos_logits.reshape(-1, pos_logits.shape[-1]), next_item.reshape(-1));
+        #Eu:(batch_size, d, 1)
+        Eu = self.encoder(su.reshape(su.shape[0], -1)).mean(dim = 1).unsqueeze(-1);
+        #(batch_size, neg_samples)
+        neg_items = torch.randint(0, self.input_types, (Eu.size(0), self.neg_samples), device = glb_var.get_value('device'));
+        #batch_size, neg_samples
+        neg_logits = torch.matmul(self.encoder(neg_items), Eu)
+        pos_loss = torch.nn.functional.binary_cross_entropy_with_logits(pos_logits, torch.ones_like(pos_logits));
+        neg_loss = torch.nn.functional.binary_cross_entropy_with_logits(neg_logits, torch.ones_like(neg_logits));
+        return loss + pos_loss + neg_loss;

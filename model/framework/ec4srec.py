@@ -1,10 +1,10 @@
 import torch
 from lib import util,glb_var
 from model import attnet, loss
-from data.generator import RecDataSet
+from data.generator import NextReqDataSet
 
 class Encoder(torch.nn.Module):
-    '''Encoder for CL4SRec
+    '''Encoder for EC4SRec
 
     Parameters:
     -----------
@@ -44,24 +44,28 @@ class Encoder(torch.nn.Module):
         else:
             encoderlayer = attnet.EncoderLayer_PostLN;
         self.mask_item = mask_item;
-        self.seq_embed = torch.nn.Embedding(input_types, d);
-        self.pos_enc = attnet.PositionEncoding(d, max_len = posenc_buffer_size)
+        self.seq_embed = torch.nn.Embedding(input_types, d, padding_idx = self.mask_item[0]);
+        self.pos_embed = attnet.LearnablePositionEncoding(d, posenc_buffer_size);
+        self.embed_dropout = torch.nn.Dropout(0.1);
+        #bad performance: self.pos_embed = attnet.PositionEncoding(d, max_len = posenc_buffer_size)
         self.Layers = torch.nn.ModuleList(
             [encoderlayer(d, d_fc, n_heads) for _ in range(n_layers)]
         )
 
-    
     def forward(self, enc_input):
         #enc_input:(batch_size, req_len)
         #enc_output:(batch_size, req_len, d)
         #mask:(batch_size, seq_len, seq_len)
-        enc_output = self.pos_enc(self.seq_embed(enc_input));
+        #enc_output = self.pos_embed(self.seq_embed(enc_input)) * self.seq_embed.embedding_dim ** 0.5;
+        enc_output = self.seq_embed(enc_input)* self.seq_embed.embedding_dim ** 0.5;
+        enc_output = enc_output + self.pos_embed(enc_input);
+        enc_output = self.embed_dropout(enc_output);
         mask = torch.bitwise_or(
             attnet.attn_pad_msk(enc_input, enc_input.shape[1], mask_item = self.mask_item),
             attnet.attn_subsequence_mask(enc_input)
         )
         for layer in self.Layers:
-            enc_output = layer(enc_output.clone(), mask);
+            enc_output = layer(enc_output, mask);
         #return hu:(batch_size, d)
         return enc_output[:, -1, :];
 
@@ -84,8 +88,22 @@ class EC4SRec(torch.nn.Module):
         util.set_attr(self, net_cfg_dict);
         self.encoder = Encoder(self.d, self.d_fc, self.n_heads, self.n_layers, 
                                self.input_types, self.posenc_buffer_size, self.mask_item);
-        self.loss_func = loss.BPRLoss()
+        self.loss_func = loss.BPRLoss(gamma = glb_var.get_value('eps'))
         self.classfy_func = torch.nn.CrossEntropyLoss(ignore_index = self.mask_item[0]);
+        if net_cfg_dict['is_embed_net_manual_init']:
+            self.apply(self._init_para);
+    
+    def _init_para(self, module):
+        if isinstance(module, torch.nn.Embedding):
+            module.weight.data.normal_(mean=0.0, std=1/self.encoder.seq_embed.embedding_dim)
+        elif isinstance(module, torch.nn.LayerNorm):
+            module.bias.data.zero_()
+            module.weight.data.fill_(1.0)
+        if isinstance(module, torch.nn.Linear):
+            module.weight.data.normal_()
+            if module.bias is not None:
+                module.bias.data.zero_()
+    
 
     def predictor(self, hu):
         '''Predictor for Duo4SRec
@@ -115,8 +133,17 @@ class EC4SRec(torch.nn.Module):
         #output:(batch_size, req_types)
         return self.predictor(hu);
 
-    def _impt_score_step(self, su, batch_idx, impt_score):
+    def _impt_score_step(self, su):
         '''step for the loop of method[cal_impt_score]
+
+        Parameters:
+        -----------
+        su:torch.Tensor
+        (1, req_len)
+
+        Returns:
+        --------
+        (req_len)
         '''
         su = su.to(glb_var.get_value('device'));
         #next_item_logits:(1, req_types)
@@ -127,9 +154,9 @@ class EC4SRec(torch.nn.Module):
             inputs = self.encoder.seq_embed.weight,
             grad_outputs = torch.ones_like(next_item_logits)
         )[0];
-        impt_score[batch_idx, :] = s[su, :].sum(dim = -1);
-        impt_score[batch_idx, :] = impt_score[batch_idx, :] / impt_score[batch_idx, :].sum();
-        return impt_score;
+        s[torch.isnan(s) | torch.isinf(s)] = glb_var.get_value('eps');
+        #(req_len)
+        return s[su, :].sum(dim = -1);
 
 
     def cal_impt_score(self, dataset):
@@ -152,28 +179,24 @@ class EC4SRec(torch.nn.Module):
             torch.cuda.empty_cache();
         #su_batch:(batch_size, req_len)
         _, su_batch, _ = iter(
-            torch.utils.data.DataLoader(RecDataSet(dataset, mode = 'train'), batch_size = dataset['u_num'], shuffle = True)
+            torch.utils.data.DataLoader(NextReqDataSet(dataset, mode = 'train'), batch_size = dataset['u_num'])
             ).__next__();
         impt_score_train = torch.zeros((dataset['u_num'], su_batch.shape[1])).to(glb_var.get_value('device'));
         for batch_idx in range(dataset['u_num']):
-            impt_score_train = self._impt_score_step(su_batch[[batch_idx], :].clone(), batch_idx, impt_score_train.clone());
+            impt_score_train[batch_idx, :] = self._impt_score_step(su_batch[[batch_idx], :].clone());
         
         #validation important score
         if hasattr(torch.cuda, 'empty_cache'):
             torch.cuda.empty_cache();
         #su_batch:(batch_size, req_len)
         _, su_batch, _ = iter(
-            torch.utils.data.DataLoader(RecDataSet(dataset, mode = 'valid'), batch_size = dataset['u_num'], shuffle = True)
+            torch.utils.data.DataLoader(NextReqDataSet(dataset, mode = 'valid'), batch_size = dataset['u_num'])
             ).__next__();
         impt_score_valid = torch.zeros((dataset['u_num'], su_batch.shape[1])).to(glb_var.get_value('device'));
         for batch_idx in range(dataset['u_num']):
-            impt_score_valid = self._impt_score_step(su_batch[[batch_idx], :].clone(), batch_idx, impt_score_valid.clone());
+            impt_score_valid[batch_idx, :] = self._impt_score_step(su_batch[[batch_idx], :].clone());
+        glb_var.get_value('logger').info('Important score update complete.')
         return impt_score_train.clone(), impt_score_valid.clone();
-
-
-            
-
-
 
     def cal_loss(self, su_batch, next_req_bacth, su_batch_operat_tuple, batch_idx):
         ''' Calculate the loss for training the model
@@ -197,7 +220,7 @@ class EC4SRec(torch.nn.Module):
         '''
         #unpack
         su_opr_pos_list, su_opr_neg_list, su_opr_rtrl_list = su_batch_operat_tuple;
-        batch_size, seq_len = su_batch.shape;
+        batch_size, _ = su_batch.shape;
         #user representation:(1, d)
         su = su_batch[batch_idx, :].unsqueeze(0);
         hu = self.encoder(su.clone());
@@ -205,14 +228,9 @@ class EC4SRec(torch.nn.Module):
         next_req = next_req_bacth[batch_idx].unsqueeze(0);
         hv_tgt = self.encoder(next_req.unsqueeze(0));
         # generate item representation
-        #h_reqs:(req_types, d)
-        h_reqs = self.encoder(torch.arange(self.input_types).unsqueeze(-1).to(glb_var.get_value('device'))); 
-        #h_neg_req:(req_types - 1, d)
-        h_neg_req = h_reqs[torch.arange(h_reqs.shape[0]).to(glb_var.get_value('device')) != next_req, :];
-
-        #Classified loss
-        next_req_pre = self.forward(su);
-        loss_cls = self.classfy_func(next_req_pre, next_req);
+         #h_reqs:(req_types - 1, d)
+        h_neg_req = self.encoder(torch.arange(self.input_types).unsqueeze(-1).to(glb_var.get_value('device'))
+                              [torch.arange(self.input_types).to(glb_var.get_value('device')) != next_req, :]); 
 
         #Recomendation loss
         rec_pos_score = torch.matmul(hu, hv_tgt.transpose(0, 1));
@@ -235,31 +253,31 @@ class EC4SRec(torch.nn.Module):
         ssl_pos_score_neg = torch.matmul(hu_a1, hu_opr_pos.mean(dim = 0).unsqueeze(-1));
         ssl_pos_loss = self.loss_func(ssl_pos_score_pos, ssl_pos_score_neg);
         #SSL neg loss
+        #hu_aneg:(1, d)
         hu_aneg = self.encoder(su_opr_neg_list[0][[batch_idx], :]);
+        #hu_a_:(batch - 1, d)
         hu_a_ = self.encoder(su_opr_neg_list[0][torch.arange(batch_size) != batch_idx, :]);
-        h1 = torch.cat((self.encoder(su_opr_pos_list[0]),self.encoder(su_opr_pos_list[1])),dim = 0);
-        alpha1 = h1.shape[0] + batch_size - 1;
-        h2 = self.encoder(su_opr_neg_list[0][torch.arange(batch_size) != batch_idx, :]);
-        alpha2 = h2.shape[0];
-        h = torch.cat((h1 * alpha1, h2 * alpha2), dim = 0).sum(dim = 0) / (alpha1 + alpha2);
+        #hu_apos:(2*batch, d)
+        hu_apos = torch.cat((self.encoder(su_opr_pos_list[0]), self.encoder(su_opr_pos_list[1])),dim = 0);
         
-        ssl_neg_loss =  - ((torch.matmul(hu_aneg, hu_a_.mean(dim = 0).unsqueeze(-1)) 
-                                     - torch.matmul(hu_aneg, h.unsqueeze(-1))))/(batch_size - 1);
+        ssl_neg_score_pos = torch.matmul(hu_aneg, hu_a_.mean(dim = 0).unsqueeze(-1));
+        ssl_neg_score_neg = torch.matmul(hu_aneg, hu_apos.mean(dim = 0).unsqueeze(-1));
+        ssl_neg_loss = self.loss_func(ssl_neg_score_pos, ssl_neg_score_neg);
         #Supervised Contrastive learning loss
-        su_neg = torch.zeros((0, seq_len)).to(glb_var.get_value('device'));
+        if su_opr_rtrl_list[batch_idx] is torch.nan:
+            return loss_rec + self.lambda_sl_pos * ssl_pos_loss + self.lambda_sl_neg * ssl_neg_loss; 
+        su_neg = su_batch[torch.arange(batch_size).to(glb_var.get_value('device'))!= batch_idx, :];
         for i in range(batch_size):
-            if not torch.any(torch.as_tensor(su_opr_rtrl_list[i]).isnan()):
+            if not torch.any(torch.as_tensor(su_opr_rtrl_list[i]).isnan()) and i != batch_idx:
                 su_neg = torch.cat((su_neg, su_opr_rtrl_list[i]), dim = 0);
-        if su_opr_rtrl_list[batch_idx] is torch.nan or su_neg.shape[0] == 0:
-            return loss_rec + self.lambda_cls * loss_cls + self.lambda_sl_pos * ssl_pos_loss + self.lambda_sl_neg * ssl_neg_loss; 
         #hu_rtrl:(1, d)
         hu_rtrl = self.encoder(su_opr_rtrl_list[batch_idx]);
         #su_neg:(new_batch_size, d)
-        hu_neg = self.encoder(su_neg.to(torch.int64));
+        hu_neg = self.encoder(su_neg);
         
         sl_pos_score = torch.matmul(hu, hu_rtrl.transpose(0, 1))/self.tau;
         sl1_neg_score = torch.matmul(hu, hu_neg.mean(dim = 0).unsqueeze(-1))/self.tau;
         sl2_neg_score = torch.matmul(hu_rtrl, hu_neg.mean(dim = 0).unsqueeze(-1))/self.tau;
 
         loss_cl = self.loss_func(sl_pos_score, sl1_neg_score) + self.loss_func(sl_pos_score, sl2_neg_score);
-        return loss_rec + self.lambda_cl * loss_cl + self.lambda_cls * loss_cls + self.lambda_sl_pos * ssl_pos_loss + self.lambda_sl_neg * ssl_neg_loss;
+        return loss_rec + self.lambda_cl * loss_cl + self.lambda_sl_pos * ssl_pos_loss + self.lambda_sl_neg * ssl_neg_loss;

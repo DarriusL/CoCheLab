@@ -44,8 +44,10 @@ class Encoder(torch.nn.Module):
         else:
             encoderlayer = attnet.EncoderLayer_PostLN;
         self.mask_item = mask_item;
-        self.seq_embed = torch.nn.Embedding(input_types, d);
-        self.pos_enc = attnet.PositionEncoding(d, max_len = posenc_buffer_size)
+        self.seq_embed = torch.nn.Embedding(input_types, d, padding_idx = self.mask_item[0]);
+        self.pos_embed = attnet.LearnablePositionEncoding(d, posenc_buffer_size);
+        self.embed_dropout = torch.nn.Dropout(0.1);
+        #bad performance: self.pos_embed = attnet.PositionEncoding(d, max_len = posenc_buffer_size)
         self.Layers = torch.nn.ModuleList(
             [encoderlayer(d, d_fc, n_heads) for _ in range(n_layers)]
         )
@@ -54,7 +56,10 @@ class Encoder(torch.nn.Module):
         #enc_input:(batch_size, req_len)
         #enc_output:(batch_size, req_len, d)
         #mask:(batch_size, seq_len, seq_len)
-        enc_output = self.pos_enc(self.seq_embed(enc_input));
+        #enc_output = self.pos_embed(self.seq_embed(enc_input)) * self.seq_embed.embedding_dim ** 0.5;
+        enc_output = self.seq_embed(enc_input)* self.seq_embed.embedding_dim ** 0.5;
+        enc_output = enc_output + self.pos_embed(enc_input);
+        enc_output = self.embed_dropout(enc_output);
         mask = torch.bitwise_or(
             attnet.attn_pad_msk(enc_input, enc_input.shape[1], mask_item = self.mask_item),
             attnet.attn_subsequence_mask(enc_input)
@@ -63,32 +68,6 @@ class Encoder(torch.nn.Module):
             enc_output = layer(enc_output, mask);
         #return hu:(batch_size, d)
         return enc_output[:, -1, :];
-
-class TorchTransformerEncoder(torch.nn.Module):
-    def __init__(self, d,  d_fc, n_heads, n_layers, 
-                 input_types, posenc_buffer_size, mask_item, is_norm_first = False) -> None:
-        super().__init__();
-        self.mask_item = mask_item;
-        self.seq_embed = torch.nn.Embedding(input_types, d);
-        self.pos_enc = attnet.PositionEncoding(d, max_len = posenc_buffer_size)
-        self.Layers = torch.nn.ModuleList(
-            [torch.nn.TransformerEncoderLayer(d, n_heads, d_fc, batch_first = True, is_norm_first = is_norm_first) for _ in range(n_layers)]
-        );
-    def forward(self, enc_input):
-        #enc_input:(batch_size, req_len)
-        #enc_output:(batch_size, req_len, d)
-        #mask:(batch_size, seq_len, seq_len)
-        enc_output = self.pos_enc(self.seq_embed(enc_input));
-        mask = torch.bitwise_or(
-            attnet.attn_pad_msk(enc_input, enc_input.shape[1], mask_item = self.mask_item),
-            attnet.attn_subsequence_mask(enc_input)
-        )
-        for layer in self.Layers:
-            enc_output = layer(enc_output, src_key_padding_mask = mask);
-
-        return enc_output[:, -1, :];
-
-
 
 class CL4SRec(torch.nn.Module):
     '''Contrastive Learning for Sequential Recommendation
@@ -109,8 +88,21 @@ class CL4SRec(torch.nn.Module):
         util.set_attr(self, net_cfg_dict);
         self.encoder = Encoder(self.d, self.d_fc, self.n_heads, self.n_layers, 
                                self.input_types, self.posenc_buffer_size, self.mask_item, self.is_norm_fist);
-        self.loss_func = loss.BPRLoss()
+        self.loss_func = loss.BPRLoss(gamma = glb_var.get_value('eps'))
         self.classfy_func = torch.nn.CrossEntropyLoss(ignore_index = self.mask_item[0]);
+        if net_cfg_dict['is_embed_net_manual_init']:
+            self.apply(self._init_para);
+    
+    def _init_para(self, module):
+        if isinstance(module, torch.nn.Embedding):
+            module.weight.data.normal_(mean=0.0, std=1/self.encoder.seq_embed.embedding_dim)
+        elif isinstance(module, torch.nn.LayerNorm):
+            module.bias.data.zero_()
+            module.weight.data.fill_(1.0)
+        elif isinstance(module, torch.nn.Linear):
+            module.weight.data.normal_()
+            if module.bias is not None:
+                module.bias.data.zero_()
 
     def predictor(self, hu):
         '''Predictor for CL4SRec
@@ -169,10 +161,9 @@ class CL4SRec(torch.nn.Module):
         next_req = next_req_bacth[batch_idx].unsqueeze(0);
         hv_tgt = self.encoder(next_req.unsqueeze(0));
         # generate item representation
-        #h_reqs:(req_types, d)
-        h_reqs = self.encoder(torch.arange(self.input_types).unsqueeze(-1).to(glb_var.get_value('device'))); 
-        #h_neg_req:(req_types - 1, d)
-        h_neg_req = h_reqs[torch.arange(h_reqs.shape[0]).to(glb_var.get_value('device')) != next_req, :];
+        #h_reqs:(req_types - 1, d)
+        h_neg_req = self.encoder(torch.arange(self.input_types).unsqueeze(-1).to(glb_var.get_value('device'))
+                              [torch.arange(self.input_types).to(glb_var.get_value('device')) != next_req, :]); 
 
         #Recomendation loss
         rec_pos_score = torch.matmul(hu, hv_tgt.transpose(0, 1));
@@ -195,8 +186,4 @@ class CL4SRec(torch.nn.Module):
         cl_neg_score = torch.matmul(hu_a1, hu_neg_opr.mean(dim = 0).unsqueeze(-1));
         loss_cl = self.loss_func(cl_pos_score, cl_neg_score);
 
-        #Classified loss
-        next_req_pre = self.forward(su);
-        loss_cls = self.classfy_func(next_req_pre, next_req);
-
-        return loss_rec + self.lambda_cl * loss_cl + self.lambda_cls * loss_cls;
+        return loss_rec + self.lambda_cl * loss_cl;
