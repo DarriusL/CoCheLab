@@ -347,14 +347,68 @@ def cut_and_fill_pcr(dataset, length, fill_mask = 0):
         req_types = dataset['req_types'],
         req_num = dataset['req_num']
     )
-    #check
-    # print('check')
-    # for uid in range(1, dataset['u_num'] + 1):
-    #     #su:(1, req_len)
-    #     su = dataset['data'][uid]['data'];
-    #     if su.shape[1] != length:
-    #         print(uid, su.shape[1])
-    #         raise
-    #     if torch.any(su > dataset['req_types']):
-    #         raise
     return dataset;
+
+
+def dataset_divide(data_set, train_ratio = 0.6, valid_ratio = 0.2):
+    ''' Divide the dataset
+
+    Parameters:
+    -----------
+
+    dataset: dict
+
+    train_ratio: float, optional
+        Ratio of training set to data set
+        default: 0.6
+    
+    Returns:
+    --------
+
+    train_set: dict
+
+    test_set: dict
+    '''
+    #divide numbers
+    n = data_set['u_num'];
+    n_train = int(n * train_ratio);
+    n_eval = int(n * valid_ratio);
+    #get user id for train and test dataset 
+    user_list_train = np.random.choice(n, n_train, replace = False).tolist();
+    user_left =  np.array(list(set(range(data_set['u_num'])) - set(user_list_train)));
+    user_list_valid = user_left[np.random.choice(user_left.shape[0], n_eval, replace = False)].tolist();
+    user_list_test = list(set(range(data_set['u_num'])) - set(user_list_train) - set(user_list_valid));
+
+    #generate train dataset and test dataset
+    train_set = {};
+    eval_set = {};
+    test_set = {};
+    train_set['u_num'] = len(user_list_train);
+    train_set['req_num'] = data_set['req_num'];
+    train_set['req_types'] = data_set['req_types'];
+    eval_set['u_num'] = len(user_list_valid);
+    eval_set['req_num'] = data_set['req_num'];
+    eval_set['req_types'] = data_set['req_types'];
+    test_set['u_num'] = len(user_list_test);
+    test_set['req_num'] = data_set['req_num'];
+    test_set['req_types'] = data_set['req_types'];
+    train_data = {};
+    eval_data = {};
+    test_data = {};
+    idx = 0;
+    for user_id in user_list_train:
+        train_data[idx] = data_set['data'][user_id];
+        idx += 1;
+    idx = 0;
+    for user_id in user_list_test:
+        test_data[idx] = data_set['data'][user_id];
+        idx += 1;
+    idx = 0;
+    for user_id in user_list_valid:
+        eval_data[idx] = data_set['data'][user_id];
+        idx += 1;
+    train_set['data'] = train_data;
+    eval_set['data'] = eval_data;
+    test_set['data'] = test_data;
+
+    return train_set, eval_set, test_set;

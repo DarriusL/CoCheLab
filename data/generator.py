@@ -162,8 +162,8 @@ def run_repcr(dataset, length, fill_mask = 0):
     report(dataset, 'reprocess dataset');
     return dataset
 
-class RecDataSet(torch.utils.data.Dataset):
-    '''Dataset for the project
+class NextReqDataSet(torch.utils.data.Dataset):
+    '''Dataset for the project on next req algorithm
 
        sample format: 
         su:(batch_size, req_len)
@@ -207,8 +207,41 @@ class RecDataSet(torch.utils.data.Dataset):
 
     def __getitem__(self, index):
         if self.mode == 'train':
-            return index, self.data[index]['data'].squeeze(0).to(torch.int64), self.next_item[0, index].to(torch.int64);
+            return (index, self.data[index]['data'].squeeze(0).to(torch.int64), self.next_item[0, index].to(torch.int64));
         elif self.mode == 'valid':
             return  index, self.valid_data[index].squeeze(0).to(torch.int64), self.next_item[1, index].to(torch.int64);
         elif self.mode == 'test':
             return index, self.test_data[index].squeeze(0).to(torch.int64), self.next_item[2, index].to(torch.int64);
+
+class GeneralDataSet(torch.utils.data.Dataset):
+    def __init__(self, Dataset) -> None:
+        super().__init__();
+        self.u_num = Dataset['u_num'];
+        self.data = {};
+        for idx in range(self.u_num):
+            self.data[idx] = torch.cat(
+                (Dataset['data'][idx]['data'],
+                 Dataset['data'][idx]['train'],
+                 Dataset['data'][idx]['valid'],
+                 Dataset['data'][idx]['test']),
+                 dim = -1);
+
+    def __len__(self):
+        return self.u_num;
+
+    def __getitem__(self, index):
+        return self.data[index].squeeze(0).to(torch.int64);
+
+def get_dataloader(dataset, net_cfg, num_workers, loader_batch, shuffle = False, mode = 'train'):
+    if net_cfg['is_cl_method']:
+        return torch.utils.data.DataLoader(NextReqDataSet(dataset, mode = mode), 
+                                                   num_workers = num_workers,
+                                                   pin_memory = True,
+                                                   batch_size = loader_batch, 
+                                                   shuffle = shuffle);
+    elif net_cfg['type'].lower() in ['caser', 'psac_gen']:
+        return torch.utils.data.DataLoader(GeneralDataSet(dataset[mode]), 
+                                                   num_workers = num_workers,
+                                                   pin_memory = True,
+                                                   batch_size = loader_batch, 
+                                                   shuffle = shuffle);

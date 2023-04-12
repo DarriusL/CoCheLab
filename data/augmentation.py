@@ -192,7 +192,8 @@ class BasicAugmentation():
             bool_idx[batch_idx] = False;
             idx_array = idx_array[bool_idx];
             return su[idx_array[np.random.choice(idx_array.shape[0], 1)], :];
-        
+
+    @torch.no_grad()
     def operate(self, su):
         '''Operate on user sequence using sampled operator
 
@@ -220,7 +221,15 @@ class BasicAugmentation():
         return seq_su;
 
 class EGA(BasicAugmentation):
-    '''Explanation Guided Augmentation for EC4SRec
+    '''Explanation Guided Augmentation
+    Example:
+    --------
+    >>> from data.augmentation import EGA
+    >>> ...
+    >>> ega = EGA(aug_cfg);
+    >>> ega.sample_opr();
+    >>> ega.update_scale(score, new_scale)
+    >>> su_seq = ba.operte(su);
     '''
     def __init__(self, aug_cfg_dict) -> None:
         super().__init__(aug_cfg_dict)
@@ -269,11 +278,15 @@ class EGA(BasicAugmentation):
         crop_num = int(np.floor(eta * req_len));
         batch_idx = torch.arange(0, batch_size).reshape(-1, 1);
         all_idx = torch.arange(0, req_len).unsqueeze(0).repeat(batch_size, 1).to(glb_var.get_value('device'));
-        #crop_idx:(batch_size, crop_num)
-        _, crop_idx = impt_score.topk(k = crop_num, largest = False, dim = -1, sorted = True);
+        if self.type.lower() == 'ega':
+            #crop_idx:(batch_size, crop_num)
+            _, crop_idx = impt_score.topk(k = crop_num, largest = False, dim = -1, sorted = True);
+        elif self.type.lower() == 'egaplus':
+            #crop_idx:(batch_size, crop_num)
+            crop_idx = torch.multinomial(self.p_neg, crop_num, False);
         su_crop_neg = su[batch_idx, crop_idx];
         su_crop_pos = su[torch.bitwise_not((all_idx.reshape(batch_size, req_len, 1) == 
-                          crop_idx.reshape(batch_size, 1, crop_num)).sum(dim = -1).to(torch.bool))].reshape(batch_size, -1);
+                        crop_idx.reshape(batch_size, 1, crop_num)).sum(dim = -1).to(torch.bool))].reshape(batch_size, -1);
         return su_crop_pos, su_crop_neg;
 
     def opr_mask(self, gamma, impt_score, su):
@@ -300,8 +313,13 @@ class EGA(BasicAugmentation):
         batch_idx = torch.arange(0, batch_size).reshape(-1, 1);
         su_mask_pos, su_mask_neg = su.clone(), su.clone();
         #mask_idx:(batch_size, mask_num)
-        _, mask_pos_idx = impt_score.topk(k = mask_num, largest = False, dim = -1, sorted = True);
-        _, mask_neg_idx = impt_score.topk(k = mask_num, largest = True, dim = -1, sorted = True);
+        if self.type.lower() == 'ega':
+            _, mask_pos_idx = impt_score.topk(k = mask_num, largest = False, dim = -1, sorted = True);
+            _, mask_neg_idx = impt_score.topk(k = mask_num, largest = True, dim = -1, sorted = True);
+        elif self.type.lower() == 'egaplus':
+            #crop_idx:(batch_size, crop_num)
+            mask_pos_idx = torch.multinomial(self.p_neg, mask_num, False);
+            mask_neg_idx = torch.multinomial(self.p_pos, mask_num, False);
         su_mask_pos[batch_idx, mask_pos_idx] = self.mask_to;
         su_mask_neg[batch_idx, mask_neg_idx] = self.mask_to;
         return su_mask_pos, su_mask_neg;
@@ -329,7 +347,10 @@ class EGA(BasicAugmentation):
         reorder_num = int(np.floor(beta * su.shape[1]));
         batch_idx = torch.arange(0, batch_size).reshape(-1, 1);
         #reorder_idx:(batch_size, reorder_num)
-        _, reorder_idx = impt_score.topk(k = reorder_num, largest = False, dim = -1, sorted = True);
+        if self.type.lower() == 'ega':
+            _, reorder_idx = impt_score.topk(k = reorder_num, largest = False, dim = -1, sorted = True);
+        elif self.type.lower() == 'egaplus':
+            reorder_idx = torch.multinomial(self.p_pos, reorder_num, False);
         sub_su = su[batch_idx, reorder_idx];
         shuffle_idx, _ = self.sample_idx(reorder_num, reorder_num, batch_size = batch_size);
         sub_su = sub_su[batch_idx, shuffle_idx];
@@ -373,14 +394,19 @@ class EGA(BasicAugmentation):
             #su_tgt:(req_len)
             su_tgt = su[batch_idx, :];
             for i in range(p.shape[0]):
-                su_k = su[idx_array[i], :];
-                p[i] = impt_score[batch_idx, torch.isin(su_k, torch.as_tensor(list(set(su_tgt.tolist()) & set(su_k.tolist()))).to(glb_var.get_value('device')))].sum() *\
-                    (len(set(su_tgt.tolist()) & set(su_k.tolist())) / len(set(su_tgt.tolist()) | set(su_k.tolist())));
+                su_k = su[idx_array[i], :].clone();
+                #The sequence of masked tokens is not considered
+                su_k[su_k.eq(0)] = -1;
+                if set(su_tgt.tolist()) & set(su_k.tolist()) != set():
+                    p[i] = impt_score[batch_idx, torch.isin(su_k, torch.as_tensor(list(set(su_tgt.tolist()) & set(su_k.tolist()))).to(glb_var.get_value('device')))].sum() *\
+                        (len(set(su_tgt.tolist()) & set(su_k.tolist())) / len(set(su_tgt.tolist()) | set(su_k.tolist())));
+                else:
+                    p[i] = 0;
             p = p + eps;
-            p = p/p.sum();
-            dist = torch.distributions.Categorical(p);
+            dist = torch.distributions.Categorical(logits = p);
             return su[[dist.sample()], :];
 
+    @torch.no_grad()
     def operate(self, impt_score, su):
         '''Operate on user sequence using sampled EGA operator
 
@@ -404,6 +430,10 @@ class EGA(BasicAugmentation):
         seq_su_pos = [];
         seq_su_neg = [];
         seq_su_rtrl = [];
+        if self.type.lower() == 'egaplus':
+            #p_pos:(batch_size, req_len)
+            self.p_pos = torch.distributions.utils.logits_to_probs(impt_score);
+            self.p_neg = torch.distributions.utils.logits_to_probs(-impt_score);
         for i in range(self.opr_sample_num):
             opr = self.operator[self.opr_sampled_idx[i]];
             if opr != 'retrieval' and opr != 'reorder':
@@ -414,17 +444,21 @@ class EGA(BasicAugmentation):
                 seq_su_pos.append(self.opr_dict[opr](self.scale[self.opr_sampled_idx[i]], impt_score.clone(), su.clone()));
             else:#'retrieval
                 for batch_idx in range(su.shape[0]):
-                    seq_su_rtrl.append(self.opr_retireval(batch_idx, self.scale[self.opr_sampled_idx[i]], impt_score, su.clone()));
+                    seq_su_rtrl.append(self.opr_retireval(batch_idx, 
+                                                          self.scale[self.opr_sampled_idx[i]], 
+                                                          impt_score.clone(), 
+                                                          su.clone(), 
+                                                          glb_var.get_value('eps')));
 
         return seq_su_pos, seq_su_neg, seq_su_rtrl;
         
 
-    
-
 def get_augmentation(aug_cfg_dict):
+    '''
+    '''
     if aug_cfg_dict['type'].lower() == 'basic':
         return BasicAugmentation(aug_cfg_dict);
-    elif aug_cfg_dict['type'].lower() == 'ega':
+    elif aug_cfg_dict['type'].lower() in ['ega', 'egaplus']:
         return EGA(aug_cfg_dict);
     else:
         glb_var.get_value('logger').error(f'augmentation type [{aug_cfg_dict["type"]}] is not supported.');
