@@ -127,14 +127,51 @@ CL-based:
 - [x] CL4SRec[[1]](#ref1)	
 - [x] Duo4SRec(DuoSRec)[[2]](#ref2)
 - [x] EC4SRec[[3]](#ref3)
+- [x] EGPC
 
 DL-based:
 
 - [x] PSAC_gen[[4]](#ref4)
+- [x] Caser[[5]](#ref5)
 
 
 
+### Performance
 
+@ML-1M
+
+overall
+
+|            | Caser | PSAC | Duo4SRec | CL4SRec | EC4SRec | EGPC |
+| :--------: | :---: | :--: | :------: | :-----: | :-----: | :--: |
+| HitRate@5  |       |      |          |         |         |      |
+| HitRate@10 |       |      |          |         |         |      |
+| HitRate@20 |       |      |          |         |         |      |
+|   NDCG@5   |       |      |          |         |         |      |
+|  NDCG@10   |       |      |          |         |         |      |
+|  NDCG@20   |       |      |          |         |         |      |
+
+traffic load
+
+| cache size | 0.1  | 0.2  | 0.3  | 0.4  | 0.5  | 0.6  | 0.7  | 0.8  | 0.9  | 1.0  |
+| :--------: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: |
+|   Caser    |      |      |      |      |      |      |      |      |      |      |
+|    PSAC    |      |      |      |      |      |      |      |      |      |      |
+|  Duo4SRec  |      |      |      |      |      |      |      |      |      |      |
+|  CL4SRec   |      |      |      |      |      |      |      |      |      |      |
+|  EC4SRec   |      |      |      |      |      |      |      |      |      |      |
+|    EGPC    |      |      |      |      |      |      |      |      |      |      |
+
+qoe
+
+| cache size | 0.1  | 0.2  | 0.3  | 0.4  | 0.5  | 0.6  | 0.7  | 0.8  | 0.9  | 1.0  |
+| :--------: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: |
+|   Caser    |      |      |      |      |      |      |      |      |      |      |
+|    PSAC    |      |      |      |      |      |      |      |      |      |      |
+|  Duo4SRec  |      |      |      |      |      |      |      |      |      |      |
+|  CL4SRec   |      |      |      |      |      |      |      |      |      |      |
+|  EC4SRec   |      |      |      |      |      |      |      |      |      |      |
+|    EGPC    |      |      |      |      |      |      |      |      |      |      |
 
 ## Configure file format
 
@@ -361,7 +398,7 @@ Network and augmentation configuration for CL4SRec on dataset ML-1M
 ### usage
 
 ```shell
-usage: executor.py [-h] [--data_process DATA_PROCESS] [--config CONFIG] [--saved_model SAVED_MODEL] [--mode MODE]
+usage: executor.py [-h] [--data_process DATA_PROCESS] [--config CONFIG] [--saved_config SAVED_CONFIG] [--mode MODE]
 ```
 
 ### options
@@ -372,8 +409,8 @@ usage: executor.py [-h] [--data_process DATA_PROCESS] [--config CONFIG] [--saved
                     type for data process(None/lite/complete)
 --config CONFIG, -cfg CONFIG
                     config for run
---saved_model SAVED_MODEL, -sm SAVED_MODEL
-                    path for saved model to test
+--saved_config SAVED_CONFIG, -sc SAVED_CONFIG
+                    path for saved config to test
 --mode MODE           train/test/train_and_test
 ```
 
@@ -388,24 +425,68 @@ python executor.py --data_process=lite
 python executor.py --data_process=complete
 ```
 
-CL4SRec on dataset(ml-1m)
+CL4SRec
 
 ```shell
 python executor.py -cfg='./config/cl4srec/cl4srec_ml1m.json' --mode=train
 python executor.py -cfg='./config/cl4srec/cl4srec_ml1m.json' --mode=train_and_test
-python executor.py -sm='./data/saved/cl4srec/ml1m/pre_64_2048_2_2/model.model' --mode=test
+python executor.py -sc='./data/saved/cl4srec/ml1m/pre_64_2048_2_2/config.json' --mode=test
+
+python executor.py -cfg='./config/cl4srec/cl4srec_appliances.json' --mode=train
+python executor.py -cfg='./config/cl4srec/cl4srec_appliances.json' --mode=train_and_test
+python executor.py -sc='./data/saved/cl4srec/appliances/pre_64_2048_2_2/config.json' --mode=test
 ```
 
-Duo4SRec on dataset(ml-1m)
+Duo4SRec
 
 ```shell
+python executor.py -cfg='./config/duo4srec/duo4srec_ml1m.json' --mode=train
 python executor.py -cfg='./config/duo4srec/duo4srec_ml1m.json' --mode=train_and_test
+python executor.py -sc='./data/saved/duo4srec/ml1m/pre_64_2048_2_2/config.json' --mode=test
+
+python executor.py -cfg='./config/duo4srec/duo4srec_appliances.json' --mode=train
+python executor.py -cfg='./config/duo4srec/duo4srec_appliances.json' --mode=train_and_test
+python executor.py -sc='./data/saved/duo4srec/appliances/pre_64_2048_2_2/config.json' --mode=test
 ```
 
-EC4SRec on dataset(ml-1m)
+EC4SRec
 
-```
+```shell
+python executor.py -cfg='./config/ec4srec/ec4srec_ml1m.json' --mode=train
 python executor.py -cfg='./config/ec4srec/ec4srec_ml1m.json' --mode=train_and_test
+python executor.py -sc='./data/saved/ec4srec/ml1m/pre_64_2048_2_2/config.json' --mode=test
+
+python executor.py -cfg='./config/ec4srec/ec4srec_appliances.json' --mode=train
+python executor.py -cfg='./config/ec4srec/ec4srec_appliances.json' --mode=train_and_test
+python executor.py -sc='./data/saved/ec4srec/appliances/pre_64_2048_2_2/config.json' --mode=test
+```
+
+EGPC
+
+```shell
+python executor.py -cfg='./config/egpc/egpc_ml1m.json' --mode=train
+python executor.py -cfg='./config/egpc/egpc_ml1m.json' --mode=train_and_test
+python executor.py -sc='./data/saved/egpc/ml1m/pre_64_2048_2_2/config.json' --mode=test
+
+python executor.py -cfg='./config/egpc/egpc_appliances.json' --mode=train
+python executor.py -cfg='./config/egpc/egpc_appliances.json' --mode=train_and_test
+python executor.py -sc='./data/saved/egpc/appliances/pre_64_2048_2_2/config.json' --mode=test
+```
+
+Caser
+
+```shell
+python executor.py -cfg='./config/caser/caser_ml1m.json' --mode=train
+python executor.py -cfg='./config/caser/caser_ml1m.json' --mode=train_and_test
+python executor.py -sc='./data/saved/caser/ml1m/64_8/config.json' --mode=test
+```
+
+PSAC
+
+```shell
+python executor.py -cfg='./config/psac/psac_gen_ml1m.json' --mode=train
+python executor.py -cfg='./config/psac/psac_gen_ml1m.json' --mode=train_and_test
+python executor.py -sc='./data/saved/psac_gen/ml1m/64_8/config.json' --mode=test
 ```
 
 
@@ -416,4 +497,5 @@ python executor.py -cfg='./config/ec4srec/ec4srec_ml1m.json' --mode=train_and_te
 1. <spin id='ref2'></spin>Qiu R, Huang Z, Yin H, et al. Contrastive learning for representation degeneration problem in sequential recommendation[C]//Proceedings of the fifteenth ACM international conference on web search and data mining. 2022: 813-823.
 1. <spin id='ref3'></spin>Wang L, Lim E P, Liu Z, et al. Explanation guided contrastive learning for sequential recommendation[C]//Proceedings of the 31st ACM International Conference on Information & Knowledge Management. 2022: 2017-2027.
 1. <spin id='ref4'></spin>Zhang Y, Li Y, Wang R, et al. PSAC: Proactive sequence-aware content caching via deep learning at the network edge[J]. IEEE Transactions on Network Science and Engineering, 2020, 7(4): 2145-2154.
+1. <spin id='ref5'></spin>Tang J, Wang K. Personalized top-n sequential recommendation via convolutional sequence embedding[C]//Proceedings of the eleventh ACM international conference on web search and data mining. 2018: 565-573.
 
