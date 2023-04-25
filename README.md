@@ -136,42 +136,9 @@ DL-based:
 
 
 
-### Performance
 
-@ML-1M
 
-overall
 
-|            | Caser | PSAC | Duo4SRec | CL4SRec | EC4SRec | EGPC |
-| :--------: | :---: | :--: | :------: | :-----: | :-----: | :--: |
-| HitRate@5  |       |      |          |         |         |      |
-| HitRate@10 |       |      |          |         |         |      |
-| HitRate@20 |       |      |          |         |         |      |
-|   NDCG@5   |       |      |          |         |         |      |
-|  NDCG@10   |       |      |          |         |         |      |
-|  NDCG@20   |       |      |          |         |         |      |
-
-traffic load
-
-| cache size | 0.1  | 0.2  | 0.3  | 0.4  | 0.5  | 0.6  | 0.7  | 0.8  | 0.9  | 1.0  |
-| :--------: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: |
-|   Caser    |      |      |      |      |      |      |      |      |      |      |
-|    PSAC    |      |      |      |      |      |      |      |      |      |      |
-|  Duo4SRec  |      |      |      |      |      |      |      |      |      |      |
-|  CL4SRec   |      |      |      |      |      |      |      |      |      |      |
-|  EC4SRec   |      |      |      |      |      |      |      |      |      |      |
-|    EGPC    |      |      |      |      |      |      |      |      |      |      |
-
-qoe
-
-| cache size | 0.1  | 0.2  | 0.3  | 0.4  | 0.5  | 0.6  | 0.7  | 0.8  | 0.9  | 1.0  |
-| :--------: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: |
-|   Caser    |      |      |      |      |      |      |      |      |      |      |
-|    PSAC    |      |      |      |      |      |      |      |      |      |      |
-|  Duo4SRec  |      |      |      |      |      |      |      |      |      |      |
-|  CL4SRec   |      |      |      |      |      |      |      |      |      |      |
-|  EC4SRec   |      |      |      |      |      |      |      |      |      |      |
-|    EGPC    |      |      |      |      |      |      |      |      |      |      |
 
 ## Configure file format
 
@@ -435,6 +402,10 @@ python executor.py -sc='./data/saved/cl4srec/ml1m/pre_64_2048_2_2/config.json' -
 python executor.py -cfg='./config/cl4srec/cl4srec_appliances.json' --mode=train
 python executor.py -cfg='./config/cl4srec/cl4srec_appliances.json' --mode=train_and_test
 python executor.py -sc='./data/saved/cl4srec/appliances/pre_64_2048_2_2/config.json' --mode=test
+
+python executor.py -cfg='./config/cl4srec/cl4srec_music.json' --mode=train
+python executor.py -cfg='./config/cl4srec/cl4srec_music.json' --mode=train_and_test
+python executor.py -sc='./data/saved/cl4srec/music/pre_64_2048_2_2/config.json' --mode=test
 ```
 
 Duo4SRec
@@ -447,6 +418,10 @@ python executor.py -sc='./data/saved/duo4srec/ml1m/pre_64_2048_2_2/config.json' 
 python executor.py -cfg='./config/duo4srec/duo4srec_appliances.json' --mode=train
 python executor.py -cfg='./config/duo4srec/duo4srec_appliances.json' --mode=train_and_test
 python executor.py -sc='./data/saved/duo4srec/appliances/pre_64_2048_2_2/config.json' --mode=test
+
+python executor.py -cfg='./config/duo4srec/duo4srec_music.json' --mode=train
+python executor.py -cfg='./config/duo4srec/duo4srec_music.json' --mode=train_and_test
+python executor.py -sc='./data/saved/duo4srec/music/pre_64_2048_2_2/config.json' --mode=test
 ```
 
 EC4SRec
@@ -459,6 +434,10 @@ python executor.py -sc='./data/saved/ec4srec/ml1m/pre_64_2048_2_2/config.json' -
 python executor.py -cfg='./config/ec4srec/ec4srec_appliances.json' --mode=train
 python executor.py -cfg='./config/ec4srec/ec4srec_appliances.json' --mode=train_and_test
 python executor.py -sc='./data/saved/ec4srec/appliances/pre_64_2048_2_2/config.json' --mode=test
+
+python executor.py -cfg='./config/ec4srec/ec4srec_music.json' --mode=train
+python executor.py -cfg='./config/ec4srec/ec4srec_music.json' --mode=train_and_test
+python executor.py -sc='./data/saved/ec4srec/music/pre_64_2048_2_2/config.json' --mode=test
 ```
 
 EGPC
@@ -471,6 +450,10 @@ python executor.py -sc='./data/saved/egpc/ml1m/pre_64_2048_2_2/config.json' --mo
 python executor.py -cfg='./config/egpc/egpc_appliances.json' --mode=train
 python executor.py -cfg='./config/egpc/egpc_appliances.json' --mode=train_and_test
 python executor.py -sc='./data/saved/egpc/appliances/pre_64_2048_2_2/config.json' --mode=test
+
+python executor.py -cfg='./config/egpc/egpc_music.json' --mode=train
+python executor.py -cfg='./config/egpc/egpc_music.json' --mode=train_and_test
+python executor.py -sc='./data/saved/egpc/music/pre_64_2048_2_2/config.json' --mode=test
 ```
 
 Caser
@@ -479,6 +462,14 @@ Caser
 python executor.py -cfg='./config/caser/caser_ml1m.json' --mode=train
 python executor.py -cfg='./config/caser/caser_ml1m.json' --mode=train_and_test
 python executor.py -sc='./data/saved/caser/ml1m/64_8/config.json' --mode=test
+
+python executor.py -cfg='./config/caser/caser_appliances.json' --mode=train
+python executor.py -cfg='./config/caser/caser_appliances.json' --mode=train_and_test
+python executor.py -sc='./data/saved/caser/appliances/64_8/config.json' --mode=test
+
+python executor.py -cfg='./config/caser/caser_music.json' --mode=train
+python executor.py -cfg='./config/caser/caser_music.json' --mode=train_and_test
+python executor.py -sc='./data/saved/caser/music/64_8/config.json' --mode=test
 ```
 
 PSAC
@@ -487,6 +478,14 @@ PSAC
 python executor.py -cfg='./config/psac/psac_gen_ml1m.json' --mode=train
 python executor.py -cfg='./config/psac/psac_gen_ml1m.json' --mode=train_and_test
 python executor.py -sc='./data/saved/psac_gen/ml1m/64_8/config.json' --mode=test
+
+python executor.py -cfg='./config/psac/psac_gen_appliances.json' --mode=train
+python executor.py -cfg='./config/psac/psac_gen_appliances.json' --mode=train_and_test
+python executor.py -sc='./data/saved/psac_gen/appliances/64_8/config.json' --mode=test
+
+python executor.py -cfg='./config/psac/psac_gen_music.json' --mode=train
+python executor.py -cfg='./config/psac/psac_gen_music.json' --mode=train_and_test
+python executor.py -sc='./data/saved/psac_gen/music/64_8/config.json' --mode=test
 ```
 
 
