@@ -1,8 +1,7 @@
-# @Time   : 2022/4/12
-# @Author : Junwei Lei
-# @Email  : darrius.lei@outlook.com
-
 import logging, os
+import smtplib
+from email.mime.text import MIMEText
+from email.header import Header
 
 class CustomException(Exception):
     ''' Used to output exception information if an exception is thrown
@@ -78,3 +77,15 @@ class Logger():
         self.logger.addHandler(self.get_console_handler());
         self.logger.addHandler(self.get_file_handler());
         return self.logger;
+
+
+def send_smtp_emil(sender, receiver, passward, subject, content, port = 25, server = None):
+    smtp = smtplib.SMTP();
+    if server is None:
+        server = 'smtp.'+sender.split('.')[-2].split('@')[-1]+'.com';
+    smtp.connect(server, port);
+    smtp.login(sender, passward);
+    message = MIMEText(content, 'plain', 'utf-8');
+    message['Subject'] = Header(subject, 'utf-8');
+    smtp.sendmail(sender, receiver, message.as_string());
+    smtp.quit()

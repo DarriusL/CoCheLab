@@ -97,6 +97,15 @@ class PositionEncoding(torch.nn.Module):
 
         return x + self.pe[:, 0:x.shape[1], :];
 
+class LearnablePositionEncoding(torch.nn.Module):
+    def __init__(self, d, max_len = 10000) -> None:
+        super().__init__()
+        self.Embed = torch.nn.Embedding(max_len, d)
+        self.register_buffer('Pos_idx', torch.arange(max_len));
+
+    def forward(self, x):
+        return self.Embed(self.Pos_idx[x.shape[1]].unsqueeze(0).repeat(x.shape[0], 1));
+
 class PositionwiseFeedForwardNet(torch.nn.Module):
     '''Position-wise Feed-Forward Network for Transformer
 
@@ -164,9 +173,8 @@ class ScaledDotProductAttention(torch.nn.Module):
         K = self.W_K(input_K);
         #scores:(batch_size, len_q, len_k)
         scores = torch.matmul(Q, K.transpose(-1, -2)) / torch.sqrt(self.temperature);
-        #mask the score with -1e9
         if mask is not None:
-            scores.masked_fill_(mask, -1e9)
+            scores.masked_fill_(mask, glb_var.get_value('mask_to_value'))
         #attention:(batch_size, len_q, len_k)*(batch_size, len_v, d)
         return torch.matmul(self.Softmax(scores), input_V);
 
@@ -204,8 +212,8 @@ class ScaledDotProductAttentionLite(torch.nn.Module):
     def forward(self, Q, K, V, mask):
         #Q:(batch_size, len_q, d_q)
         #K:(batch_size, len_k, d_k)
-        #scores:(batch_size, n_heads, len_q, len_k) and mask the score with -1e9
-        scores = (torch.matmul(Q, K.transpose(-1, -2)) / torch.sqrt(self.temperature)).masked_fill_(mask, 1e-9);
+        #scores:(batch_size, n_heads, len_q, len_k) and mask the score with -1e8(for amp)
+        scores = (torch.matmul(Q, K.transpose(-1, -2)) / torch.sqrt(self.temperature)).masked_fill_(mask, glb_var.get_value('mask_to_value'));
         #attention:(batch_size, n_heads, len_q, d_v)
         return torch.matmul(self.Softmax(scores), V);
         
@@ -246,7 +254,7 @@ class MultiHeadAttention(torch.nn.Module):
         self.W_K = torch.nn.Linear(d, d_k * n_heads, bias = False);
         self.W_V = torch.nn.Linear(d, d_v * n_heads, bias = False);
         self.W_O = torch.nn.Linear(d_v * n_heads, d);
-        self.Attnet = ScaledDotProductAttentionLite(temperature = d_k);
+        self.Attnet = ScaledDotProductAttentionLite(temperature = d_k/n_heads);
         util.set_attr(
             obj = self,
             dict = dict(
@@ -346,7 +354,7 @@ class EncoderLayer_PostLN(TemplateLayer_PostLN):
     '''
     def __init__(self, d, d_fc, n_heads) -> None:
         super().__init__(d, d_fc);
-        d_q, d_k, d_v = 64, 64, 64;
+        d_q = d_k = d_v = int(d/n_heads);
         self.Multiheadatt = MultiHeadAttention(d, d_q, d_k, d_v, n_heads);
 
     def forward(self, enc_input, mask):
@@ -399,7 +407,7 @@ class DecodeLayer_PostLN(TemplateLayer_PostLN):
     '''
     def __init__(self, d, d_fc, n_heads) -> None:
         super().__init__(d, d_fc);
-        d_q, d_k, d_v = 64, 64, 64;
+        d_q = d_k = d_v = int(d/n_heads);
         self.Self_attention = MultiHeadAttention(d, d_q, d_k, d_v, n_heads);
         self.Enc_attention = MultiHeadAttention(d, d_q, d_k, d_v, n_heads);
 

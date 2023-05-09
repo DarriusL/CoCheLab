@@ -1,46 +1,46 @@
 {
     "net": {
-        "type": "PSAC_gen",
-        "is_cl_method": false,
+        "type": "Caser",
         "is_embed_net_manual_init": false,
+        "is_cl_method": false,
         "d": 64,
         "n_kernels": 8,
         "L": 3,
-        "input_types": 3558,
+        "input_types": 4107,
         "neg_samples": 3,
         "mask_item": [
             0
         ]
     },
-    "dataset": {
-        "type": "ml1m",
-        "path": "./data/datasets/process/complete/ml_devide_55.data",
-        "crop_or_fill": false,
-        "fill_mask": 0,
-        "limit_length": 55
-    },
+    "seed": 6655,
     "linux_fast_num_workers": 4,
     "email_reminder": false,
-    "seed": 5566,
+    "dataset": {
+        "type": "appliances",
+        "path": "./data/datasets/process/complete/appliances_devide_25.data",
+        "crop_or_fill": false,
+        "fill_mask": 0,
+        "limit_length": 25
+    },
     "train": {
         "batch_size": 256,
-        "max_epoch": 350,
-        "valid_step": 10,
+        "max_epoch": 1000,
+        "valid_step": 5,
         "stop_train_step_valid_not_improve": 100,
         "gpu_is_available": true,
         "use_amp": false,
         "optimizer_type": "adam",
-        "learning_rate": 0.001,
+        "learning_rate": 0.0001,
         "weight_decay": 1e-08,
         "betas": [
             0.9,
             0.999
         ],
-        "use_lr_schedule": false,
+        "use_lr_schedule": true,
         "lr_max": 0.001,
         "metric_less": true,
         "save": true,
-        "model_save_path": "./data/saved/psac_gen/ml1m/64_8/model.model",
+        "model_save_path": "./data/saved/caser/appliances/64_8/model.model",
         "end_save": false
     },
     "test": {
