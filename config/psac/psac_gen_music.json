@@ -1,0 +1,72 @@
+{
+    "net": {
+        "type": "PSAC_gen",
+        "is_cl_method": false,
+        "is_embed_net_manual_init": false,
+        "d": 64,
+        "n_kernels": 8,
+        "L": 3,
+        "input_types": 11754,
+        "neg_samples": 3,
+        "mask_item": [
+            0
+        ]
+    },
+    "dataset": {
+        "type": "music",
+        "path": "./data/datasets/process/lite/music_devide_25.data",
+        "crop_or_fill": false,
+        "fill_mask": 0,
+        "limit_length": 25
+    },
+    "linux_fast_num_workers": 4,
+    "email_reminder": false,
+    "seed": 5566,
+    "train": {
+        "batch_size": 256,
+        "max_epoch": 1000,
+        "valid_step": 5,
+        "stop_train_step_valid_not_improve": 100,
+        "gpu_is_available": true,
+        "use_amp": false,
+        "optimizer_type": "adam",
+        "learning_rate": 0.001,
+        "weight_decay": 1e-08,
+        "betas": [
+            0.9,
+            0.999
+        ],
+        "use_lr_schedule": true,
+        "lr_max": 0.001,
+        "metric_less": true,
+        "save": true,
+        "model_save_path": "./data/saved/psac_gen/music/64_8/model.model",
+        "end_save": false
+    },
+    "test": {
+        "batch_size": 256,
+        "cache_satisfaction_ratio": 0.2,
+        "bs_storagy": 4000,
+        "slide_T": 3,
+        "alter_topk": 40,
+        "metrics_at_k": [
+            5,
+            10,
+            20
+        ],
+        "cache_size": [
+            0.1,
+            0.2,
+            0.3,
+            0.4,
+            0.5,
+            0.6,
+            0.7,
+            0.8,
+            0.9,
+            1.0
+        ],
+        "gpu_is_available": true,
+        "save": true
+    }
+}
