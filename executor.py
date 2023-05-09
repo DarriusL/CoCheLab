@@ -1,10 +1,12 @@
-import argparse, sys, logging
+import argparse, sys, logging, os
 from data.generator import run_pcr
 from lib import glb_var
 from lib.callback import Logger, CustomException
 from Room.work import run_work
 
 if __name__ == '__main__':
+    if not os.path.exists('./cache/logger/'):
+        os.makedirs('./cache/logger/')
     glb_var.__init__();
     log = Logger(
         level = logging.DEBUG,
