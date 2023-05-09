@@ -5,9 +5,12 @@ Code for the edge cache algorithm.
 ## Environment configuration
 
 ```shell
+git clone https://github.com/DarriusL/CacheLab.git
+mddir CacheLab
 cd CacheLab
-conda env create -f environment.yml
-conda activate cachelab
+conda env create -f cachelab_dev.yml
+conda activate cachelab_dev
+git update-index --assume-unchanged config/lab_cfg.json
 ```
 
 ## Framework file structure
