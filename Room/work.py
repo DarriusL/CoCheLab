@@ -1,4 +1,4 @@
-import torch, time
+import torch, time,os
 from lib import glb_var, json_util, util, callback
 from Room.officer import Trainer, Tester, get_save_path
 from model import *
@@ -17,8 +17,15 @@ def run_work(config_path, mode = 'train'):
     default:train
     '''
     #load config
+    lab_cfg = json_util.jsonload('./config/lab_cfg.json');
     if mode == 'test':
-        config = torch.load(config_path).get('config');
+        config = json_util.jsonload(config_path);
+        _, config['train']['model_save_path'] = os.path.split(config['train']['model_save_path']);
+        cfg_root, _ = os.path.split(config_path);
+        config['train']['model_save_path'] = cfg_root + '/' + config['train']['model_save_path'];
+        glb_var.get_value('logger').info(f"Updata save path:[{config['train']['model_save_path']}]");
+        json_util.jsonsave(config, config_path);
+        del cfg_root;
     else:
         config = json_util.jsonload(config_path);
     #set random seed
@@ -29,6 +36,13 @@ def run_work(config_path, mode = 'train'):
     else:
         device = torch.device("cpu");
     glb_var.set_value('device', device);
+    #set training constant
+    if config['train']['use_amp']:
+        glb_var.set_value('mask_to_value', lab_cfg['constant']['use_amp_true']['mask_to_value']);
+        glb_var.set_value('eps', lab_cfg['constant']['use_amp_true']['eps']);
+    else:
+        glb_var.set_value('mask_to_value', lab_cfg['constant']['use_amp_false']['mask_to_value']);
+        glb_var.set_value('eps', lab_cfg['constant']['use_amp_false']['eps']);
 
     #check dateset config
     dataset = torch.load(config['dataset']['path']);
@@ -41,14 +55,16 @@ def run_work(config_path, mode = 'train'):
         glb_var.get_value('logger').info(f'Processing complete, consuming: {util.s2hms(time.time() - t)}');
         if mode in ['train', 'train_and_test']:
             config['net']['input_types'] = dataset['req_types'];
+    elif mode in ['train', 'train_and_test']:
+        #Using a processed dataset
+        config['net']['input_types'] = dataset['train']['req_types'];
+
     
     #get model
     if mode in ['train', 'train_and_test']:
-        model = generate_model(config['net']);
-        if config['net']['is_net_manual_init']:        
-            model.apply(init_weight);
+        model = generate_model(config);
     else:
-        model  = torch.load(config_path).get('model');
+        model  = torch.load(config['train']['model_save_path']);
     
     #conditional update
     if mode in ['train', 'train_and_test']:
@@ -56,7 +72,8 @@ def run_work(config_path, mode = 'train'):
         glb_var.get_value('logger').info(f"Updata save path:[{config['train']['model_save_path']}]")
         json_util.jsonsave(config, config_path);
 
-    report(config);
+    report(config, lab_cfg);
+    result = None;
     if mode == 'train':
         trainer = Trainer(config, model);
         run_train(trainer, dataset);
@@ -67,21 +84,34 @@ def run_work(config_path, mode = 'train'):
             glb_var.set_value('device', torch.device("cuda:0" if torch.cuda.is_available() else "cpu"));
         else:
             glb_var.set_value('device', torch.device("cpu"));
-        tester = Tester(config, torch.load(config['train']['model_save_path']).get('model'));
-        run_test(tester, dataset);
+        tester = Tester(config, torch.load(config['train']['model_save_path']));
+        result = run_test(tester, dataset);
     elif mode == 'test':
         if config['test']['gpu_is_available']:
             glb_var.set_value('device', torch.device("cuda:0" if torch.cuda.is_available() else "cpu"));
         else:
             glb_var.set_value('device', torch.device("cpu"));
         tester = Tester(config, model);
-        run_test(tester, dataset);
+        result = run_test(tester, dataset);
     else:
         glb_var.get_value('logger').error(f'Unrecognized Mode [{mode}], acceptable:(train/test/train_and_test)');
         raise callback.CustomException('ModeError');
 
+    if config['email_reminder']:
+        subject = 'CacheLab Reminder';
+        if result is not None:
+            str_add = 'The test result is showed below:\n' + result;
+        else:
+            str_add = '';
+        content = 'CacheLab user:\n\nThe lab operation is over, please return to view the results as soon as possible.' + str_add + \
+            '\n\nCacheLab\n'+util.get_date(' ');
+        email_cfg = lab_cfg['email_reminder'];
+        callback.send_smtp_emil(email_cfg['sender'], email_cfg['receiver'], email_cfg['password'],
+                                    subject, content, email_cfg['port'], email_cfg['sever']);
+
+
 def run_train(trainer, dataset):
-    '''training the model
+    '''train the model
 
     Parameters:
     -----------
@@ -97,12 +127,15 @@ def run_train(trainer, dataset):
     return trainer.model;
 
 def run_test(tester, dataset):
+    '''test the trained model
+    '''
     t = time.time();
     glb_var.get_value('logger').info('Start Testing ... ');
-    tester.test(dataset);
+    result = tester.test(dataset);
     glb_var.get_value('logger').info(f'Testing complete, time consuming: {util.s2hms(time.time() - t)}');
+    return result;
 
-def generate_model(net_cfg_dict):
+def generate_model(cfg):
     '''Generate model base on config
 
     Parameters:
@@ -114,6 +147,7 @@ def generate_model(net_cfg_dict):
     --------
     model
     '''
+    net_cfg_dict = cfg['net'];
     if net_cfg_dict['type'].lower() == 'cl4srec':
         model = CL4SRec(net_cfg_dict);
     elif net_cfg_dict['type'].lower() == 'duo4srec':
@@ -121,29 +155,62 @@ def generate_model(net_cfg_dict):
     elif net_cfg_dict['type'].lower() == 'ec4srec':
         model = EC4SRec(net_cfg_dict);
     elif net_cfg_dict['type'].lower() == 'psac_gen':
-        model = PSAC_gen(net_cfg_dict);
+        model = PSAC_gen(net_cfg_dict, cfg['train']['batch_size']);
+    elif net_cfg_dict['type'].lower() == 'caser':
+        model = Caser(net_cfg_dict, cfg['train']['batch_size']);
+    elif net_cfg_dict['type'].lower() == 'egpc':
+        model = EGPC(net_cfg_dict);
     else:
         glb_var.get_value('logger').error(f'Unrecognized Mode [{net_cfg_dict["type"].lower()}]');
         raise callback.CustomException('ModelTypeError');
     return model;
 
-def report(config):
-    '''print the config
+def report(config, lab_cfg):
+    '''print the info and check config
     '''
+    #check config
+    keys = ['net', 'dataset', 'linux_fast_num_workers', 'email_reminder', 'seed', 'train', 'test'];
+    train_keys = ['batch_size', 'max_epoch', 'valid_step', 'stop_train_step_valid_not_improve', 'gpu_is_available', 'use_amp', 
+                  'optimizer_type', 'learning_rate', 'weight_decay', 'betas', 'use_lr_schedule', 'lr_max', 'metric_less',
+                  'save', 'model_save_path', 'end_save'];
+    cfg_keys = config.keys();
+    for key in keys:
+        if key not in cfg_keys:
+            glb_var.get_value('logger').error(f'Config miss key [{key}]');
+            raise callback.CustomException('ConfigError');
+        elif key == 'train':
+            cfg_train_keys = config['train'].keys();
+            for subkey in train_keys:
+                if subkey not in cfg_train_keys:
+                    glb_var.get_value('logger').error(f'Config key [train] miss subkey [{subkey}]');
+                    raise callback.CustomException('ConfigError');
+
+    #buffer size
+    if 'posenc_buffer_size' in config['net'].keys():
+        if config['dataset']['limit_length'] + 3 > config['net']['posenc_buffer_size']:
+            glb_var.get_value('logger').error('Parameter settings on net [posenc_buffer_size] and on dataset [limit_length] conflict');
+            raise callback.CustomException('ConfigError');
+    #net config
+    if config['net']['type'].lower() in ['cl4srec', 'ec4srec', 'duo4srec', 'egpc'] and not config['net']['is_cl_method']:
+            glb_var.get_value('logger').error(f'Net type [{config["net"]["type"]}] is Contrastive Learning, please set [is_cl_method] to [True]');
+            raise callback.CustomException('ConfigError');
+    if config['email_reminder']:
+        try:
+            smtp = callback.smtplib.SMTP();
+            smtp.connect(lab_cfg['email_reminder']['sever'], lab_cfg['email_reminder']['port']);
+            smtp.login(lab_cfg['email_reminder']['sender'], lab_cfg['email_reminder']['password']);
+            smtp.close();
+        except:
+            glb_var.get_value('logger').error('Please enter the config directory to configure the lab_cfg.json file');
+            raise callback.CustomException('ConfigError');
     glb_var.get_value('logger').info(
-        'CacheLab Configure\n'
-        '=======================================\n' + json_util.dict2jsonstr(config)
+    f'CacheLab Configuration report:\n'
+    '------------------------------------\n'
+    f'Constant settings:\nDevice: [{glb_var.get_value("device")}]\n'
+    f'Eps: [{glb_var.get_value("eps")}]\nMask_to_value: [{glb_var.get_value("mask_to_value")}]\n'
+    '------------------------------------\n'
     );
 
-def init_weight(m):
-    '''function for initialization
-    '''
-    if isinstance(m, torch.nn.Linear):
-        torch.nn.init.trunc_normal_(m.weight, a=-0.01, b=0.01);
-        if m.bias is not None:
-            torch.nn.init.trunc_normal_(m.bias, a=-0.01, b=0.01);
-    elif isinstance(m, torch.nn.Embedding):
-        torch.nn.init.trunc_normal_(m.weight, a=-1, b=1);
 
 
 
