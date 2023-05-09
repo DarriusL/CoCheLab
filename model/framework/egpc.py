@@ -4,7 +4,7 @@ from model import attnet, loss
 from data.generator import NextReqDataSet
 
 class Encoder(torch.nn.Module):
-    '''Encoder for PSC_EGCL
+    '''Encoder for EGPC
 
     Parameters:
     -----------
@@ -254,21 +254,26 @@ class EGPC(torch.nn.Module):
         ssl_neg_score_pos = torch.matmul(hu_aneg, hu_a_.mean(dim = 0).unsqueeze(-1));
         ssl_neg_score_neg = torch.matmul(hu_aneg, hu_apos.mean(dim = 0).unsqueeze(-1));
         ssl_neg_loss = self.loss_func(ssl_neg_score_pos, ssl_neg_score_neg);
-        #Supervised Contrastive learning loss
-        if su_opr_rtrl_list[batch_idx] is torch.nan:
-            return loss_rec + self.lambda_sl_pos * ssl_pos_loss + self.lambda_sl_neg * ssl_neg_loss; 
-        su_neg = su_batch[torch.arange(batch_size).to(glb_var.get_value('device'))!= batch_idx, :];
-        for i in range(batch_size):
-            if not torch.any(torch.as_tensor(su_opr_rtrl_list[i]).isnan()) and i != batch_idx:
-                su_neg = torch.cat((su_neg, su_opr_rtrl_list[i]), dim = 0);
-        #hu_rtrl:(1, d)
-        hu_rtrl = self.encoder(su_opr_rtrl_list[batch_idx]);
-        #su_neg:(new_batch_size, d)
-        hu_neg = self.encoder(su_neg);
-        
-        sl_pos_score = torch.matmul(hu, hu_rtrl.transpose(0, 1))/self.tau;
-        sl1_neg_score = torch.matmul(hu, hu_neg.mean(dim = 0).unsqueeze(-1))/self.tau;
-        sl2_neg_score = torch.matmul(hu_rtrl, hu_neg.mean(dim = 0).unsqueeze(-1))/self.tau;
 
-        loss_cl = self.loss_func(sl_pos_score, sl1_neg_score) + self.loss_func(sl_pos_score, sl2_neg_score);
-        return loss_rec + self.lambda_cl * loss_cl + self.lambda_sl_pos * ssl_pos_loss + self.lambda_sl_neg * ssl_neg_loss;
+        if not su_opr_rtrl_list:
+            #without reg
+            return loss_rec + self.lambda_sl_pos * ssl_pos_loss + self.lambda_sl_neg * ssl_neg_loss;
+        else:
+            #Supervised Contrastive learning loss
+            if su_opr_rtrl_list[batch_idx] is torch.nan:
+                return loss_rec + self.lambda_sl_pos * ssl_pos_loss + self.lambda_sl_neg * ssl_neg_loss; 
+            su_neg = su_batch[torch.arange(batch_size).to(glb_var.get_value('device'))!= batch_idx, :];
+            for i in range(batch_size):
+                if not torch.any(torch.as_tensor(su_opr_rtrl_list[i]).isnan()) and i != batch_idx:
+                    su_neg = torch.cat((su_neg, su_opr_rtrl_list[i]), dim = 0);
+            #hu_rtrl:(1, d)
+            hu_rtrl = self.encoder(su_opr_rtrl_list[batch_idx]);
+            #su_neg:(new_batch_size, d)
+            hu_neg = self.encoder(su_neg);
+            
+            sl_pos_score = torch.matmul(hu, hu_rtrl.transpose(0, 1))/self.tau;
+            sl1_neg_score = torch.matmul(hu, hu_neg.mean(dim = 0).unsqueeze(-1))/self.tau;
+            sl2_neg_score = torch.matmul(hu_rtrl, hu_neg.mean(dim = 0).unsqueeze(-1))/self.tau;
+
+            loss_cl = self.loss_func(sl_pos_score, sl1_neg_score) + self.loss_func(sl_pos_score, sl2_neg_score);
+            return loss_rec + self.lambda_cl * loss_cl + self.lambda_sl_pos * ssl_pos_loss + self.lambda_sl_neg * ssl_neg_loss;
