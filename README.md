@@ -1,6 +1,6 @@
 # CacheLab
 
-Code for the edge cache algorithm.
+Code for the content caching algorithm in edge caching.
 
 ## Environment configuration
 
