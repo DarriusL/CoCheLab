@@ -1,7 +1,9 @@
 *.ipynb
+*.pyc
 *.log
 *.data
 *.txt
-./data/saved/
-./cache/unsaved_data
-./data/datasets
+data/saved/
+cache/
+data/datasets/
+

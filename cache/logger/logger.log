@@ -1,1 +1,1351 @@
 
+[2023-05-09 21:20:53,536]-[INFO - lib.callback] 
+Updata save path:[./data/saved/psac_gen/music/64_8/model.model]
+
+[2023-05-09 21:20:53,551]-[INFO - lib.callback] 
+CacheLab Configuration report:
+------------------------------------
+Constant settings:
+Device: [cuda:0]
+Eps: [1e-10]
+Mask_to_value: [-10000000000.0]
+------------------------------------
+
+
+[2023-05-09 21:20:56,717]-[INFO - lib.callback] 
+Start training ... 
+
+[2023-05-09 21:21:01,949]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 1/1000] - train loss:12.38600540 - lr:3.9999999999999996e-05
+Accumulated training time:[00 hour - 00 min - 04 s] - Estimated time remaining:[01 hour - 22 min - 50 s]
+
+[2023-05-09 21:21:02,221]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 2/1000] - train loss:12.60228729 - lr:4.002649504216782e-05
+Accumulated training time:[00 hour - 00 min - 05 s] - Estimated time remaining:[00 hour - 43 min - 38 s]
+
+[2023-05-09 21:21:02,485]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 3/1000] - train loss:12.64403629 - lr:4.0105977243724334e-05
+Accumulated training time:[00 hour - 00 min - 05 s] - Estimated time remaining:[00 hour - 30 min - 31 s]
+
+[2023-05-09 21:21:02,737]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 4/1000] - train loss:12.65613556 - lr:4.0238437830151423e-05
+Accumulated training time:[00 hour - 00 min - 05 s] - Estimated time remaining:[00 hour - 23 min - 55 s]
+
+[2023-05-09 21:21:02,979]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 5/1000] - train loss:12.56031036 - lr:4.042386217832953e-05
+Accumulated training time:[00 hour - 00 min - 06 s] - Estimated time remaining:[00 hour - 19 min - 55 s]
+
+[2023-05-09 21:21:03,924]-[INFO - lib.callback] 
+Save path: ./data/saved/psac_gen/music/64_8
+
+[2023-05-09 21:21:03,925]-[INFO - lib.callback] 
+[PSAC_gen]-[valid]
+[epoch: 5/1000]- valid loss:12.52923775 - valid min loss: 12.52923775 - req_types:20 - valid_not_improve_cnt:0
+
+[2023-05-09 21:21:04,164]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 6/1000] - train loss:12.70071888 - lr:4.06622298181502e-05
+Accumulated training time:[00 hour - 00 min - 07 s] - Estimated time remaining:[00 hour - 19 min - 51 s]
+
+[2023-05-09 21:21:04,411]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 7/1000] - train loss:12.38755608 - lr:4.095351443477748e-05
+Accumulated training time:[00 hour - 00 min - 07 s] - Estimated time remaining:[00 hour - 17 min - 35 s]
+
+[2023-05-09 21:21:04,655]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 8/1000] - train loss:12.28363991 - lr:4.1297683871552196e-05
+Accumulated training time:[00 hour - 00 min - 07 s] - Estimated time remaining:[00 hour - 15 min - 52 s]
+
+[2023-05-09 21:21:04,896]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 9/1000] - train loss:12.66778755 - lr:4.169470013354218e-05
+Accumulated training time:[00 hour - 00 min - 07 s] - Estimated time remaining:[00 hour - 14 min - 32 s]
+
+[2023-05-09 21:21:05,141]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 10/1000] - train loss:12.64653206 - lr:4.214451939173636e-05
+Accumulated training time:[00 hour - 00 min - 08 s] - Estimated time remaining:[00 hour - 13 min - 28 s]
+
+[2023-05-09 21:21:05,315]-[INFO - lib.callback] 
+[PSAC_gen]-[valid]
+[epoch: 10/1000]- valid loss:12.65029240 - valid min loss: 12.52923775 - req_types:28 - valid_not_improve_cnt:1
+
+[2023-05-09 21:21:05,562]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 11/1000] - train loss:12.46244621 - lr:4.264709198788404e-05
+Accumulated training time:[00 hour - 00 min - 08 s] - Estimated time remaining:[00 hour - 12 min - 52 s]
+
+[2023-05-09 21:21:05,799]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 12/1000] - train loss:12.71394444 - lr:4.320236243997625e-05
+Accumulated training time:[00 hour - 00 min - 08 s] - Estimated time remaining:[00 hour - 12 min - 06 s]
+
+[2023-05-09 21:21:06,052]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 13/1000] - train loss:12.60348415 - lr:4.381026944837109e-05
+Accumulated training time:[00 hour - 00 min - 09 s] - Estimated time remaining:[00 hour - 11 min - 29 s]
+
+[2023-05-09 21:21:06,297]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 14/1000] - train loss:12.55801201 - lr:4.44707459025613e-05
+Accumulated training time:[00 hour - 00 min - 09 s] - Estimated time remaining:[00 hour - 10 min - 56 s]
+
+[2023-05-09 21:21:06,544]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 15/1000] - train loss:12.54400444 - lr:4.518371888858187e-05
+Accumulated training time:[00 hour - 00 min - 09 s] - Estimated time remaining:[00 hour - 10 min - 28 s]
+
+[2023-05-09 21:21:06,725]-[INFO - lib.callback] 
+[PSAC_gen]-[valid]
+[epoch: 15/1000]- valid loss:12.66758728 - valid min loss: 12.52923775 - req_types:31 - valid_not_improve_cnt:2
+
+[2023-05-09 21:21:06,978]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 16/1000] - train loss:12.58943939 - lr:4.594910969706078e-05
+Accumulated training time:[00 hour - 00 min - 10 s] - Estimated time remaining:[00 hour - 10 min - 15 s]
+
+[2023-05-09 21:21:07,232]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 17/1000] - train loss:12.46877670 - lr:4.676683383190755e-05
+Accumulated training time:[00 hour - 00 min - 10 s] - Estimated time remaining:[00 hour - 09 min - 53 s]
+
+[2023-05-09 21:21:07,470]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 18/1000] - train loss:12.61881256 - lr:4.76368010196408e-05
+Accumulated training time:[00 hour - 00 min - 10 s] - Estimated time remaining:[00 hour - 09 min - 32 s]
+
+[2023-05-09 21:21:07,717]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 19/1000] - train loss:12.47073555 - lr:4.8558915219355575e-05
+Accumulated training time:[00 hour - 00 min - 10 s] - Estimated time remaining:[00 hour - 09 min - 14 s]
+
+[2023-05-09 21:21:07,955]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 20/1000] - train loss:12.66671944 - lr:4.953307463332398e-05
+Accumulated training time:[00 hour - 00 min - 10 s] - Estimated time remaining:[00 hour - 08 min - 58 s]
+
+[2023-05-09 21:21:09,339]-[INFO - lib.callback] 
+Save path: ./data/saved/psac_gen/music/64_8
+
+[2023-05-09 21:21:09,340]-[INFO - lib.callback] 
+[PSAC_gen]-[valid]
+[epoch: 20/1000]- valid loss:12.48189354 - valid min loss: 12.48189354 - req_types:28 - valid_not_improve_cnt:0
+
+[2023-05-09 21:21:09,674]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 21/1000] - train loss:12.54147720 - lr:5.055917171823462e-05
+Accumulated training time:[00 hour - 00 min - 12 s] - Estimated time remaining:[00 hour - 09 min - 52 s]
+
+[2023-05-09 21:21:09,924]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 22/1000] - train loss:12.16232681 - lr:5.1637093197064426e-05
+Accumulated training time:[00 hour - 00 min - 12 s] - Estimated time remaining:[00 hour - 09 min - 35 s]
+
+[2023-05-09 21:21:10,180]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 23/1000] - train loss:12.60204697 - lr:5.2766720071584054e-05
+Accumulated training time:[00 hour - 00 min - 13 s] - Estimated time remaining:[00 hour - 09 min - 20 s]
+
+[2023-05-09 21:21:10,435]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 24/1000] - train loss:12.24322128 - lr:5.394792763549505e-05
+Accumulated training time:[00 hour - 00 min - 13 s] - Estimated time remaining:[00 hour - 09 min - 07 s]
+
+[2023-05-09 21:21:10,706]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 25/1000] - train loss:12.80693436 - lr:5.518058548819639e-05
+Accumulated training time:[00 hour - 00 min - 13 s] - Estimated time remaining:[00 hour - 08 min - 55 s]
+
+[2023-05-09 21:21:11,940]-[INFO - lib.callback] 
+Save path: ./data/saved/psac_gen/music/64_8
+
+[2023-05-09 21:21:11,941]-[INFO - lib.callback] 
+[PSAC_gen]-[valid]
+[epoch: 25/1000]- valid loss:12.38476372 - valid min loss: 12.38476372 - req_types:35 - valid_not_improve_cnt:0
+
+[2023-05-09 21:21:12,237]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 26/1000] - train loss:12.56151390 - lr:5.646455754918043e-05
+Accumulated training time:[00 hour - 00 min - 15 s] - Estimated time remaining:[00 hour - 09 min - 31 s]
+
+[2023-05-09 21:21:12,511]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 27/1000] - train loss:12.54305840 - lr:5.7799702073056355e-05
+Accumulated training time:[00 hour - 00 min - 15 s] - Estimated time remaining:[00 hour - 09 min - 19 s]
+
+[2023-05-09 21:21:12,756]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 28/1000] - train loss:12.74512100 - lr:5.9185871665196955e-05
+Accumulated training time:[00 hour - 00 min - 15 s] - Estimated time remaining:[00 hour - 09 min - 07 s]
+
+[2023-05-09 21:21:13,018]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 29/1000] - train loss:12.50126839 - lr:6.062291329801141e-05
+Accumulated training time:[00 hour - 00 min - 16 s] - Estimated time remaining:[00 hour - 08 min - 57 s]
+
+[2023-05-09 21:21:13,257]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 30/1000] - train loss:12.44127560 - lr:6.21106683278388e-05
+Accumulated training time:[00 hour - 00 min - 16 s] - Estimated time remaining:[00 hour - 08 min - 46 s]
+
+[2023-05-09 21:21:13,448]-[INFO - lib.callback] 
+[PSAC_gen]-[valid]
+[epoch: 30/1000]- valid loss:12.72719097 - valid min loss: 12.38476372 - req_types:36 - valid_not_improve_cnt:1
+
+[2023-05-09 21:21:13,706]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 31/1000] - train loss:12.38133812 - lr:6.364897251246132e-05
+Accumulated training time:[00 hour - 00 min - 16 s] - Estimated time remaining:[00 hour - 08 min - 43 s]
+
+[2023-05-09 21:21:13,997]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 32/1000] - train loss:12.65334606 - lr:6.523765602923636e-05
+Accumulated training time:[00 hour - 00 min - 17 s] - Estimated time remaining:[00 hour - 08 min - 34 s]
+
+[2023-05-09 21:21:14,326]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 33/1000] - train loss:12.47502518 - lr:6.68765434938439e-05
+Accumulated training time:[00 hour - 00 min - 17 s] - Estimated time remaining:[00 hour - 08 min - 28 s]
+
+[2023-05-09 21:21:14,603]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 34/1000] - train loss:12.41914558 - lr:6.856545397964883e-05
+Accumulated training time:[00 hour - 00 min - 17 s] - Estimated time remaining:[00 hour - 08 min - 20 s]
+
+[2023-05-09 21:21:14,967]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 35/1000] - train loss:12.46992111 - lr:7.030420103767369e-05
+Accumulated training time:[00 hour - 00 min - 17 s] - Estimated time remaining:[00 hour - 08 min - 16 s]
+
+[2023-05-09 21:21:15,991]-[INFO - lib.callback] 
+Save path: ./data/saved/psac_gen/music/64_8
+
+[2023-05-09 21:21:15,991]-[INFO - lib.callback] 
+[PSAC_gen]-[valid]
+[epoch: 35/1000]- valid loss:12.32727814 - valid min loss: 12.32727814 - req_types:39 - valid_not_improve_cnt:0
+
+[2023-05-09 21:21:16,269]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 36/1000] - train loss:12.79913139 - lr:7.209259271718279e-05
+Accumulated training time:[00 hour - 00 min - 19 s] - Estimated time remaining:[00 hour - 08 min - 36 s]
+
+[2023-05-09 21:21:16,535]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 37/1000] - train loss:12.69101524 - lr:7.393043158687186e-05
+Accumulated training time:[00 hour - 00 min - 19 s] - Estimated time remaining:[00 hour - 08 min - 29 s]
+
+[2023-05-09 21:21:16,820]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 38/1000] - train loss:12.61060810 - lr:7.581751475666454e-05
+Accumulated training time:[00 hour - 00 min - 19 s] - Estimated time remaining:[00 hour - 08 min - 22 s]
+
+[2023-05-09 21:21:17,083]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 39/1000] - train loss:12.54166412 - lr:7.775363390011031e-05
+Accumulated training time:[00 hour - 00 min - 20 s] - Estimated time remaining:[00 hour - 08 min - 15 s]
+
+[2023-05-09 21:21:17,329]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 40/1000] - train loss:12.68301964 - lr:7.973857527738258e-05
+Accumulated training time:[00 hour - 00 min - 20 s] - Estimated time remaining:[00 hour - 08 min - 08 s]
+
+[2023-05-09 21:21:17,520]-[INFO - lib.callback] 
+[PSAC_gen]-[valid]
+[epoch: 40/1000]- valid loss:12.74953461 - valid min loss: 12.32727814 - req_types:29 - valid_not_improve_cnt:1
+
+[2023-05-09 21:21:17,777]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 41/1000] - train loss:12.76050186 - lr:8.177211975887505e-05
+Accumulated training time:[00 hour - 00 min - 20 s] - Estimated time remaining:[00 hour - 08 min - 06 s]
+
+[2023-05-09 21:21:18,038]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 42/1000] - train loss:12.61162758 - lr:8.385404284939305e-05
+Accumulated training time:[00 hour - 00 min - 21 s] - Estimated time remaining:[00 hour - 08 min - 00 s]
+
+[2023-05-09 21:21:18,285]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 43/1000] - train loss:12.52491379 - lr:8.598411471293609e-05
+Accumulated training time:[00 hour - 00 min - 21 s] - Estimated time remaining:[00 hour - 07 min - 54 s]
+
+[2023-05-09 21:21:18,538]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 44/1000] - train loss:12.36277485 - lr:8.816210019807133e-05
+Accumulated training time:[00 hour - 00 min - 21 s] - Estimated time remaining:[00 hour - 07 min - 48 s]
+
+[2023-05-09 21:21:18,805]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 45/1000] - train loss:12.52868748 - lr:9.038775886389397e-05
+Accumulated training time:[00 hour - 00 min - 21 s] - Estimated time remaining:[00 hour - 07 min - 43 s]
+
+[2023-05-09 21:21:18,993]-[INFO - lib.callback] 
+[PSAC_gen]-[valid]
+[epoch: 45/1000]- valid loss:12.54846287 - valid min loss: 12.32727814 - req_types:26 - valid_not_improve_cnt:2
+
+[2023-05-09 21:21:19,249]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 46/1000] - train loss:12.36462021 - lr:9.266084500656922e-05
+Accumulated training time:[00 hour - 00 min - 22 s] - Estimated time remaining:[00 hour - 07 min - 41 s]
+
+[2023-05-09 21:21:19,515]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 47/1000] - train loss:12.43759823 - lr:9.498110768645931e-05
+Accumulated training time:[00 hour - 00 min - 22 s] - Estimated time remaining:[00 hour - 07 min - 37 s]
+
+[2023-05-09 21:21:19,794]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 48/1000] - train loss:12.48728943 - lr:9.734829075582396e-05
+Accumulated training time:[00 hour - 00 min - 22 s] - Estimated time remaining:[00 hour - 07 min - 32 s]
+
+[2023-05-09 21:21:20,063]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 49/1000] - train loss:12.44135857 - lr:9.976213288710018e-05
+Accumulated training time:[00 hour - 00 min - 23 s] - Estimated time remaining:[00 hour - 07 min - 28 s]
+
+[2023-05-09 21:21:20,323]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 50/1000] - train loss:12.53379822 - lr:0.00010222236760174983
+Accumulated training time:[00 hour - 00 min - 23 s] - Estimated time remaining:[00 hour - 07 min - 23 s]
+
+[2023-05-09 21:21:20,501]-[INFO - lib.callback] 
+[PSAC_gen]-[valid]
+[epoch: 50/1000]- valid loss:12.34642220 - valid min loss: 12.32727814 - req_types:34 - valid_not_improve_cnt:3
+
+[2023-05-09 21:21:20,762]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 51/1000] - train loss:12.29394722 - lr:0.00010472872329967916
+Accumulated training time:[00 hour - 00 min - 23 s] - Estimated time remaining:[00 hour - 07 min - 22 s]
+
+[2023-05-09 21:21:21,016]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 52/1000] - train loss:12.54442883 - lr:0.00010728092328922206
+Accumulated training time:[00 hour - 00 min - 24 s] - Estimated time remaining:[00 hour - 07 min - 18 s]
+
+[2023-05-09 21:21:21,275]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 53/1000] - train loss:12.53031540 - lr:0.00010987868581768551
+Accumulated training time:[00 hour - 00 min - 24 s] - Estimated time remaining:[00 hour - 07 min - 14 s]
+
+[2023-05-09 21:21:21,528]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 54/1000] - train loss:12.38543034 - lr:0.00011252172410245375
+Accumulated training time:[00 hour - 00 min - 24 s] - Estimated time remaining:[00 hour - 07 min - 10 s]
+
+[2023-05-09 21:21:21,811]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 55/1000] - train loss:12.37667751 - lr:0.00011520974636264846
+Accumulated training time:[00 hour - 00 min - 24 s] - Estimated time remaining:[00 hour - 07 min - 06 s]
+
+[2023-05-09 21:21:22,169]-[INFO - lib.callback] 
+[PSAC_gen]-[valid]
+[epoch: 55/1000]- valid loss:12.69677734 - valid min loss: 12.32727814 - req_types:35 - valid_not_improve_cnt:4
+
+[2023-05-09 21:21:22,507]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 56/1000] - train loss:12.53591442 - lr:0.00011794245585134008
+Accumulated training time:[00 hour - 00 min - 25 s] - Estimated time remaining:[00 hour - 07 min - 10 s]
+
+[2023-05-09 21:21:22,850]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 57/1000] - train loss:12.57908154 - lr:0.00012071955088830701
+Accumulated training time:[00 hour - 00 min - 25 s] - Estimated time remaining:[00 hour - 07 min - 08 s]
+
+[2023-05-09 21:21:23,187]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 58/1000] - train loss:12.72823524 - lr:0.00012354072489334067
+Accumulated training time:[00 hour - 00 min - 26 s] - Estimated time remaining:[00 hour - 07 min - 05 s]
+
+[2023-05-09 21:21:23,570]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 59/1000] - train loss:12.53106117 - lr:0.0001264056664200899
+Accumulated training time:[00 hour - 00 min - 26 s] - Estimated time remaining:[00 hour - 07 min - 04 s]
+
+[2023-05-09 21:21:23,876]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 60/1000] - train loss:12.27521420 - lr:0.00012931405919044416
+Accumulated training time:[00 hour - 00 min - 26 s] - Estimated time remaining:[00 hour - 07 min - 01 s]
+
+[2023-05-09 21:21:24,069]-[INFO - lib.callback] 
+[PSAC_gen]-[valid]
+[epoch: 60/1000]- valid loss:12.62249279 - valid min loss: 12.32727814 - req_types:33 - valid_not_improve_cnt:5
+
+[2023-05-09 21:21:24,323]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 61/1000] - train loss:12.47227287 - lr:0.00013226558212944893
+Accumulated training time:[00 hour - 00 min - 27 s] - Estimated time remaining:[00 hour - 07 min - 01 s]
+
+[2023-05-09 21:21:24,587]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 62/1000] - train loss:12.51981354 - lr:0.00013525990940075098
+Accumulated training time:[00 hour - 00 min - 27 s] - Estimated time remaining:[00 hour - 06 min - 57 s]
+
+[2023-05-09 21:21:24,865]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 63/1000] - train loss:12.72062874 - lr:0.00013829671044257
+Accumulated training time:[00 hour - 00 min - 27 s] - Estimated time remaining:[00 hour - 06 min - 54 s]
+
+[2023-05-09 21:21:25,178]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 64/1000] - train loss:12.40488338 - lr:0.000141375650004191
+Accumulated training time:[00 hour - 00 min - 28 s] - Estimated time remaining:[00 hour - 06 min - 52 s]
+
+[2023-05-09 21:21:25,465]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 65/1000] - train loss:12.61714935 - lr:0.00014449638818297375
+Accumulated training time:[00 hour - 00 min - 28 s] - Estimated time remaining:[00 hour - 06 min - 49 s]
+
+[2023-05-09 21:21:25,669]-[INFO - lib.callback] 
+[PSAC_gen]-[valid]
+[epoch: 65/1000]- valid loss:12.39580917 - valid min loss: 12.32727814 - req_types:38 - valid_not_improve_cnt:6
+
+[2023-05-09 21:21:25,914]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 66/1000] - train loss:12.41684341 - lr:0.0001476585804618785
+Accumulated training time:[00 hour - 00 min - 28 s] - Estimated time remaining:[00 hour - 06 min - 49 s]
+
+[2023-05-09 21:21:26,175]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 67/1000] - train loss:12.43768311 - lr:0.0001508618777474977
+Accumulated training time:[00 hour - 00 min - 29 s] - Estimated time remaining:[00 hour - 06 min - 46 s]
+
+[2023-05-09 21:21:26,466]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 68/1000] - train loss:12.57517910 - lr:0.00015410592640859532
+Accumulated training time:[00 hour - 00 min - 29 s] - Estimated time remaining:[00 hour - 06 min - 44 s]
+
+[2023-05-09 21:21:26,707]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 69/1000] - train loss:12.44471931 - lr:0.00015739036831514594
+Accumulated training time:[00 hour - 00 min - 29 s] - Estimated time remaining:[00 hour - 06 min - 41 s]
+
+[2023-05-09 21:21:26,959]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 70/1000] - train loss:12.28693581 - lr:0.00016071484087787152
+Accumulated training time:[00 hour - 00 min - 29 s] - Estimated time remaining:[00 hour - 06 min - 38 s]
+
+[2023-05-09 21:21:27,139]-[INFO - lib.callback] 
+[PSAC_gen]-[valid]
+[epoch: 70/1000]- valid loss:12.56463528 - valid min loss: 12.32727814 - req_types:39 - valid_not_improve_cnt:7
+
+[2023-05-09 21:21:27,420]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 71/1000] - train loss:12.30865479 - lr:0.0001640789770882687
+Accumulated training time:[00 hour - 00 min - 30 s] - Estimated time remaining:[00 hour - 06 min - 38 s]
+
+[2023-05-09 21:21:27,681]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 72/1000] - train loss:12.36280632 - lr:0.00016748240555912593
+Accumulated training time:[00 hour - 00 min - 30 s] - Estimated time remaining:[00 hour - 06 min - 35 s]
+
+[2023-05-09 21:21:27,932]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 73/1000] - train loss:12.61953163 - lr:0.00017092475056552329
+Accumulated training time:[00 hour - 00 min - 30 s] - Estimated time remaining:[00 hour - 06 min - 33 s]
+
+[2023-05-09 21:21:28,170]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 74/1000] - train loss:12.42066765 - lr:0.00017440563208631014
+Accumulated training time:[00 hour - 00 min - 31 s] - Estimated time remaining:[00 hour - 06 min - 30 s]
+
+[2023-05-09 21:21:28,410]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 75/1000] - train loss:12.51011372 - lr:0.00017792466584605883
+Accumulated training time:[00 hour - 00 min - 31 s] - Estimated time remaining:[00 hour - 06 min - 27 s]
+
+[2023-05-09 21:21:28,589]-[INFO - lib.callback] 
+[PSAC_gen]-[valid]
+[epoch: 75/1000]- valid loss:12.34883881 - valid min loss: 12.32727814 - req_types:34 - valid_not_improve_cnt:8
+
+[2023-05-09 21:21:28,827]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 76/1000] - train loss:12.41686535 - lr:0.00018148146335748654
+Accumulated training time:[00 hour - 00 min - 31 s] - Estimated time remaining:[00 hour - 06 min - 27 s]
+
+[2023-05-09 21:21:29,071]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 77/1000] - train loss:12.23063183 - lr:0.0001850756319643431
+Accumulated training time:[00 hour - 00 min - 32 s] - Estimated time remaining:[00 hour - 06 min - 24 s]
+
+[2023-05-09 21:21:29,321]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 78/1000] - train loss:12.38902855 - lr:0.00018870677488475854
+Accumulated training time:[00 hour - 00 min - 32 s] - Estimated time remaining:[00 hour - 06 min - 22 s]
+
+[2023-05-09 21:21:29,564]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 79/1000] - train loss:12.51439953 - lr:0.000192374491255046
+Accumulated training time:[00 hour - 00 min - 32 s] - Estimated time remaining:[00 hour - 06 min - 19 s]
+
+[2023-05-09 21:21:29,813]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 80/1000] - train loss:12.61202526 - lr:0.00019607837617395627
+Accumulated training time:[00 hour - 00 min - 32 s] - Estimated time remaining:[00 hour - 06 min - 17 s]
+
+[2023-05-09 21:21:29,994]-[INFO - lib.callback] 
+[PSAC_gen]-[valid]
+[epoch: 80/1000]- valid loss:12.47077274 - valid min loss: 12.32727814 - req_types:38 - valid_not_improve_cnt:9
+
+[2023-05-09 21:21:30,239]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 81/1000] - train loss:12.58922768 - lr:0.0001998180207473763
+Accumulated training time:[00 hour - 00 min - 33 s] - Estimated time remaining:[00 hour - 06 min - 17 s]
+
+[2023-05-09 21:21:30,478]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 82/1000] - train loss:12.54288578 - lr:0.00020359301213346986
+Accumulated training time:[00 hour - 00 min - 33 s] - Estimated time remaining:[00 hour - 06 min - 15 s]
+
+[2023-05-09 21:21:30,718]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 83/1000] - train loss:12.67181206 - lr:0.00020740293358825388
+Accumulated training time:[00 hour - 00 min - 33 s] - Estimated time remaining:[00 hour - 06 min - 12 s]
+
+[2023-05-09 21:21:30,965]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 84/1000] - train loss:12.47841072 - lr:0.00021124736451160495
+Accumulated training time:[00 hour - 00 min - 33 s] - Estimated time remaining:[00 hour - 06 min - 10 s]
+
+[2023-05-09 21:21:31,214]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 85/1000] - train loss:12.35058403 - lr:0.0002151258804936922
+Accumulated training time:[00 hour - 00 min - 34 s] - Estimated time remaining:[00 hour - 06 min - 08 s]
+
+[2023-05-09 21:21:31,390]-[INFO - lib.callback] 
+[PSAC_gen]-[valid]
+[epoch: 85/1000]- valid loss:12.60069370 - valid min loss: 12.32727814 - req_types:34 - valid_not_improve_cnt:10
+
+[2023-05-09 21:21:31,636]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 86/1000] - train loss:12.64224815 - lr:0.00021903805336183043
+Accumulated training time:[00 hour - 00 min - 34 s] - Estimated time remaining:[00 hour - 06 min - 08 s]
+
+[2023-05-09 21:21:31,876]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 87/1000] - train loss:12.40867805 - lr:0.00022298345122774793
+Accumulated training time:[00 hour - 00 min - 34 s] - Estimated time remaining:[00 hour - 06 min - 06 s]
+
+[2023-05-09 21:21:32,116]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 88/1000] - train loss:12.51854229 - lr:0.00022696163853526646
+Accumulated training time:[00 hour - 00 min - 35 s] - Estimated time remaining:[00 hour - 06 min - 04 s]
+
+[2023-05-09 21:21:32,359]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 89/1000] - train loss:12.39928055 - lr:0.00023097217610838436
+Accumulated training time:[00 hour - 00 min - 35 s] - Estimated time remaining:[00 hour - 06 min - 02 s]
+
+[2023-05-09 21:21:32,602]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 90/1000] - train loss:12.53837013 - lr:0.00023501462119975903
+Accumulated training time:[00 hour - 00 min - 35 s] - Estimated time remaining:[00 hour - 06 min - 00 s]
+
+[2023-05-09 21:21:32,789]-[INFO - lib.callback] 
+[PSAC_gen]-[valid]
+[epoch: 90/1000]- valid loss:12.43637657 - valid min loss: 12.32727814 - req_types:44 - valid_not_improve_cnt:11
+
+[2023-05-09 21:21:33,033]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 91/1000] - train loss:12.47695351 - lr:0.00023908852753958595
+Accumulated training time:[00 hour - 00 min - 36 s] - Estimated time remaining:[00 hour - 06 min - 00 s]
+
+[2023-05-09 21:21:33,284]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 92/1000] - train loss:12.49733543 - lr:0.0002431934453848637
+Accumulated training time:[00 hour - 00 min - 36 s] - Estimated time remaining:[00 hour - 05 min - 58 s]
+
+[2023-05-09 21:21:33,544]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 93/1000] - train loss:12.47815609 - lr:0.00024732892156904525
+Accumulated training time:[00 hour - 00 min - 36 s] - Estimated time remaining:[00 hour - 05 min - 56 s]
+
+[2023-05-09 21:21:33,801]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 94/1000] - train loss:12.37987900 - lr:0.0002514944995520641
+Accumulated training time:[00 hour - 00 min - 36 s] - Estimated time remaining:[00 hour - 05 min - 54 s]
+
+[2023-05-09 21:21:34,044]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 95/1000] - train loss:12.30638123 - lr:0.0002556897194707356
+Accumulated training time:[00 hour - 00 min - 37 s] - Estimated time remaining:[00 hour - 05 min - 53 s]
+
+[2023-05-09 21:21:34,225]-[INFO - lib.callback] 
+[PSAC_gen]-[valid]
+[epoch: 95/1000]- valid loss:12.37114334 - valid min loss: 12.32727814 - req_types:44 - valid_not_improve_cnt:12
+
+[2023-05-09 21:21:34,468]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 96/1000] - train loss:12.36892700 - lr:0.0002599141181895237
+Accumulated training time:[00 hour - 00 min - 37 s] - Estimated time remaining:[00 hour - 05 min - 53 s]
+
+[2023-05-09 21:21:34,714]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 97/1000] - train loss:12.47026253 - lr:0.00026416722935166943
+Accumulated training time:[00 hour - 00 min - 37 s] - Estimated time remaining:[00 hour - 05 min - 51 s]
+
+[2023-05-09 21:21:34,963]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 98/1000] - train loss:12.16322899 - lr:0.00026844858343067445
+Accumulated training time:[00 hour - 00 min - 37 s] - Estimated time remaining:[00 hour - 05 min - 49 s]
+
+[2023-05-09 21:21:35,210]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 99/1000] - train loss:12.46888828 - lr:0.0002727577077821352
+Accumulated training time:[00 hour - 00 min - 38 s] - Estimated time remaining:[00 hour - 05 min - 47 s]
+
+[2023-05-09 21:21:35,449]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 100/1000] - train loss:12.31113052 - lr:0.00027709412669592087
+Accumulated training time:[00 hour - 00 min - 38 s] - Estimated time remaining:[00 hour - 05 min - 46 s]
+
+[2023-05-09 21:21:35,628]-[INFO - lib.callback] 
+[PSAC_gen]-[valid]
+[epoch: 100/1000]- valid loss:12.39078999 - valid min loss: 12.32727814 - req_types:39 - valid_not_improve_cnt:13
+
+[2023-05-09 21:21:35,868]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 101/1000] - train loss:12.13617134 - lr:0.0002814573614486898
+Accumulated training time:[00 hour - 00 min - 38 s] - Estimated time remaining:[00 hour - 05 min - 46 s]
+
+[2023-05-09 21:21:36,115]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 102/1000] - train loss:12.21170044 - lr:0.0002858469303567389
+Accumulated training time:[00 hour - 00 min - 39 s] - Estimated time remaining:[00 hour - 05 min - 44 s]
+
+[2023-05-09 21:21:36,356]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 103/1000] - train loss:12.26046181 - lr:0.0002902623488291792
+Accumulated training time:[00 hour - 00 min - 39 s] - Estimated time remaining:[00 hour - 05 min - 42 s]
+
+[2023-05-09 21:21:36,603]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 104/1000] - train loss:12.49131203 - lr:0.0002947031294214334
+Accumulated training time:[00 hour - 00 min - 39 s] - Estimated time remaining:[00 hour - 05 min - 41 s]
+
+[2023-05-09 21:21:36,847]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 105/1000] - train loss:12.22740746 - lr:0.00029916878188904694
+Accumulated training time:[00 hour - 00 min - 39 s] - Estimated time remaining:[00 hour - 05 min - 39 s]
+
+[2023-05-09 21:21:37,807]-[INFO - lib.callback] 
+Save path: ./data/saved/psac_gen/music/64_8
+
+[2023-05-09 21:21:37,807]-[INFO - lib.callback] 
+[PSAC_gen]-[valid]
+[epoch: 105/1000]- valid loss:12.31600094 - valid min loss: 12.31600094 - req_types:43 - valid_not_improve_cnt:0
+
+[2023-05-09 21:21:38,059]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 106/1000] - train loss:12.25033951 - lr:0.0003036588132418098
+Accumulated training time:[00 hour - 00 min - 41 s] - Estimated time remaining:[00 hour - 05 min - 46 s]
+
+[2023-05-09 21:21:38,307]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 107/1000] - train loss:12.36955643 - lr:0.00030817272779818
+Accumulated training time:[00 hour - 00 min - 41 s] - Estimated time remaining:[00 hour - 05 min - 44 s]
+
+[2023-05-09 21:21:38,543]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 108/1000] - train loss:12.36786366 - lr:0.0003127100272400054
+Accumulated training time:[00 hour - 00 min - 41 s] - Estimated time remaining:[00 hour - 05 min - 43 s]
+
+[2023-05-09 21:21:38,780]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 109/1000] - train loss:12.38694859 - lr:0.00031727021066753607
+Accumulated training time:[00 hour - 00 min - 41 s] - Estimated time remaining:[00 hour - 05 min - 41 s]
+
+[2023-05-09 21:21:39,039]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 110/1000] - train loss:12.11382961 - lr:0.00032185277465472087
+Accumulated training time:[00 hour - 00 min - 42 s] - Estimated time remaining:[00 hour - 05 min - 40 s]
+
+[2023-05-09 21:21:39,211]-[INFO - lib.callback] 
+[PSAC_gen]-[valid]
+[epoch: 110/1000]- valid loss:12.40705490 - valid min loss: 12.31600094 - req_types:40 - valid_not_improve_cnt:1
+
+[2023-05-09 21:21:39,458]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 111/1000] - train loss:12.22675514 - lr:0.0003264572133047849
+Accumulated training time:[00 hour - 00 min - 42 s] - Estimated time remaining:[00 hour - 05 min - 40 s]
+
+[2023-05-09 21:21:39,701]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 112/1000] - train loss:12.28392124 - lr:0.00033108301830607695
+Accumulated training time:[00 hour - 00 min - 42 s] - Estimated time remaining:[00 hour - 05 min - 38 s]
+
+[2023-05-09 21:21:39,941]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 113/1000] - train loss:12.33613110 - lr:0.00033572967898818664
+Accumulated training time:[00 hour - 00 min - 42 s] - Estimated time remaining:[00 hour - 05 min - 37 s]
+
+[2023-05-09 21:21:40,185]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 114/1000] - train loss:12.28748512 - lr:0.00034039668237831897
+Accumulated training time:[00 hour - 00 min - 43 s] - Estimated time remaining:[00 hour - 05 min - 35 s]
+
+[2023-05-09 21:21:40,429]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 115/1000] - train loss:12.34561443 - lr:0.0003450835132579258
+Accumulated training time:[00 hour - 00 min - 43 s] - Estimated time remaining:[00 hour - 05 min - 34 s]
+
+[2023-05-09 21:21:40,608]-[INFO - lib.callback] 
+[PSAC_gen]-[valid]
+[epoch: 115/1000]- valid loss:12.42352772 - valid min loss: 12.31600094 - req_types:38 - valid_not_improve_cnt:2
+
+[2023-05-09 21:21:40,855]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 116/1000] - train loss:12.64456558 - lr:0.0003497896542195829
+Accumulated training time:[00 hour - 00 min - 43 s] - Estimated time remaining:[00 hour - 05 min - 34 s]
+
+[2023-05-09 21:21:41,100]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 117/1000] - train loss:12.44806576 - lr:0.0003545145857241103
+Accumulated training time:[00 hour - 00 min - 44 s] - Estimated time remaining:[00 hour - 05 min - 33 s]
+
+[2023-05-09 21:21:41,346]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 118/1000] - train loss:12.33352089 - lr:0.0003592577861579267
+Accumulated training time:[00 hour - 00 min - 44 s] - Estimated time remaining:[00 hour - 05 min - 31 s]
+
+[2023-05-09 21:21:41,591]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 119/1000] - train loss:12.43773270 - lr:0.0003640187318906343
+Accumulated training time:[00 hour - 00 min - 44 s] - Estimated time remaining:[00 hour - 05 min - 30 s]
+
+[2023-05-09 21:21:41,851]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 120/1000] - train loss:12.12312317 - lr:0.000368796897332825
+Accumulated training time:[00 hour - 00 min - 44 s] - Estimated time remaining:[00 hour - 05 min - 29 s]
+
+[2023-05-09 21:21:42,040]-[INFO - lib.callback] 
+[PSAC_gen]-[valid]
+[epoch: 120/1000]- valid loss:12.42831993 - valid min loss: 12.31600094 - req_types:36 - valid_not_improve_cnt:3
+
+[2023-05-09 21:21:42,289]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 121/1000] - train loss:12.09826279 - lr:0.0003735917549941035
+Accumulated training time:[00 hour - 00 min - 45 s] - Estimated time remaining:[00 hour - 05 min - 29 s]
+
+[2023-05-09 21:21:42,536]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 122/1000] - train loss:12.05324650 - lr:0.0003784027755413202
+Accumulated training time:[00 hour - 00 min - 45 s] - Estimated time remaining:[00 hour - 05 min - 27 s]
+
+[2023-05-09 21:21:42,779]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 123/1000] - train loss:12.40338802 - lr:0.0003832294278570071
+Accumulated training time:[00 hour - 00 min - 45 s] - Estimated time remaining:[00 hour - 05 min - 26 s]
+
+[2023-05-09 21:21:43,027]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 124/1000] - train loss:12.27489567 - lr:0.00038807117909801174
+Accumulated training time:[00 hour - 00 min - 46 s] - Estimated time remaining:[00 hour - 05 min - 25 s]
+
+[2023-05-09 21:21:43,276]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 125/1000] - train loss:12.04612160 - lr:0.00039292749475432014
+Accumulated training time:[00 hour - 00 min - 46 s] - Estimated time remaining:[00 hour - 05 min - 24 s]
+
+[2023-05-09 21:21:43,453]-[INFO - lib.callback] 
+[PSAC_gen]-[valid]
+[epoch: 125/1000]- valid loss:12.52064228 - valid min loss: 12.31600094 - req_types:17 - valid_not_improve_cnt:4
+
+[2023-05-09 21:21:43,693]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 126/1000] - train loss:12.01009941 - lr:0.00039779783870806564
+Accumulated training time:[00 hour - 00 min - 46 s] - Estimated time remaining:[00 hour - 05 min - 24 s]
+
+[2023-05-09 21:21:43,940]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 127/1000] - train loss:12.13114357 - lr:0.0004026816732927128
+Accumulated training time:[00 hour - 00 min - 46 s] - Estimated time remaining:[00 hour - 05 min - 22 s]
+
+[2023-05-09 21:21:44,200]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 128/1000] - train loss:12.49563313 - lr:0.00040757845935241496
+Accumulated training time:[00 hour - 00 min - 47 s] - Estimated time remaining:[00 hour - 05 min - 21 s]
+
+[2023-05-09 21:21:44,445]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 129/1000] - train loss:12.10815048 - lr:0.00041248765630153364
+Accumulated training time:[00 hour - 00 min - 47 s] - Estimated time remaining:[00 hour - 05 min - 20 s]
+
+[2023-05-09 21:21:44,699]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 130/1000] - train loss:12.26371288 - lr:0.0004174087221843185
+Accumulated training time:[00 hour - 00 min - 47 s] - Estimated time remaining:[00 hour - 05 min - 19 s]
+
+[2023-05-09 21:21:44,873]-[INFO - lib.callback] 
+[PSAC_gen]-[valid]
+[epoch: 130/1000]- valid loss:12.34257507 - valid min loss: 12.31600094 - req_types:19 - valid_not_improve_cnt:5
+
+[2023-05-09 21:21:45,120]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 131/1000] - train loss:12.19496536 - lr:0.00042234111373473573
+Accumulated training time:[00 hour - 00 min - 48 s] - Estimated time remaining:[00 hour - 05 min - 19 s]
+
+[2023-05-09 21:21:45,368]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 132/1000] - train loss:12.01792145 - lr:0.00042728428643644325
+Accumulated training time:[00 hour - 00 min - 48 s] - Estimated time remaining:[00 hour - 05 min - 18 s]
+
+[2023-05-09 21:21:45,622]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 133/1000] - train loss:12.00073147 - lr:0.0004322376945829026
+Accumulated training time:[00 hour - 00 min - 48 s] - Estimated time remaining:[00 hour - 05 min - 17 s]
+
+[2023-05-09 21:21:45,871]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 134/1000] - train loss:12.15788841 - lr:0.0004372007913376238
+Accumulated training time:[00 hour - 00 min - 48 s] - Estimated time remaining:[00 hour - 05 min - 16 s]
+
+[2023-05-09 21:21:46,128]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 135/1000] - train loss:12.29454231 - lr:0.0004421730287945321
+Accumulated training time:[00 hour - 00 min - 49 s] - Estimated time remaining:[00 hour - 05 min - 14 s]
+
+[2023-05-09 21:21:46,303]-[INFO - lib.callback] 
+[PSAC_gen]-[valid]
+[epoch: 135/1000]- valid loss:12.45157719 - valid min loss: 12.31600094 - req_types:19 - valid_not_improve_cnt:6
+
+[2023-05-09 21:21:46,564]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 136/1000] - train loss:12.30053425 - lr:0.00044715385803845663
+Accumulated training time:[00 hour - 00 min - 49 s] - Estimated time remaining:[00 hour - 05 min - 15 s]
+
+[2023-05-09 21:21:46,828]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 137/1000] - train loss:12.04548454 - lr:0.00045214272920572716
+Accumulated training time:[00 hour - 00 min - 49 s] - Estimated time remaining:[00 hour - 05 min - 14 s]
+
+[2023-05-09 21:21:47,076]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 138/1000] - train loss:11.96792889 - lr:0.0004571390915448772
+Accumulated training time:[00 hour - 00 min - 50 s] - Estimated time remaining:[00 hour - 05 min - 12 s]
+
+[2023-05-09 21:21:47,323]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 139/1000] - train loss:11.86280060 - lr:0.000462142393477445
+Accumulated training time:[00 hour - 00 min - 50 s] - Estimated time remaining:[00 hour - 05 min - 11 s]
+
+[2023-05-09 21:21:47,569]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 140/1000] - train loss:12.15726089 - lr:0.00046715208265886486
+Accumulated training time:[00 hour - 00 min - 50 s] - Estimated time remaining:[00 hour - 05 min - 10 s]
+
+[2023-05-09 21:21:48,613]-[INFO - lib.callback] 
+Save path: ./data/saved/psac_gen/music/64_8
+
+[2023-05-09 21:21:48,614]-[INFO - lib.callback] 
+[PSAC_gen]-[valid]
+[epoch: 140/1000]- valid loss:12.24158001 - valid min loss: 12.24158001 - req_types:16 - valid_not_improve_cnt:0
+
+[2023-05-09 21:21:48,872]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 141/1000] - train loss:12.16536140 - lr:0.000472167606039445
+Accumulated training time:[00 hour - 00 min - 51 s] - Estimated time remaining:[00 hour - 05 min - 16 s]
+
+[2023-05-09 21:21:49,124]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 142/1000] - train loss:11.96314716 - lr:0.00047718840992542057
+Accumulated training time:[00 hour - 00 min - 52 s] - Estimated time remaining:[00 hour - 05 min - 15 s]
+
+[2023-05-09 21:21:49,374]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 143/1000] - train loss:12.15181351 - lr:0.00048221394004008093
+Accumulated training time:[00 hour - 00 min - 52 s] - Estimated time remaining:[00 hour - 05 min - 14 s]
+
+[2023-05-09 21:21:49,619]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 144/1000] - train loss:12.11302376 - lr:0.00048724364158495785
+Accumulated training time:[00 hour - 00 min - 52 s] - Estimated time remaining:[00 hour - 05 min - 12 s]
+
+[2023-05-09 21:21:49,870]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 145/1000] - train loss:12.17285347 - lr:0.0004922769593010743
+Accumulated training time:[00 hour - 00 min - 52 s] - Estimated time remaining:[00 hour - 05 min - 11 s]
+
+[2023-05-09 21:21:50,052]-[INFO - lib.callback] 
+[PSAC_gen]-[valid]
+[epoch: 145/1000]- valid loss:12.30606461 - valid min loss: 12.24158001 - req_types:19 - valid_not_improve_cnt:1
+
+[2023-05-09 21:21:50,309]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 146/1000] - train loss:12.27797031 - lr:0.0004973133375302422
+Accumulated training time:[00 hour - 00 min - 53 s] - Estimated time remaining:[00 hour - 05 min - 11 s]
+
+[2023-05-09 21:21:50,556]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 147/1000] - train loss:12.11712074 - lr:0.0005023522202764049
+Accumulated training time:[00 hour - 00 min - 53 s] - Estimated time remaining:[00 hour - 05 min - 10 s]
+
+[2023-05-09 21:21:50,801]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 148/1000] - train loss:11.84372520 - lr:0.0005073930512670173
+Accumulated training time:[00 hour - 00 min - 53 s] - Estimated time remaining:[00 hour - 05 min - 09 s]
+
+[2023-05-09 21:21:51,049]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 149/1000] - train loss:12.19708824 - lr:0.0005124352740144562
+Accumulated training time:[00 hour - 00 min - 54 s] - Estimated time remaining:[00 hour - 05 min - 08 s]
+
+[2023-05-09 21:21:51,293]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 150/1000] - train loss:12.06606102 - lr:0.0005174783318774531
+Accumulated training time:[00 hour - 00 min - 54 s] - Estimated time remaining:[00 hour - 05 min - 07 s]
+
+[2023-05-09 21:21:52,298]-[INFO - lib.callback] 
+Save path: ./data/saved/psac_gen/music/64_8
+
+[2023-05-09 21:21:52,299]-[INFO - lib.callback] 
+[PSAC_gen]-[valid]
+[epoch: 150/1000]- valid loss:11.97736931 - valid min loss: 11.97736931 - req_types:15 - valid_not_improve_cnt:0
+
+[2023-05-09 21:21:52,555]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 151/1000] - train loss:11.89597511 - lr:0.0005225216681225468
+Accumulated training time:[00 hour - 00 min - 55 s] - Estimated time remaining:[00 hour - 05 min - 12 s]
+
+[2023-05-09 21:21:52,872]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 152/1000] - train loss:12.26496887 - lr:0.0005275647259855438
+Accumulated training time:[00 hour - 00 min - 55 s] - Estimated time remaining:[00 hour - 05 min - 11 s]
+
+[2023-05-09 21:21:53,129]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 153/1000] - train loss:12.00766182 - lr:0.0005326069487329825
+Accumulated training time:[00 hour - 00 min - 56 s] - Estimated time remaining:[00 hour - 05 min - 10 s]
+
+[2023-05-09 21:21:53,385]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 154/1000] - train loss:11.84037781 - lr:0.000537647779723595
+Accumulated training time:[00 hour - 00 min - 56 s] - Estimated time remaining:[00 hour - 05 min - 09 s]
+
+[2023-05-09 21:21:53,650]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 155/1000] - train loss:11.73159599 - lr:0.0005426866624697578
+Accumulated training time:[00 hour - 00 min - 56 s] - Estimated time remaining:[00 hour - 05 min - 08 s]
+
+[2023-05-09 21:21:53,883]-[INFO - lib.callback] 
+[PSAC_gen]-[valid]
+[epoch: 155/1000]- valid loss:12.30195045 - valid min loss: 11.97736931 - req_types:16 - valid_not_improve_cnt:1
+
+[2023-05-09 21:21:54,207]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 156/1000] - train loss:12.04655457 - lr:0.0005477230406989255
+Accumulated training time:[00 hour - 00 min - 57 s] - Estimated time remaining:[00 hour - 05 min - 09 s]
+
+[2023-05-09 21:21:54,543]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 157/1000] - train loss:11.94952393 - lr:0.000552756358415042
+Accumulated training time:[00 hour - 00 min - 57 s] - Estimated time remaining:[00 hour - 05 min - 09 s]
+
+[2023-05-09 21:21:54,869]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 158/1000] - train loss:12.03029251 - lr:0.000557786059959919
+Accumulated training time:[00 hour - 00 min - 57 s] - Estimated time remaining:[00 hour - 05 min - 08 s]
+
+[2023-05-09 21:21:55,147]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 159/1000] - train loss:11.61275291 - lr:0.0005628115900745793
+Accumulated training time:[00 hour - 00 min - 58 s] - Estimated time remaining:[00 hour - 05 min - 07 s]
+
+[2023-05-09 21:21:55,404]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 160/1000] - train loss:11.93872261 - lr:0.000567832393960555
+Accumulated training time:[00 hour - 00 min - 58 s] - Estimated time remaining:[00 hour - 05 min - 06 s]
+
+[2023-05-09 21:21:55,581]-[INFO - lib.callback] 
+[PSAC_gen]-[valid]
+[epoch: 160/1000]- valid loss:12.05328655 - valid min loss: 11.97736931 - req_types:16 - valid_not_improve_cnt:2
+
+[2023-05-09 21:21:55,845]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 161/1000] - train loss:11.99033642 - lr:0.000572847917341135
+Accumulated training time:[00 hour - 00 min - 58 s] - Estimated time remaining:[00 hour - 05 min - 06 s]
+
+[2023-05-09 21:21:56,104]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 162/1000] - train loss:11.77388573 - lr:0.000577857606522555
+Accumulated training time:[00 hour - 00 min - 59 s] - Estimated time remaining:[00 hour - 05 min - 05 s]
+
+[2023-05-09 21:21:56,361]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 163/1000] - train loss:12.22049332 - lr:0.0005828609084551227
+Accumulated training time:[00 hour - 00 min - 59 s] - Estimated time remaining:[00 hour - 05 min - 04 s]
+
+[2023-05-09 21:21:56,625]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 164/1000] - train loss:11.75770473 - lr:0.0005878572707942726
+Accumulated training time:[00 hour - 00 min - 59 s] - Estimated time remaining:[00 hour - 05 min - 04 s]
+
+[2023-05-09 21:21:56,877]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 165/1000] - train loss:11.93817616 - lr:0.0005928461419615432
+Accumulated training time:[00 hour - 00 min - 59 s] - Estimated time remaining:[00 hour - 05 min - 03 s]
+
+[2023-05-09 21:21:57,078]-[INFO - lib.callback] 
+[PSAC_gen]-[valid]
+[epoch: 165/1000]- valid loss:12.26482296 - valid min loss: 11.97736931 - req_types:14 - valid_not_improve_cnt:3
+
+[2023-05-09 21:21:57,322]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 166/1000] - train loss:11.96856880 - lr:0.0005978269712054677
+Accumulated training time:[00 hour - 01 min - 00 s] - Estimated time remaining:[00 hour - 05 min - 03 s]
+
+[2023-05-09 21:21:57,567]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 167/1000] - train loss:11.72651768 - lr:0.0006027992086623762
+Accumulated training time:[00 hour - 01 min - 00 s] - Estimated time remaining:[00 hour - 05 min - 02 s]
+
+[2023-05-09 21:21:57,822]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 168/1000] - train loss:11.76985645 - lr:0.0006077623054170972
+Accumulated training time:[00 hour - 01 min - 00 s] - Estimated time remaining:[00 hour - 05 min - 01 s]
+
+[2023-05-09 21:21:58,067]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 169/1000] - train loss:11.86245155 - lr:0.0006127157135635568
+Accumulated training time:[00 hour - 01 min - 01 s] - Estimated time remaining:[00 hour - 05 min - 00 s]
+
+[2023-05-09 21:21:58,316]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 170/1000] - train loss:11.92122555 - lr:0.0006176588862652642
+Accumulated training time:[00 hour - 01 min - 01 s] - Estimated time remaining:[00 hour - 04 min - 59 s]
+
+[2023-05-09 21:21:58,522]-[INFO - lib.callback] 
+[PSAC_gen]-[valid]
+[epoch: 170/1000]- valid loss:12.10898685 - valid min loss: 11.97736931 - req_types:14 - valid_not_improve_cnt:4
+
+[2023-05-09 21:21:58,774]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 171/1000] - train loss:11.80473518 - lr:0.0006225912778156814
+Accumulated training time:[00 hour - 01 min - 01 s] - Estimated time remaining:[00 hour - 04 min - 59 s]
+
+[2023-05-09 21:21:59,025]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 172/1000] - train loss:12.01345825 - lr:0.0006275123436984662
+Accumulated training time:[00 hour - 01 min - 02 s] - Estimated time remaining:[00 hour - 04 min - 58 s]
+
+[2023-05-09 21:21:59,270]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 173/1000] - train loss:11.83298302 - lr:0.0006324215406475851
+Accumulated training time:[00 hour - 01 min - 02 s] - Estimated time remaining:[00 hour - 04 min - 57 s]
+
+[2023-05-09 21:21:59,520]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 174/1000] - train loss:11.81422806 - lr:0.0006373183267072871
+Accumulated training time:[00 hour - 01 min - 02 s] - Estimated time remaining:[00 hour - 04 min - 56 s]
+
+[2023-05-09 21:21:59,763]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 175/1000] - train loss:11.77099419 - lr:0.0006422021612919343
+Accumulated training time:[00 hour - 01 min - 02 s] - Estimated time remaining:[00 hour - 04 min - 56 s]
+
+[2023-05-09 21:21:59,944]-[INFO - lib.callback] 
+[PSAC_gen]-[valid]
+[epoch: 175/1000]- valid loss:12.18550873 - valid min loss: 11.97736931 - req_types:15 - valid_not_improve_cnt:5
+
+[2023-05-09 21:22:00,221]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 176/1000] - train loss:11.66937542 - lr:0.0006470725052456798
+Accumulated training time:[00 hour - 01 min - 03 s] - Estimated time remaining:[00 hour - 04 min - 56 s]
+
+[2023-05-09 21:22:00,471]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 177/1000] - train loss:11.78464890 - lr:0.0006519288209019883
+Accumulated training time:[00 hour - 01 min - 03 s] - Estimated time remaining:[00 hour - 04 min - 55 s]
+
+[2023-05-09 21:22:00,725]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 178/1000] - train loss:11.83170509 - lr:0.0006567705721429929
+Accumulated training time:[00 hour - 01 min - 03 s] - Estimated time remaining:[00 hour - 04 min - 54 s]
+
+[2023-05-09 21:22:00,971]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 179/1000] - train loss:11.87869358 - lr:0.0006615972244586798
+Accumulated training time:[00 hour - 01 min - 03 s] - Estimated time remaining:[00 hour - 04 min - 53 s]
+
+[2023-05-09 21:22:01,220]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 180/1000] - train loss:11.89921093 - lr:0.0006664082450058965
+Accumulated training time:[00 hour - 01 min - 04 s] - Estimated time remaining:[00 hour - 04 min - 52 s]
+
+[2023-05-09 21:22:01,394]-[INFO - lib.callback] 
+[PSAC_gen]-[valid]
+[epoch: 180/1000]- valid loss:12.47403717 - valid min loss: 11.97736931 - req_types:13 - valid_not_improve_cnt:6
+
+[2023-05-09 21:22:01,644]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 181/1000] - train loss:11.79240799 - lr:0.000671203102667175
+Accumulated training time:[00 hour - 01 min - 04 s] - Estimated time remaining:[00 hour - 04 min - 52 s]
+
+[2023-05-09 21:22:01,892]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 182/1000] - train loss:11.89395428 - lr:0.0006759812681093656
+Accumulated training time:[00 hour - 01 min - 04 s] - Estimated time remaining:[00 hour - 04 min - 51 s]
+
+[2023-05-09 21:22:02,141]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 183/1000] - train loss:11.90915585 - lr:0.0006807422138420734
+Accumulated training time:[00 hour - 01 min - 05 s] - Estimated time remaining:[00 hour - 04 min - 50 s]
+
+[2023-05-09 21:22:02,389]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 184/1000] - train loss:11.66569138 - lr:0.0006854854142758899
+Accumulated training time:[00 hour - 01 min - 05 s] - Estimated time remaining:[00 hour - 04 min - 50 s]
+
+[2023-05-09 21:22:02,628]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 185/1000] - train loss:11.84943295 - lr:0.0006902103457804171
+Accumulated training time:[00 hour - 01 min - 05 s] - Estimated time remaining:[00 hour - 04 min - 49 s]
+
+[2023-05-09 21:22:02,805]-[INFO - lib.callback] 
+[PSAC_gen]-[valid]
+[epoch: 185/1000]- valid loss:12.09615326 - valid min loss: 11.97736931 - req_types:14 - valid_not_improve_cnt:7
+
+[2023-05-09 21:22:03,060]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 186/1000] - train loss:11.83966637 - lr:0.0006949164867420742
+Accumulated training time:[00 hour - 01 min - 06 s] - Estimated time remaining:[00 hour - 04 min - 49 s]
+
+[2023-05-09 21:22:03,313]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 187/1000] - train loss:11.86840439 - lr:0.0006996033176216812
+Accumulated training time:[00 hour - 01 min - 06 s] - Estimated time remaining:[00 hour - 04 min - 48 s]
+
+[2023-05-09 21:22:03,563]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 188/1000] - train loss:11.74866295 - lr:0.0007042703210118134
+Accumulated training time:[00 hour - 01 min - 06 s] - Estimated time remaining:[00 hour - 04 min - 47 s]
+
+[2023-05-09 21:22:03,818]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 189/1000] - train loss:11.67782021 - lr:0.000708916981693923
+Accumulated training time:[00 hour - 01 min - 06 s] - Estimated time remaining:[00 hour - 04 min - 46 s]
+
+[2023-05-09 21:22:04,079]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 190/1000] - train loss:11.92342472 - lr:0.000713542786695215
+Accumulated training time:[00 hour - 01 min - 07 s] - Estimated time remaining:[00 hour - 04 min - 46 s]
+
+[2023-05-09 21:22:05,821]-[INFO - lib.callback] 
+Save path: ./data/saved/psac_gen/music/64_8
+
+[2023-05-09 21:22:05,823]-[INFO - lib.callback] 
+[PSAC_gen]-[valid]
+[epoch: 190/1000]- valid loss:11.96848106 - valid min loss: 11.96848106 - req_types:17 - valid_not_improve_cnt:0
+
+[2023-05-09 21:22:06,148]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 191/1000] - train loss:11.59666061 - lr:0.000718147225345279
+Accumulated training time:[00 hour - 01 min - 09 s] - Estimated time remaining:[00 hour - 04 min - 52 s]
+
+[2023-05-09 21:22:06,409]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 192/1000] - train loss:11.68021584 - lr:0.0007227297893324638
+Accumulated training time:[00 hour - 01 min - 09 s] - Estimated time remaining:[00 hour - 04 min - 52 s]
+
+[2023-05-09 21:22:06,654]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 193/1000] - train loss:11.64440060 - lr:0.0007272899727599946
+Accumulated training time:[00 hour - 01 min - 09 s] - Estimated time remaining:[00 hour - 04 min - 51 s]
+
+[2023-05-09 21:22:06,902]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 194/1000] - train loss:11.58478928 - lr:0.0007318272722018201
+Accumulated training time:[00 hour - 01 min - 09 s] - Estimated time remaining:[00 hour - 04 min - 50 s]
+
+[2023-05-09 21:22:07,149]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 195/1000] - train loss:11.75943375 - lr:0.0007363411867581902
+Accumulated training time:[00 hour - 01 min - 10 s] - Estimated time remaining:[00 hour - 04 min - 49 s]
+
+[2023-05-09 21:22:07,333]-[INFO - lib.callback] 
+[PSAC_gen]-[valid]
+[epoch: 195/1000]- valid loss:12.15364838 - valid min loss: 11.96848106 - req_types:11 - valid_not_improve_cnt:1
+
+[2023-05-09 21:22:07,592]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 196/1000] - train loss:11.62383270 - lr:0.0007408312181109531
+Accumulated training time:[00 hour - 01 min - 10 s] - Estimated time remaining:[00 hour - 04 min - 49 s]
+
+[2023-05-09 21:22:07,853]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 197/1000] - train loss:11.58523464 - lr:0.0007452968705785666
+Accumulated training time:[00 hour - 01 min - 10 s] - Estimated time remaining:[00 hour - 04 min - 48 s]
+
+[2023-05-09 21:22:08,207]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 198/1000] - train loss:11.45441914 - lr:0.0007497376511708207
+Accumulated training time:[00 hour - 01 min - 11 s] - Estimated time remaining:[00 hour - 04 min - 48 s]
+
+[2023-05-09 21:22:08,482]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 199/1000] - train loss:11.72195625 - lr:0.000754153069643261
+Accumulated training time:[00 hour - 01 min - 11 s] - Estimated time remaining:[00 hour - 04 min - 47 s]
+
+[2023-05-09 21:22:08,739]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 200/1000] - train loss:11.58932400 - lr:0.0007585426385513102
+Accumulated training time:[00 hour - 01 min - 11 s] - Estimated time remaining:[00 hour - 04 min - 47 s]
+
+[2023-05-09 21:22:08,924]-[INFO - lib.callback] 
+[PSAC_gen]-[valid]
+[epoch: 200/1000]- valid loss:12.13819027 - valid min loss: 11.96848106 - req_types:12 - valid_not_improve_cnt:2
+
+[2023-05-09 21:22:09,176]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 201/1000] - train loss:11.71900940 - lr:0.0007629058733040791
+Accumulated training time:[00 hour - 01 min - 12 s] - Estimated time remaining:[00 hour - 04 min - 47 s]
+
+[2023-05-09 21:22:09,429]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 202/1000] - train loss:11.61898899 - lr:0.0007672422922178648
+Accumulated training time:[00 hour - 01 min - 12 s] - Estimated time remaining:[00 hour - 04 min - 46 s]
+
+[2023-05-09 21:22:09,671]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 203/1000] - train loss:11.60803509 - lr:0.0007715514165693255
+Accumulated training time:[00 hour - 01 min - 12 s] - Estimated time remaining:[00 hour - 04 min - 45 s]
+
+[2023-05-09 21:22:09,919]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 204/1000] - train loss:11.43931007 - lr:0.0007758327706483305
+Accumulated training time:[00 hour - 01 min - 12 s] - Estimated time remaining:[00 hour - 04 min - 44 s]
+
+[2023-05-09 21:22:10,168]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 205/1000] - train loss:11.57258797 - lr:0.0007800858818104762
+Accumulated training time:[00 hour - 01 min - 13 s] - Estimated time remaining:[00 hour - 04 min - 43 s]
+
+[2023-05-09 21:22:11,149]-[INFO - lib.callback] 
+Save path: ./data/saved/psac_gen/music/64_8
+
+[2023-05-09 21:22:11,150]-[INFO - lib.callback] 
+[PSAC_gen]-[valid]
+[epoch: 205/1000]- valid loss:11.82661533 - valid min loss: 11.82661533 - req_types:11 - valid_not_improve_cnt:0
+
+[2023-05-09 21:22:11,394]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 206/1000] - train loss:11.77050209 - lr:0.0007843102805292644
+Accumulated training time:[00 hour - 01 min - 14 s] - Estimated time remaining:[00 hour - 04 min - 46 s]
+
+[2023-05-09 21:22:11,638]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 207/1000] - train loss:11.56854534 - lr:0.0007885055004479359
+Accumulated training time:[00 hour - 01 min - 14 s] - Estimated time remaining:[00 hour - 04 min - 46 s]
+
+[2023-05-09 21:22:11,889]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 208/1000] - train loss:11.64059830 - lr:0.0007926710784309548
+Accumulated training time:[00 hour - 01 min - 14 s] - Estimated time remaining:[00 hour - 04 min - 45 s]
+
+[2023-05-09 21:22:12,131]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 209/1000] - train loss:11.82767296 - lr:0.0007968065546151362
+Accumulated training time:[00 hour - 01 min - 15 s] - Estimated time remaining:[00 hour - 04 min - 44 s]
+
+[2023-05-09 21:22:12,378]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 210/1000] - train loss:11.58463478 - lr:0.0008009114724604141
+Accumulated training time:[00 hour - 01 min - 15 s] - Estimated time remaining:[00 hour - 04 min - 43 s]
+
+[2023-05-09 21:22:12,595]-[INFO - lib.callback] 
+[PSAC_gen]-[valid]
+[epoch: 210/1000]- valid loss:12.02372360 - valid min loss: 11.82661533 - req_types:10 - valid_not_improve_cnt:1
+
+[2023-05-09 21:22:12,843]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 211/1000] - train loss:11.52318764 - lr:0.000804985378800241
+Accumulated training time:[00 hour - 01 min - 15 s] - Estimated time remaining:[00 hour - 04 min - 43 s]
+
+[2023-05-09 21:22:13,103]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 212/1000] - train loss:11.63739777 - lr:0.0008090278238916157
+Accumulated training time:[00 hour - 01 min - 16 s] - Estimated time remaining:[00 hour - 04 min - 42 s]
+
+[2023-05-09 21:22:13,347]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 213/1000] - train loss:11.75642681 - lr:0.0008130383614647334
+Accumulated training time:[00 hour - 01 min - 16 s] - Estimated time remaining:[00 hour - 04 min - 42 s]
+
+[2023-05-09 21:22:13,593]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 214/1000] - train loss:11.59886932 - lr:0.0008170165487722521
+Accumulated training time:[00 hour - 01 min - 16 s] - Estimated time remaining:[00 hour - 04 min - 41 s]
+
+[2023-05-09 21:22:13,836]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 215/1000] - train loss:11.54951763 - lr:0.0008209619466381695
+Accumulated training time:[00 hour - 01 min - 16 s] - Estimated time remaining:[00 hour - 04 min - 40 s]
+
+[2023-05-09 21:22:14,023]-[INFO - lib.callback] 
+[PSAC_gen]-[valid]
+[epoch: 215/1000]- valid loss:11.91234970 - valid min loss: 11.82661533 - req_types:16 - valid_not_improve_cnt:2
+
+[2023-05-09 21:22:14,274]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 216/1000] - train loss:11.52627563 - lr:0.0008248741195063076
+Accumulated training time:[00 hour - 01 min - 17 s] - Estimated time remaining:[00 hour - 04 min - 40 s]
+
+[2023-05-09 21:22:14,524]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 217/1000] - train loss:11.50445366 - lr:0.0008287526354883949
+Accumulated training time:[00 hour - 01 min - 17 s] - Estimated time remaining:[00 hour - 04 min - 39 s]
+
+[2023-05-09 21:22:14,788]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 218/1000] - train loss:11.52603817 - lr:0.000832597066411746
+Accumulated training time:[00 hour - 01 min - 17 s] - Estimated time remaining:[00 hour - 04 min - 39 s]
+
+[2023-05-09 21:22:15,075]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 219/1000] - train loss:11.62870979 - lr:0.00083640698786653
+Accumulated training time:[00 hour - 01 min - 18 s] - Estimated time remaining:[00 hour - 04 min - 38 s]
+
+[2023-05-09 21:22:15,342]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 220/1000] - train loss:11.60291195 - lr:0.0008401819792526236
+Accumulated training time:[00 hour - 01 min - 18 s] - Estimated time remaining:[00 hour - 04 min - 37 s]
+
+[2023-05-09 21:22:15,547]-[INFO - lib.callback] 
+[PSAC_gen]-[valid]
+[epoch: 220/1000]- valid loss:11.92500591 - valid min loss: 11.82661533 - req_types:11 - valid_not_improve_cnt:3
+
+[2023-05-09 21:22:15,790]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 221/1000] - train loss:11.50971985 - lr:0.0008439216238260436
+Accumulated training time:[00 hour - 01 min - 18 s] - Estimated time remaining:[00 hour - 04 min - 37 s]
+
+[2023-05-09 21:22:16,038]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 222/1000] - train loss:11.36798954 - lr:0.0008476255087449539
+Accumulated training time:[00 hour - 01 min - 19 s] - Estimated time remaining:[00 hour - 04 min - 37 s]
+
+[2023-05-09 21:22:16,293]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 223/1000] - train loss:11.60816669 - lr:0.0008512932251152415
+Accumulated training time:[00 hour - 01 min - 19 s] - Estimated time remaining:[00 hour - 04 min - 36 s]
+
+[2023-05-09 21:22:16,548]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 224/1000] - train loss:11.38489056 - lr:0.0008549243680356569
+Accumulated training time:[00 hour - 01 min - 19 s] - Estimated time remaining:[00 hour - 04 min - 35 s]
+
+[2023-05-09 21:22:16,804]-[INFO - lib.callback] 
+[PSAC_gen]-[train]
+[epoch: 225/1000] - train loss:11.36654091 - lr:0.0008585185366425135
+Accumulated training time:[00 hour - 01 min - 19 s] - Estimated time remaining:[00 hour - 04 min - 34 s]
+
+[2023-05-09 21:22:17,891]-[INFO - lib.callback] 
+Save path: ./data/saved/psac_gen/music/64_8
+
+[2023-05-09 21:22:17,891]-[INFO - lib.callback] 
+[PSAC_gen]-[valid]
+[epoch: 225/1000]- valid loss:11.82143593 - valid min loss: 11.82143593 - req_types:11 - valid_not_improve_cnt:0
