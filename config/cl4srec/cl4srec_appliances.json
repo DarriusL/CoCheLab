@@ -1,0 +1,90 @@
+{
+    "net": {
+        "type": "CL4SRec",
+        "is_norm_fist": true,
+        "is_embed_net_manual_init": false,
+        "is_cl_method": true,
+        "d": 64,
+        "d_fc": 2048,
+        "n_heads": 2,
+        "n_layers": 2,
+        "posenc_buffer_size": 28,
+        "input_types": 4107,
+        "mask_item": [
+            0
+        ],
+        "lambda_cl": 0.1
+    },
+    "augmentation": {
+        "type": "Basic",
+        "operator": [
+            "crop",
+            "mask",
+            "reorder"
+        ],
+        "scale": [
+            0.4,
+            0.4,
+            0.4
+        ],
+        "opr_sample_num": 2,
+        "mask_to": 0
+    },
+    "seed": 5566,
+    "linux_fast_num_workers": 4,
+    "email_reminder": true,
+    "dataset": {
+        "type": "appliances",
+        "path": "./data/datasets/process/complete/Appliances.data",
+        "crop_or_fill": true,
+        "fill_mask": 0,
+        "limit_length": 25
+    },
+    "train": {
+        "batch_size": 256,
+        "max_epoch": 100,
+        "valid_step": 5,
+        "stop_train_step_valid_not_improve": 100,
+        "gpu_is_available": true,
+        "use_amp": false,
+        "optimizer_type": "adam",
+        "learning_rate": 1e-05,
+        "weight_decay": 0.001,
+        "betas": [
+            0.9,
+            0.999
+        ],
+        "use_lr_schedule": true,
+        "lr_max": 1e-05,
+        "metric_less": true,
+        "save": true,
+        "model_save_path": "./data/saved/cl4srec/appliances/pre_64_2048_2_2/model.model",
+        "end_save": true
+    },
+    "test": {
+        "batch_size": 256,
+        "cache_satisfaction_ratio": 0.2,
+        "bs_storagy": 1000,
+        "slide_T": 3,
+        "alter_topk": 10,
+        "metrics_at_k": [
+            5,
+            10,
+            20
+        ],
+        "cache_size": [
+            0.1,
+            0.2,
+            0.3,
+            0.4,
+            0.5,
+            0.6,
+            0.7,
+            0.8,
+            0.9,
+            1.0
+        ],
+        "gpu_is_available": true,
+        "save": true
+    }
+}
