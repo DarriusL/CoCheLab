@@ -1,6 +1,7 @@
 *.ipynb
 *.log
 *.data
+*.txt
 ./data/saved/
 ./cache/unsaved_data
 ./data/datasets
