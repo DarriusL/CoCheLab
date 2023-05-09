@@ -2,25 +2,23 @@
     "net": {
         "type": "EC4SRec",
         "is_norm_fist": true,
-        "is_net_manual_init": false,
-        "is_cl_method":true,
+        "is_embed_net_manual_init": false,
+        "is_cl_method": true,
         "d": 64,
         "d_fc": 2048,
         "n_heads": 2,
         "n_layers": 2,
-        "posenc_buffer_size": 200,
-        "input_types": 3549,
+        "posenc_buffer_size": 58,
+        "input_types": 3558,
         "mask_item": [
             0
         ],
-        "impt_score_step": 1,
-        "tau": 0.6,
-        "lambda_cl": 0.1,
+        "impt_score_step": 20,
+        "tau": 0.1,
+        "lambda_cl": 0.3,
         "lambda_sl_pos": 0.1,
-        "lambda_sl_neg": 0.1,
-        "lambda_cls": 0.1
+        "lambda_sl_neg": 0.1
     },
-    "seed": 5566,
     "augmentation": {
         "type": "EGA",
         "operator": [
@@ -30,49 +28,55 @@
             "retrieval"
         ],
         "scale": [
-            0.5,
-            0.5,
-            0.5,
+            0.4,
+            0.4,
+            0.4,
             null
         ],
         "opr_sample_num": 3,
         "mask_to": 0
     },
+    "seed": 5566,
+    "linux_fast_num_workers": 4,
+    "email_reminder": true,
     "dataset": {
         "type": "ml1m",
         "path": "./data/datasets/process/complete/ml.data",
         "crop_or_fill": true,
         "fill_mask": 0,
-        "limit_length": 50
+        "limit_length": 55
     },
     "train": {
         "batch_size": 256,
-        "max_epoch": 100,
-        "valid_step": 10,
+        "max_epoch": 200,
+        "valid_step": 5,
+        "stop_train_step_valid_not_improve": 50,
         "gpu_is_available": true,
+        "use_amp": false,
         "optimizer_type": "adam",
-        "learning_rate": 0.001,
-        "weight_decay": 0.001,
+        "learning_rate": 1e-06,
+        "weight_decay": 1e-08,
         "betas": [
             0.9,
             0.999
         ],
-        "use_lr_schedule": true,
-        "lr_max": 0.001,
+        "use_lr_schedule": false,
+        "lr_max": 1e-06,
         "metric_less": true,
         "save": true,
-        "model_save_path": "./data/saved/ec4srec/ml1m/pre_64_2048_2_2/model.model"
+        "model_save_path": "./data/saved/ec4srec/ml1m/pre_64_2048_2_2/model.model",
+        "end_save": true
     },
     "test": {
-        "batch_size":256,
-        "cache_satisfaction_ratio":0.2,
-        "bs_storagy":1000,
-        "slide_T":4,
-        "alter_topk":10,
+        "batch_size": 256,
+        "cache_satisfaction_ratio": 0.2,
+        "bs_storagy": 1000,
+        "slide_T": 3,
+        "alter_topk": 10,
         "metrics_at_k": [
             5,
             10,
-            15
+            20
         ],
         "cache_size": [
             0.1,
