@@ -1,5 +1,5 @@
 from data import processor as pcr
-import time, torch, torch
+import time, torch, torch, os
 from lib.callback import CustomException as ce
 from lib import glb_var, util
 
@@ -27,35 +27,33 @@ def report(dataset, src):
         '==============================\n'
         )
 
-def ml_generate(tgt):
+def ml_generate(src):
     '''Generate the ml-1m dataset and save it to the target directory
 
     Parameters:
     -----------
 
-    tgt: str
+    src: str
     path with filename
     '''
     #process ml-1m
     start = time.time();
-    src = './data/datasets/meta/ml-1m/ratings.dat';
     glb_var.get_value('logger').info(f'Processing {src} ...');
     mldataset = pcr.ml_pcr(src = src);
-    torch.save(mldataset, str(tgt));
     glb_var.get_value('logger').info(f'Processing {src} complete. time consuming:{util.s2hms(time.time() - start)} s\n');
-    
     report(
         dataset = mldataset,
         src = src
     )
+    return mldataset;
 
-def rev_generate(src, tgt):
+def rev_generate(src):
     '''Generate a review dataset and save it to the target directory
 
     Parameters:
     -----------
 
-    tgt: str
+    src: str
     path with filename
 
     '''
@@ -63,77 +61,12 @@ def rev_generate(src, tgt):
     start = time.time();
     glb_var.get_value('logger').info(f'Processing {src} ...');
     dataset = pcr.rev_pcr(src = src);
-    torch.save(dataset, str(tgt));
     glb_var.get_value('logger').info(f'Processing {src} complete. time consuming:{util.s2hms(time.time() - start)} s\n');
     report(
         dataset = dataset,
         src = src
     )
-
-def lite_generate(tgt):
-    '''
-    Generate a lite dataset and save it to the target path
-
-    Parameters:
-
-    tgt: str
-    directory to save the file
-    '''
-
-    #process ml-1m
-    ml_generate(str(tgt) + '/ml.data');
-    #process appliances
-    rev_generate(
-        src = './data/datasets/meta/appliances/Appliances_lite.json',
-        tgt = str(tgt) + '/Appliances_lite.data'
-        )
-    #process beauty
-    rev_generate(
-        src = './data/datasets/meta/beauty/All_Beauty_lite.json',
-        tgt = str(tgt) + '/All_Beauty_lite.data'
-    )
-    #process music
-    rev_generate(
-        src = './data/datasets/meta/music/Digital_Music_lite.json',
-        tgt = str(tgt) + '/Digital_Music_lite.data'
-    )
-    #process kindle
-    rev_generate(
-        src = './data/datasets/meta/kindle/Kindle_Store_lite.json',
-        tgt = str(tgt) + '/Kindle_Store_lite.data'
-    )
-
-def complete_generate(tgt):
-    '''
-    Generate a complete dataset and save it to the target path
-
-    Parameters:
-
-    tgt: str
-    directory to save the file
-    '''
-    #process ml-1m
-    ml_generate(str(tgt) + '/ml.data');
-    #process appliances
-    rev_generate(
-        src = './data/datasets/meta/appliances/Appliances.json',
-        tgt = str(tgt) + '/Appliances.data'
-        )
-    #process beauty
-    rev_generate(
-        src = './data/datasets/meta/beauty/All_Beauty.json',
-        tgt = str(tgt) + '/All_Beauty.data'
-    )
-    #process music
-    rev_generate(
-        src = './data/datasets/meta/music/Digital_Music.json',
-        tgt = str(tgt) + '/Digital_Music.data'
-    )
-    #process kindle
-    rev_generate(
-        src = './data/datasets/meta/kindle/Kindle_Store.json',
-        tgt = str(tgt) + '/Kindle_Store.data'
-    )
+    return dataset;
 
 def run_pcr(cfg):
     '''Running function of data processing
@@ -143,22 +76,31 @@ def run_pcr(cfg):
     cfg:dict
     Configure for data-processing
     '''
-    if cfg['type'] == 'lite':
-        if cfg['tgt'] is None:
-            tgt = './data/datasets/process/lite';
-        lite_generate(tgt = tgt);
-    elif cfg['type'] == 'complete':
-        if cfg['tgt'] is None:
-            tgt = './data/datasets/process/complete';
-        complete_generate(tgt = tgt);
-    else:
-        glb_var.get_value('logger').error(f'Unrecognized type[{cfg["type"]}],only two types (lite and complete) accepted.\n')
-        raise ce('TypeError')
+    for dp_cfg in cfg.values():
+        save_path, _ = os.path.split(dp_cfg['tgt']);
+        if not os.path.exists(save_path):
+            os.makedirs(save_path);
+        if dp_cfg['data_type'].lower() == 'ml1m':
+            dataset = ml_generate(dp_cfg['src'])
+            torch.save(dataset, dp_cfg['tgt']);
+        elif dp_cfg['data_type'].lower() == 'amazon review':
+            dataset = rev_generate(dp_cfg['src']);
+            torch.save(dataset, dp_cfg['tgt']);
+        if dp_cfg['crop_or_fill']:
+            dataset_repcr = run_repcr(dataset, dp_cfg['limit_length'], dp_cfg['fill_mask']);
+            if dp_cfg['repcr_devide_to_train_valid_test']:
+                glb_var.get_value('logger').info(f'divide dataset  ...');
+                dataset_repcr = pcr.dataset_divide(dataset_repcr, dp_cfg['ratio'][0], dp_cfg['ratio'][1]);
+                glb_var.get_value('logger').info(f'divide dataset  ... complete. \n');
+            torch.save(dataset_repcr, dp_cfg['repcr_tgt']);
     
 def run_repcr(dataset, length, fill_mask = 0):
     '''Reporcess
     '''
+    start = time.time();
+    glb_var.get_value('logger').info(f'Reprocessing, cut or fill to {length}  ...');
     dataset = pcr.cut_and_fill_pcr(dataset, length, fill_mask);
+    glb_var.get_value('logger').info(f'Reprocessing, cut or fill to {length}  ... complete. time consuming:{util.s2hms(time.time() - start)} s\n');
     report(dataset, 'reprocess dataset');
     return dataset
 

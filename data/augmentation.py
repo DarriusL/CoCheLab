@@ -233,7 +233,7 @@ class EGA(BasicAugmentation):
     '''
     def __init__(self, aug_cfg_dict) -> None:
         super().__init__(aug_cfg_dict)
-        #type:"EGA"
+        #type:"EGA" or "EGAPlus"
         #operator:["crop", "mask", "reorder", "retrieval"]
         #scale:[eta, gamma, beta, next_req_batch_tensor]
         #   next_req_batch_tensor:torch.Tensor

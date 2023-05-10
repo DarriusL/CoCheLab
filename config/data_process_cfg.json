@@ -1,0 +1,47 @@
+{
+    "dp_1":{
+        "data_type":"ml1m",
+        "src":"./data/datasets/meta/ml-1m/ratings.dat",
+        "tgt":"./data/datasets/process/complete/ml.data",
+        "crop_or_fill": true,
+        "fill_mask": 0,
+        "limit_length": 55,
+        "repcr_devide_to_train_valid_test":true,
+        "ratio":[
+            0.6,
+            0.2,
+            0.2
+        ],
+        "repcr_tgt":"./data/datasets/process/complete/ml_devide_55.data"
+    },
+    "dp_2":{
+        "data_type":"amazon review",
+        "src":"./data/datasets/meta/appliances/Appliances.json",
+        "tgt":"./data/datasets/process/complete/Appliances.data",
+        "crop_or_fill": true,
+        "fill_mask": 0,
+        "limit_length": 25,
+        "repcr_devide_to_train_valid_test":true,
+        "ratio":[
+            0.6,
+            0.2,
+            0.2
+        ],
+        "repcr_tgt":"./data/datasets/process/complete/appliances_devide_25.data"
+    },
+    "dp_3":{
+        "data_type":"amazon review",
+        "src":"./data/datasets/process/lite/Digital_Music_lite.data",
+        "tgt":"./data/datasets/process/lite/Digital_Music_lite.data",
+        "crop_or_fill": true,
+        "fill_mask": 0,
+        "limit_length": 25,
+        "repcr_devide_to_train_valid_test":true,
+        "ratio":[
+            0.6,
+            0.2,
+            0.2
+        ],
+        "repcr_tgt":"./data/datasets/process/lite/music_devide_25.data"
+    }
+}

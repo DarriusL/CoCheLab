@@ -1,6 +1,6 @@
 import argparse, sys, logging, os
 from data.generator import run_pcr
-from lib import glb_var
+from lib import glb_var, json_util
 from lib.callback import Logger, CustomException
 from Room.work import run_work
 
@@ -14,7 +14,7 @@ if __name__ == '__main__':
     ).get_log()
     glb_var.set_value('logger', log);
     parse = argparse.ArgumentParser();
-    parse.add_argument('--data_process', '-dp', type = str, default = None, help = 'type for data process(None/lite/complete)');
+    parse.add_argument('--data_process', '-dp', type = str, default = False, help = 'Whether to process data(True/False)');
     parse.add_argument('--config', '-cfg', type = str, default = None, help = 'config for run');
     parse.add_argument('--saved_config', '-sc', type = str, default = None, help = 'path for saved config to test')
     parse.add_argument('--mode', type = str, default = 'train', help = 'train/test/train_and_test')
@@ -22,12 +22,9 @@ if __name__ == '__main__':
     args = parse.parse_args();
 
     #execute date process command
-    if args.data_process is not None:
-        dp_config = {
-            'type': args.data_process,
-            'tgt': None
-        }
-        run_pcr(cfg = dp_config);
+    if args.data_process:
+        dp_cfg = json_util.jsonload('./config/data_process_cfg.json');
+        run_pcr(cfg = dp_cfg);
         sys.exit(0);
 
     #execute work command
