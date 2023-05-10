@@ -31,7 +31,7 @@ Configuration files for data processing.
         ],
         "repcr_tgt":"./data/datasets/process/complete/ml_devide_55.data"
     },
-    dp_2:{}
+    "dp_2":{}
 }
 ```
 
