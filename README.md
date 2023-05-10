@@ -11,6 +11,7 @@ cd CacheLab
 conda env create -f cachelab_dev.yml
 conda activate cachelab_dev
 git update-index --assume-unchanged config/lab_cfg.json
+git update-index --assume-unchanged config/data_process_cfg.json
 ```
 
 ## Framework file structure
@@ -390,9 +391,10 @@ usage: executor.py [-h] [--data_process DATA_PROCESS] [--config CONFIG] [--saved
 
 process dataset
 
+You need to configure the data processing configuration file yourself:@./config/data_process_cfg.json
+
 ```
-python executor.py --data_process=lite
-python executor.py --data_process=complete
+python executor.py --data_process=True
 ```
 
 CL4SRec
