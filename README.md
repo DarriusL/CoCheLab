@@ -17,19 +17,21 @@ git update-index --assume-unchanged config/data_process_cfg.json
 
 ```
 CacheLab
+├── .gitignore
 ├── cache
-│	├── logger
-│	│	└── logger.log
-│	└── unsaved_data
+│	└── logger
+│		└── logger.log
+├── cachelab_env.yml
 ├── config
-│	├── cl4srec
-│	│	└── cl4srec_ml1m.json
-│	├── duo4srec
-│	│	└── duo4srec_ml1m.json
-│	├── ec4srec
-│	│	└── ec4srec_ml1m.json
-│	└── psac
-│		└── psac_gen_ml1m.json
+│	├── caser/.
+│	├── CFG_README.md
+│	├── cl4srec/.
+│	├── data_process_cfg.json
+│	├── duo4srec/.
+│	├── ec4srec/.
+│	├── egpc/.
+│	├── lab_cfg.json
+│	└── psac/.
 ├── data
 │	├── augmentation.py
 │	├── datasets
@@ -55,31 +57,23 @@ CacheLab
 │	│		├── complete
 │	│		│	├── All_Beauty.data
 │	│		│	├── Appliances.data
+│	│		│	├── appliances_devide_25.data
 │	│		│	├── Digital_Music.data
+│	│		│	├── kindle_devide_25.data
 │	│		│	├── Kindle_Store.data
-│	│		│	└── ml.data
+│	│		│	├── ml.data
+│	│		│	├── ml_devide_55.data
+│	│		│	└── music_devide_25.data
 │	│		└── lite
 │	│			├── All_Beauty_lite.data
 │	│			├── Appliances_lite.data
 │	│			├── Digital_Music_lite.data
 │	│			├── Kindle_Store_lite.data
-│	│			└── ml.data
+│	│			├── ml.data
+│	│			└── music_devide_25.data
 │	├── generator.py
 │	├── processor.py
-│	├── saved
-│	│	├── cl4srec
-│	│	│	└── ml1m
-│	│	│		└── pre_64_2048_2_2
-│	│	│			├── loss.png
-│	│	│			├── model.model
-│	│	│			└── test_result.json
-│	│	├── duo4srec
-│	│	│	└── ml1m
-│	│	│		└── pre_64_2048_2_2
-│	│	└── ec4srec
-│	│		└── ml1m
-│	│			├── post_64_2048_2_2
-│	│			└── pre_64_2048_2_2
+│	├── saved/.
 │	└── __init__.py
 |
 ├── executor.py
@@ -92,17 +86,14 @@ CacheLab
 |
 ├── model
 │	├── attnet.py
-│	├── framework
-│	│	├── cl4srec.py
-│	│	├── duo4srec.py
-│	│	├── ec4srec.py
-│	│	└── psac.py
-│	├── loss.py
-│	├── __init__.py
-│	└── __pycache__
-│		├── attnet.cpython-310.pyc
-│		├── loss.cpython-310.pyc
-│		└── __init__.cpython-310.pyc
+│	├── cnnnet.py
+│	└── framework
+│		├── caser.py
+│		├── cl4srec.py
+│		├── duo4srec.py
+│		├── ec4srec.py
+│		├── egpc.py
+│		└── psac.py
 ├── README.md
 └── Room
 	├── officer.py
