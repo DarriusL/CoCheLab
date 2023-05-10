@@ -1,6 +1,6 @@
 {
     "dp_ml":{
-        "data_type":"ml1m",
+        "data_type":"movielens",
         "src":"./data/datasets/meta/ml-1m/ratings.dat",
         "tgt":"./data/datasets/process/complete/ml.data",
         "crop_or_fill": true,
