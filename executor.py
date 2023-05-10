@@ -1,3 +1,7 @@
+# @Time   : 2023.03.03
+# @Author : Darrius Lei
+# @Email  : darrius.lei@outlook.com
+
 import argparse, sys, logging, os
 from data.generator import run_pcr
 from lib import glb_var, json_util

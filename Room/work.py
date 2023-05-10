@@ -1,3 +1,7 @@
+# @Time   : 2023.03.03
+# @Author : Darrius Lei
+# @Email  : darrius.lei@outlook.com
+
 import torch, time,os
 from lib import glb_var, json_util, util, callback
 from Room.officer import Trainer, Tester, get_save_path

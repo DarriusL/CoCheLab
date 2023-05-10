@@ -1,3 +1,6 @@
+# @Time   : 2022.11.03
+# @Author : Darrius Lei
+# @Email  : darrius.lei@outlook.com
 import networkx as nx
 import igraph as ig
 import scipy as sp

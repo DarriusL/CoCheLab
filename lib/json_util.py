@@ -1,3 +1,6 @@
+# @Time   : 2023.03.03
+# @Author : Darrius Lei
+# @Email  : darrius.lei@outlook.com
 import json, os
 
 def jsonload(src):

@@ -1,3 +1,6 @@
+# @Time   : 2023.03.03
+# @Author : Darrius Lei
+# @Email  : darrius.lei@outlook.com
 from data import processor as pcr
 import time, torch, torch, os
 from lib.callback import CustomException as ce
@@ -80,7 +83,7 @@ def run_pcr(cfg):
         save_path, _ = os.path.split(dp_cfg['tgt']);
         if not os.path.exists(save_path):
             os.makedirs(save_path);
-        if dp_cfg['data_type'].lower() == 'ml1m':
+        if dp_cfg['data_type'].lower() == 'movielens':
             dataset = ml_generate(dp_cfg['src'])
             torch.save(dataset, dp_cfg['tgt']);
         elif dp_cfg['data_type'].lower() == 'amazon review':

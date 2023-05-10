@@ -1,3 +1,7 @@
+# @Time   : 2023.03.03
+# @Author : Darrius Lei
+# @Email  : darrius.lei@outlook.com
+
 from model.framework.cl4srec import *
 from model.framework.duo4srec import *
 from model.framework.ec4srec import *

@@ -14,7 +14,7 @@
         ],
         "repcr_tgt":"./data/datasets/process/complete/ml_devide_55.data"
     },
-    "dp_2":{
+    "dp_appliances":{
         "data_type":"amazon review",
         "src":"./data/datasets/meta/appliances/Appliances.json",
         "tgt":"./data/datasets/process/complete/Appliances.data",
@@ -29,7 +29,7 @@
         ],
         "repcr_tgt":"./data/datasets/process/complete/appliances_devide_25.data"
     },
-    "dp_3":{
+    "dp_music":{
         "data_type":"amazon review",
         "src":"./data/datasets/process/lite/Digital_Music_lite.data",
         "tgt":"./data/datasets/process/lite/Digital_Music_lite.data",
