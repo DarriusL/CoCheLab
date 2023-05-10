@@ -6,7 +6,6 @@ Code for the content caching algorithm in edge caching.
 
 ```shell
 git clone https://github.com/DarriusL/CacheLab.git
-mkdir CacheLab
 cd CacheLab
 conda env create -f cachelab_dev.yml
 conda activate cachelab_dev
