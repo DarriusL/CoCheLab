@@ -1,5 +1,5 @@
 {
-    "dp_1":{
+    "dp_ml":{
         "data_type":"ml1m",
         "src":"./data/datasets/meta/ml-1m/ratings.dat",
         "tgt":"./data/datasets/process/complete/ml.data",
