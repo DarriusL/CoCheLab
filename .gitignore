@@ -1,8 +1,14 @@
+# IDEs
+.vscode
+
+# Python
 *.ipynb
 *.pyc
 *.log
 *.data
 *.txt
+
+#Data
 data/saved/
 cache/
 data/datasets/
