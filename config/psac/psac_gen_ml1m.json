@@ -24,7 +24,7 @@
     "seed": 5566,
     "train": {
         "batch_size": 256,
-        "max_epoch": 350,
+        "max_epoch": 1000,
         "valid_step": 10,
         "stop_train_step_valid_not_improve": 100,
         "gpu_is_available": true,
@@ -46,7 +46,7 @@
     "test": {
         "batch_size": 256,
         "cache_satisfaction_ratio": 0.2,
-        "bs_storagy": 1000,
+        "bs_storagy": 100,
         "slide_T": 3,
         "alter_topk": 10,
         "metrics_at_k": [
