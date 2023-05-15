@@ -9,6 +9,7 @@
 *.txt
 
 #Data
+__pycache__/
 data/saved/
 cache/
 data/datasets/
