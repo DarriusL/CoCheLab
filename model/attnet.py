@@ -261,7 +261,7 @@ class MultiHeadAttention(torch.nn.Module):
         self.Attnet = ScaledDotProductAttentionLite(temperature = d_k/n_heads);
         util.set_attr(
             obj = self,
-            dict = dict(
+            dict_ = dict(
             d = d,
             d_q = d_q,
             d_k = d_k,

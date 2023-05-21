@@ -103,6 +103,7 @@ class BasicAugmentation():
                     ),
                     dim = -1
                 )
+        idx = idx.to(glb_var.get_value('device'));
         batch_idx = torch.arange(0, batch_size).reshape(-1, 1);
         return idx, batch_idx;
 
@@ -123,8 +124,8 @@ class BasicAugmentation():
         (batch_size, floor(req_len * eta))
         '''
         crop_num = int(np.floor(eta * su.shape[1]));
-        crop_idx, batch_idx = self.sample_idx(su.shape[1], crop_num, batch_size = su.shape[0], cont = True);
-        return su[batch_idx, crop_idx];
+        crop_idx, _ = self.sample_idx(su.shape[1], crop_num, batch_size = su.shape[0], cont = True);
+        return su.gather(-1, crop_idx);
 
     def opr_mask(self, gamma, su):
         '''Operator Random mask
@@ -165,9 +166,9 @@ class BasicAugmentation():
         '''
         reorder_num = int(np.floor(beta * su.shape[1]));
         reorder_idx, batch_idx = self.sample_idx(su.shape[1], reorder_num, batch_size = su.shape[0]);
-        sub_su = su[batch_idx, reorder_idx];
+        sub_su = su.gather(-1, reorder_idx);
         shuffle_idx, _ = self.sample_idx(reorder_num, reorder_num, batch_size = su.shape[0]);
-        sub_su = sub_su[batch_idx, shuffle_idx];
+        sub_su = sub_su.gather(-1, shuffle_idx);
         su[batch_idx, reorder_idx] = sub_su;
         return su; 
 
@@ -279,7 +280,6 @@ class EGA(BasicAugmentation):
         '''
         batch_size, req_len = su.shape;
         crop_num = int(np.floor(eta * req_len));
-        batch_idx = torch.arange(0, batch_size).reshape(-1, 1);
         all_idx = torch.arange(0, req_len).unsqueeze(0).repeat(batch_size, 1).to(glb_var.get_value('device'));
         if self.type.lower() == 'ega':
             #crop_idx:(batch_size, crop_num)
@@ -287,7 +287,7 @@ class EGA(BasicAugmentation):
         elif self.type.lower() == 'egaplus':
             #crop_idx:(batch_size, crop_num)
             crop_idx = torch.multinomial(self.p_neg, crop_num, False);
-        su_crop_neg = su[batch_idx, crop_idx];
+        su_crop_neg = su.gather(-1, crop_idx);
         su_crop_pos = su[torch.bitwise_not((all_idx.reshape(batch_size, req_len, 1) == 
                         crop_idx.reshape(batch_size, 1, crop_num)).sum(dim = -1).to(torch.bool))].reshape(batch_size, -1);
         return su_crop_pos, su_crop_neg;
@@ -354,9 +354,9 @@ class EGA(BasicAugmentation):
             _, reorder_idx = impt_score.topk(k = reorder_num, largest = False, dim = -1, sorted = True);
         elif self.type.lower() == 'egaplus':
             reorder_idx = torch.multinomial(self.p_pos, reorder_num, False);
-        sub_su = su[batch_idx, reorder_idx];
+        sub_su = su.gather(-1, reorder_idx);
         shuffle_idx, _ = self.sample_idx(reorder_num, reorder_num, batch_size = batch_size);
-        sub_su = sub_su[batch_idx, shuffle_idx];
+        sub_su = sub_su.gather(-1, shuffle_idx);
         su[batch_idx, reorder_idx] = sub_su;
         #su_pos
         return su;

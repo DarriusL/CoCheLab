@@ -3,8 +3,9 @@
 # @Email  : darrius.lei@outlook.com
 import pydash as ps
 import datetime, time, torch
+from matplotlib import pyplot as plt
 
-def set_attr(obj, dict, keys = None):
+def set_attr(obj, dict_, keys = None, except_type = None):
     '''Quickly assign properties to objects
 
     Parameters:
@@ -12,7 +13,7 @@ def set_attr(obj, dict, keys = None):
     obj: object of a python class
         Assign values to the properties of the object
 
-    dict: dict
+    dict_: dict
         A dictionary for assigning values to object attributes, 
         whose key is the attribute, and the corresponding value is the value
     
@@ -22,8 +23,10 @@ def set_attr(obj, dict, keys = None):
 
     '''
     if keys is not None:
-        dict = ps.pick(dict, keys);
-    for key, value in dict.items():
+        dict_ = ps.pick(dict, keys);
+    for key, value in dict_.items():
+        if type(value) == except_type:
+            continue;
         setattr(obj, key, value);
 
 def get_attr(obj, keys):
@@ -61,3 +64,10 @@ def s2hms(s):
     '''Convert s to hms
     '''
     return time.strftime("%H hour - %M min - %S s", time.gmtime(s));
+
+def single_plot(x_data, y_data, x_label, y_label, path):
+    plt.figure(figsize = (10, 6));
+    plt.plot(x_data, y_data);
+    plt.xlabel(x_label);
+    plt.ylabel(y_label);
+    plt.savefig(path, dpi = 400);
