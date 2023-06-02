@@ -227,12 +227,11 @@ class EGPC(torch.nn.Module):
         h_neg_req = self.encoder(torch.arange(self.input_types).unsqueeze(-1).to(glb_var.get_value('device'))
                               [torch.arange(self.input_types).to(glb_var.get_value('device')) != next_req, :]); 
 
-        #Recomendation loss
+        #Recomendation loss(prediction loss)
         rec_pos_score = torch.matmul(hu, hv_tgt.transpose(0, 1));
         rec_neg_score = torch.matmul(hu, h_neg_req.mean(dim = 0).unsqueeze(-1))
         loss_rec = self.loss_func(rec_pos_score, rec_neg_score);
-        #Self-Supervised Contrastive learning loss
-        #SSL pos loss
+        #Positive sequence loss
         #hu_a:(1, d)
         hu_a1 = self.encoder(su_opr_pos_list[0][[batch_idx], :]);
         hu_a2 = self.encoder(su_opr_pos_list[1][[batch_idx], :]);
@@ -247,7 +246,7 @@ class EGPC(torch.nn.Module):
         ssl_pos_score_pos = torch.matmul(hu_a1, hu_a2.transpose(0, 1));
         ssl_pos_score_neg = torch.matmul(hu_a1, hu_opr_pos.mean(dim = 0).unsqueeze(-1));
         ssl_pos_loss = self.loss_func(ssl_pos_score_pos, ssl_pos_score_neg);
-        #SSL neg loss
+        #Negative sequence loss
         #hu_aneg:(1, d)
         hu_aneg = self.encoder(su_opr_neg_list[0][[batch_idx], :]);
         #hu_a_:(batch - 1, d)
