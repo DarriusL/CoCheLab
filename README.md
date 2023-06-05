@@ -1,6 +1,6 @@
-# CacheLab
+# CoCheLab
 
-Code for the content caching algorithm in edge caching.
+Code for the **Co**ntent Ca**ch**ing algorithm in edge caching.
 
 ## Environment configuration
 
