@@ -58,6 +58,8 @@ class Logger():
         #Create a logger object
         self.logger = logging.getLogger(__name__);
         self.logger.setLevel(self.level);
+        self.logger.addHandler(self.get_console_handler());
+        self.logger.addHandler(self.get_file_handler());
 
     def get_console_handler(self):
         #Create a log handler for the console
@@ -77,12 +79,36 @@ class Logger():
         return file_handler;
 
     def get_log(self):
-        self.logger.addHandler(self.get_console_handler());
-        self.logger.addHandler(self.get_file_handler());
         return self.logger;
 
 
 def send_smtp_emil(sender, receiver, passward, subject, content, port = 25, server = None):
+    '''Send email using SMTP protocol
+
+    Parameter:
+    ----------
+    sender:str
+        Address to send email
+    
+    receiver:str
+        Address to receive email from sender
+
+    passward:str
+        sender's password or authorization code
+    
+    subject:str
+        email subject
+
+    content:str
+        email content
+
+    port:int, optional
+        port of server
+        default:25
+    
+    server:str, optional
+        default:None
+    '''
     smtp = smtplib.SMTP();
     if server is None:
         server = 'smtp.'+sender.split('.')[-2].split('@')[-1]+'.com';
@@ -92,3 +118,42 @@ def send_smtp_emil(sender, receiver, passward, subject, content, port = 25, serv
     message['Subject'] = Header(subject, 'utf-8');
     smtp.sendmail(sender, receiver, message.as_string());
     smtp.quit()
+
+class VarReporter():
+    '''Reporter for var'''
+    def __init__(self) -> None:
+        self.var_dict = {};
+
+    def add(self, key, value):
+        '''Add variables that need to be reported to reporter
+        '''
+        self.var_dict[key] = value;
+
+    def report(self, logger_func, head, num_of_var_per_line = 4):
+        '''Reporting parameters
+
+        Parameters:
+        -----------
+        logger_func:function
+            logger function
+            e.g. logger.info
+        
+        head:str
+            content preamble
+
+        var_dict:dict
+            A dictionary of parameters to print
+        
+        num_of_var_per_line:int, optional
+            number of arguments to print per line
+            default:4
+        '''
+        content = head + '\n';
+        cnt = 0;
+        for key, value in self.var_dict.items():
+            content += f'{key}:[{value}] ';
+            cnt += 1;
+            if cnt >= num_of_var_per_line:
+                cnt = 0;
+                content += '\n';
+        logger_func(content);

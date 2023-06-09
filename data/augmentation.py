@@ -5,6 +5,8 @@ import torch
 from lib import util, glb_var, callback
 import numpy as np
 
+logger = glb_var.get_value('logger');
+
 class BasicAugmentation():
     '''Basic Augmentation for CL4SRec, Duo4SRec
 
@@ -245,7 +247,7 @@ class EGA(BasicAugmentation):
         #opr_sample_num
         #mask_to
         if 'retrieval' in self.operator and self.operator[-1] != 'retrieval':
-            glb_var.get_value('logger').error('Operator [retrieval] must be at the end of the list.\nHint:'
+            logger.error('Operator [retrieval] must be at the end of the list.\nHint:'
                 'Donnot forget to change the [scale] when adjusting, otherwise unexpected results or unexpected errors will occur');
             callback.CustomException('AugmentationConfigError');
 
@@ -464,5 +466,5 @@ def get_augmentation(aug_cfg_dict):
     elif aug_cfg_dict['type'].lower() in ['ega', 'egaplus']:
         return EGA(aug_cfg_dict);
     else:
-        glb_var.get_value('logger').error(f'augmentation type [{aug_cfg_dict["type"]}] is not supported.');
+        logger.error(f'augmentation type [{aug_cfg_dict["type"]}] is not supported.');
         raise callback.CustomException('AugmentationTypeError');

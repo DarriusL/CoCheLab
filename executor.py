@@ -3,10 +3,8 @@
 # @Email  : darrius.lei@outlook.com
 
 import argparse, sys, logging, os
-from data.generator import run_pcr
 from lib import glb_var, json_util
 from lib.callback import Logger, CustomException
-from Room.work import run_work
 
 if __name__ == '__main__':
     if not os.path.exists('./cache/logger/'):
@@ -27,11 +25,13 @@ if __name__ == '__main__':
 
     #execute date process command
     if args.data_process:
+        from data.generator import run_pcr
         dp_cfg = json_util.jsonload('./config/data_process_cfg.json');
         run_pcr(cfg = dp_cfg);
         sys.exit(0);
 
     #execute work command
+    from Room.work import run_work
     if args.config is not None:
         if args.mode not in ['train', 'train_and_test']:
             log.error(f'The using of the configuration file does not support the {args.mode} mode. \n'

@@ -49,4 +49,4 @@ def get_value(key):
     try:
         return glb_dict[key];
     except KeyError:
-        raise CustomException('The retrieved key does not exist');
+        raise CustomException(f'The retrieved key [{key}] does not exist');

@@ -9,6 +9,8 @@ from data import augmentation, generator
 import matplotlib.pyplot as plt
 from collections import Counter
 
+logger = glb_var.get_value('logger');
+
 def get_save_path(cfg):
     '''Gnerate save path
     '''
@@ -34,7 +36,6 @@ class AbstractTrainer():
         self.valid_loss = [];
         self.valid_min_loss = np.inf if self.metric_less else -np.inf;
         self.device = glb_var.get_value('device');
-        self.logger = glb_var.get_value('logger');
         if self.use_amp:
             self.scaler = torch.cuda.amp.grad_scaler.GradScaler();
         self.model = model.to(self.device);
@@ -44,7 +45,7 @@ class AbstractTrainer():
         elif self.optimizer_type.lower() == 'adamw':
             self.optimizer = torch.optim.AdamW(self.model.parameters(), lr = self.learning_rate, betas = self.betas, weight_decay = self.weight_decay);
         else:
-            self.logger.warning(f"Unrecognized optimizer[{self.optimizer_type.lower()}], set default Adam optimizer");
+            logger.warning(f"Unrecognized optimizer[{self.optimizer_type.lower()}], set default Adam optimizer");
             self.optimizer = torch.optim.Adam(self.model.parameters(), lr = self.learning_rate);
 
         #lr decay
@@ -62,12 +63,12 @@ class AbstractTrainer():
             os.makedirs(self.save_path)
     
     def train(self, train_data):
-        self.logger.error('Method needs to be called after being implemented');
+        logger.error('Method needs to be called after being implemented');
         raise callback.CustomException('NotImplementedError');
 
     def _check_nan(self, loss):
         if torch.isnan(loss):
-            self.logger.error('Loss is nan.\nHint:\n(1)Check the loss function;\n'
+            logger.error('Loss is nan.\nHint:\n(1)Check the loss function;\n'
                               '(2)Checks if the constant used is in the range between [-6.55 x 10^4]~[6.55 x 10^4]\n'
                               '(3)Not applicable for automatic mixed-precision acceleration.');
             raise callback.CustomException('ValueError');
@@ -77,7 +78,7 @@ class AbstractTrainer():
         '''
         torch.save(self.model, self.save_path + '/model.model');
         json_util.jsonsave(self.cfg, self.save_path + '/config.json');
-        self.logger.info(f'Save path: {self.save_path}')
+        logger.info(f'Save path: {self.save_path}')
 
 class AbstractTester():
     '''Abstract parent trainer class
@@ -85,11 +86,10 @@ class AbstractTester():
     def __init__(self, test_cfg_dict, model) -> None:
         util.set_attr(self, test_cfg_dict);
         self.device = glb_var.get_value('device');
-        self.logger = glb_var.get_value('logger');
         self.model = model.to(self.device);
 
     def test(self, test_data):
-        self.logger.error('Method needs to be called after being implemented');
+        logger.error('Method needs to be called after being implemented');
         raise callback.CustomException('NotImplementedError');
 
 class Trainer(AbstractTrainer):
@@ -155,7 +155,7 @@ class Trainer(AbstractTrainer):
                 elif mode == 'valid':
                     su_batch_operat_list = self.aug.operate(self.impt_score_valid[index, :].clone(), su_batch.clone());
                 else:
-                    self.logger.error('Unsupported mode type');
+                    logger.error('Unsupported mode type');
                     raise callback.CustomException('ModeError');
             else:
                 #su_batch_operat_list:list
@@ -287,7 +287,7 @@ class Trainer(AbstractTrainer):
             train_data = iter(train_loader).__next__();
             #train
             self.train_loss.append(self._train_epoch(train_data));
-            self.logger.info(f'[{self.model.type}]-[train]\n'
+            logger.info(f'[{self.model.type}]-[train]\n'
                             f'[epoch: {epoch + 1}/{self.max_epoch}] - train loss:{self.train_loss[-1]:.8f} - '
                             f'lr:{self.optimizer.param_groups[0]["lr"]}\n'
                             f'Accumulated training time:[{util.s2hms(time.time() - t)}] - '
@@ -321,12 +321,12 @@ class Trainer(AbstractTrainer):
                     else:
                         valid_not_improve_cnt += 1;
 
-                self.logger.info(f'[{self.model.type}]-[valid]\n'
+                logger.info(f'[{self.model.type}]-[valid]\n'
                                  f'[epoch: {epoch + 1}/{self.max_epoch}]- valid loss:{self.valid_loss[-1]:.8f} - '
                                  f'valid min loss: {self.valid_min_loss:.8f} - req_types:{req_types} - '
                                  f'valid_not_improve_cnt:{valid_not_improve_cnt}');
                 if valid_not_improve_cnt >= self.stop_train_step_valid_not_improve:
-                    self.logger.info('Meet the set requirements, stop training');
+                    logger.info('Meet the set requirements, stop training');
                     break;
             if self.cfg['net']['type'].lower() in ['ec4srec', 'egpc'] and epoch + 1 != self.max_epoch:
                 #if it's EC4SRec and meet the update imptscore strp
@@ -497,7 +497,7 @@ class Tester(AbstractTester):
                 #choose top-cache_num
                 cache_set = set(torch.as_tensor(list(alter_dict.keys()))
                             [torch.argsort(torch.as_tensor(list(alter_dict.values())), descending=True)[:cache_num]].tolist());
-            self.logger.debug('Tester._caching_and_cal_qoe_trafficload\n'
+            logger.debug('Tester._caching_and_cal_qoe_trafficload\n'
                             f'cache_num: {cache_num} - len(cache_set): {len(cache_set)}')
             #calculate qoe and trafficload
             qoe, userload, allload = 0, 0, 0;
@@ -556,7 +556,7 @@ class Tester(AbstractTester):
                     t_reason += (time.time() - t_r);
                 #next_req:(batch_size)
                 next_req_pre = next_req_logits.argmax(dim = -1);
-                self.logger.debug(f'pre_types:{len(Counter(next_req_pre.tolist()))}');
+                logger.debug(f'pre_types:{len(Counter(next_req_pre.tolist()))}');
                 #new data:(batch_size, seq_len)
                 data = torch.cat((test_data, next_req.unsqueeze(-1)), dim = -1);
             elif self.model.type.lower() in ['caser', 'psac_gen']:
@@ -573,7 +573,7 @@ class Tester(AbstractTester):
                     next_req_logits = self.model(test_data);
                     t_reason += (time.time() - t_r);
                 next_req_pre = next_req_logits.argmax(dim = -1);
-                self.logger.debug(f'pre_types:{len(Counter(next_req_pre.reshape(-1).tolist()))}');
+                logger.debug(f'pre_types:{len(Counter(next_req_pre.reshape(-1).tolist()))}');
 
             #calculate hit rate and ndcg
             hitrate, ndcg = self._cal_hitrate_and_ndcg_atk(test_data.clone(), next_req_pre.clone(), next_req.clone(), self.metrics_at_k);
@@ -608,7 +608,7 @@ class Tester(AbstractTester):
         str_show2 = '';
         for it in range(len(self.cache_size)):
             str_show2 += f'  {self.cache_size[it]:.1f}   -   {qoe[it]:.6f} -- {trafficload[it]:.6f}       \n'
-        self.logger.info(
+        logger.info(
             f'batch test[{cur_step+1}/{n_step}] time consuming: {util.s2hms(time.time() - t_start)}\n'
             f'--------------------------------------\n'
             f'[{self.model.type}]Result of batch test\n'
@@ -642,5 +642,5 @@ class Tester(AbstractTester):
             f'Performance report of the model\n'\
             f'--------------------------------------\n'\
             f'cache_size  -  QoE -- TrafficLoad     \n' + str_show2;
-        self.logger.info(str);
+        logger.info(str);
         return str;

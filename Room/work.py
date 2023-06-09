@@ -8,6 +8,8 @@ from Room.officer import Trainer, Tester, get_save_path
 from model import *
 from data import *
 
+logger = glb_var.get_value('logger');
+
 def run_work(config_path, mode = 'train'):
     ''' Run work command
 
@@ -27,7 +29,7 @@ def run_work(config_path, mode = 'train'):
         _, config['train']['model_save_path'] = os.path.split(config['train']['model_save_path']);
         cfg_root, _ = os.path.split(config_path);
         config['train']['model_save_path'] = cfg_root + '/' + config['train']['model_save_path'];
-        glb_var.get_value('logger').info(f"Updata save path:[{config['train']['model_save_path']}]");
+        logger.info(f"Updata save path:[{config['train']['model_save_path']}]");
         json_util.jsonsave(config, config_path);
         del cfg_root;
     else:
@@ -52,11 +54,11 @@ def run_work(config_path, mode = 'train'):
     dataset = torch.load(config['dataset']['path']);
     if config['dataset']['crop_or_fill']:
         t = time.time()
-        glb_var.get_value('logger').info(f'Cut and fill dataset to limited length: {config["dataset"]["limit_length"]} ...')
+        logger.info(f'Cut and fill dataset to limited length: {config["dataset"]["limit_length"]} ...')
         dataset = run_repcr(dataset, 
                             length = config['dataset']['limit_length'], 
                             fill_mask = config['dataset']['fill_mask']);
-        glb_var.get_value('logger').info(f'Processing complete, consuming: {util.s2hms(time.time() - t)}');
+        logger.info(f'Processing complete, consuming: {util.s2hms(time.time() - t)}');
         if mode in ['train', 'train_and_test']:
             config['net']['input_types'] = dataset['req_types'];
     elif mode in ['train', 'train_and_test']:
@@ -73,7 +75,7 @@ def run_work(config_path, mode = 'train'):
     #conditional update
     if mode in ['train', 'train_and_test']:
         config['train']['model_save_path'] = get_save_path(config);
-        glb_var.get_value('logger').info(f"Updata save path:[{config['train']['model_save_path']}]")
+        logger.info(f"Updata save path:[{config['train']['model_save_path']}]")
         json_util.jsonsave(config, config_path);
 
     report(config, lab_cfg);
@@ -98,7 +100,7 @@ def run_work(config_path, mode = 'train'):
         tester = Tester(config, model);
         result = run_test(tester, dataset);
     else:
-        glb_var.get_value('logger').error(f'Unrecognized Mode [{mode}], acceptable:(train/test/train_and_test)');
+        logger.error(f'Unrecognized Mode [{mode}], acceptable:(train/test/train_and_test)');
         raise callback.CustomException('ModeError');
 
     if config['email_reminder']:
@@ -125,18 +127,18 @@ def run_train(trainer, dataset):
     dataset:dict
     '''
     t = time.time();
-    glb_var.get_value('logger').info('Start training ... ');
+    logger.info('Start training ... ');
     trainer.train(dataset);
-    glb_var.get_value('logger').info(f'Training complete, time consuming: {util.s2hms(time.time() - t)}');
+    logger.info(f'Training complete, time consuming: {util.s2hms(time.time() - t)}');
     return trainer.model;
 
 def run_test(tester, dataset):
     '''test the trained model
     '''
     t = time.time();
-    glb_var.get_value('logger').info('Start Testing ... ');
+    logger.info('Start Testing ... ');
     result = tester.test(dataset);
-    glb_var.get_value('logger').info(f'Testing complete, time consuming: {util.s2hms(time.time() - t)}');
+    logger.info(f'Testing complete, time consuming: {util.s2hms(time.time() - t)}');
     return result;
 
 def generate_model(cfg):
@@ -165,7 +167,7 @@ def generate_model(cfg):
     elif net_cfg_dict['type'].lower() == 'egpc':
         model = EGPC(net_cfg_dict);
     else:
-        glb_var.get_value('logger').error(f'Unrecognized Mode [{net_cfg_dict["type"].lower()}]');
+        logger.error(f'Unrecognized Mode [{net_cfg_dict["type"].lower()}]');
         raise callback.CustomException('ModelTypeError');
     return model;
 
@@ -180,23 +182,23 @@ def report(config, lab_cfg):
     cfg_keys = config.keys();
     for key in keys:
         if key not in cfg_keys:
-            glb_var.get_value('logger').error(f'Config miss key [{key}]');
+            logger.error(f'Config miss key [{key}]');
             raise callback.CustomException('ConfigError');
         elif key == 'train':
             cfg_train_keys = config['train'].keys();
             for subkey in train_keys:
                 if subkey not in cfg_train_keys:
-                    glb_var.get_value('logger').error(f'Config key [train] miss subkey [{subkey}]');
+                    logger.error(f'Config key [train] miss subkey [{subkey}]');
                     raise callback.CustomException('ConfigError');
 
     #buffer size
     if 'posenc_buffer_size' in config['net'].keys():
         if config['dataset']['limit_length'] + 3 > config['net']['posenc_buffer_size']:
-            glb_var.get_value('logger').error('Parameter settings on net [posenc_buffer_size] and on dataset [limit_length] conflict');
+            logger.error('Parameter settings on net [posenc_buffer_size] and on dataset [limit_length] conflict');
             raise callback.CustomException('ConfigError');
     #net config
     if config['net']['type'].lower() in ['cl4srec', 'ec4srec', 'duo4srec', 'egpc'] and not config['net']['is_cl_method']:
-            glb_var.get_value('logger').error(f'Net type [{config["net"]["type"]}] is Contrastive Learning, please set [is_cl_method] to [True]');
+            logger.error(f'Net type [{config["net"]["type"]}] is Contrastive Learning, please set [is_cl_method] to [True]');
             raise callback.CustomException('ConfigError');
     if config['email_reminder']:
         try:
@@ -205,9 +207,9 @@ def report(config, lab_cfg):
             smtp.login(lab_cfg['email_reminder']['sender'], lab_cfg['email_reminder']['password']);
             smtp.close();
         except:
-            glb_var.get_value('logger').error('Please enter the config directory to configure the lab_cfg.json file');
+            logger.error('Please enter the config directory to configure the lab_cfg.json file');
             raise callback.CustomException('ConfigError');
-    glb_var.get_value('logger').info(
+    logger.info(
     f'CacheLab Configuration report:\n'
     '------------------------------------\n'
     f'Constant settings:\nDevice: [{glb_var.get_value("device")}]\n'

@@ -5,6 +5,8 @@
 import torch
 from lib import glb_var, util, callback
 
+logger = glb_var.get_value('logger')
+
 def attn_pad_msk(seq, expand_len, mask_item = [0]):
     '''Return the mask for pad
 
@@ -35,7 +37,7 @@ def attn_pad_msk(seq, expand_len, mask_item = [0]):
     try:
         msk_num = len(mask_item);
     except:
-        glb_var.get_value('logger').error('The mask must be of type list');
+        logger.error('The mask must be of type list');
         callback.CustomException('TypeError');
     msk = seq.data.eq(mask_item[0]).unsqueeze(1).repeat(1, expand_len,  1);
     for i in range(1, msk_num - 1):

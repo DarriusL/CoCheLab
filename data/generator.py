@@ -6,6 +6,8 @@ import time, torch, torch, os, copy
 from lib.callback import CustomException as ce
 from lib import glb_var, util
 
+logger = glb_var.get_value('logger')
+
 def report(dataset, src):
     '''
     Display information about datasets
@@ -17,7 +19,7 @@ def report(dataset, src):
 
     src:dataset dir
     '''
-    glb_var.get_value('logger').info(
+    logger.info(
         src + ' \n'
         f'Report\n'
         '==============================\n'
@@ -41,9 +43,9 @@ def ml_generate(src):
     '''
     #process ml-1m
     start = time.time();
-    glb_var.get_value('logger').info(f'Processing {src} ...');
+    logger.info(f'Processing {src} ...');
     mldataset = pcr.ml_pcr(src = src);
-    glb_var.get_value('logger').info(f'Processing {src} complete. time consuming:{util.s2hms(time.time() - start)}\n');
+    logger.info(f'Processing {src} complete. time consuming:{util.s2hms(time.time() - start)}\n');
     report(
         dataset = mldataset,
         src = src
@@ -62,9 +64,9 @@ def rev_generate(src):
     '''
     #process
     start = time.time();
-    glb_var.get_value('logger').info(f'Processing {src} ...');
+    logger.info(f'Processing {src} ...');
     dataset = pcr.rev_pcr(src = src);
-    glb_var.get_value('logger').info(f'Processing {src} complete. time consuming:{util.s2hms(time.time() - start)}\n');
+    logger.info(f'Processing {src} complete. time consuming:{util.s2hms(time.time() - start)}\n');
     report(
         dataset = dataset,
         src = src
@@ -92,10 +94,10 @@ def run_pcr(cfg):
         if dp_cfg['crop_or_fill']:
             dataset_repcr = run_repcr(dataset, dp_cfg['limit_length'], dp_cfg['fill_mask']);
             if dp_cfg['repcr_devide_to_train_valid_test']:
-                glb_var.get_value('logger').info(f'divide dataset  ...');
+                logger.info(f'divide dataset  ...');
                 train, valid, test = pcr.dataset_divide(copy.deepcopy(dataset_repcr), dp_cfg['ratio'][0], dp_cfg['ratio'][1]);
                 torch.save({'train': train, 'valid': valid, 'test':test}, dp_cfg['repcr_tgt'])
-                glb_var.get_value('logger').info(f'divide dataset  ... complete. \n');
+                logger.info(f'divide dataset  ... complete. \n');
             else:
                 torch.save(dataset_repcr, dp_cfg['repcr_tgt']);
     
@@ -103,9 +105,9 @@ def run_repcr(dataset, length, fill_mask = 0):
     '''Reporcess
     '''
     start = time.time();
-    glb_var.get_value('logger').info(f'Reprocessing, cut or fill to {length}  ...');
+    logger.info(f'Reprocessing, cut or fill to {length}  ...');
     dataset_repcr = pcr.cut_and_fill_pcr(dataset, length, fill_mask);
-    glb_var.get_value('logger').info(f'Reprocessing, cut or fill to {length}  ... complete. time consuming:{util.s2hms(time.time() - start)}\n');
+    logger.info(f'Reprocessing, cut or fill to {length}  ... complete. time consuming:{util.s2hms(time.time() - start)}\n');
     return dataset_repcr
 
 class NextReqDataSet(torch.utils.data.Dataset):
@@ -144,7 +146,7 @@ class NextReqDataSet(torch.utils.data.Dataset):
                      self.next_item[1:2, uid:uid + 1]), dim = -1
                 )
         else:
-            glb_var.get_value('logger').error(f'Unrecognized mode [{mode}],only accept the two mode types: train/valid/test.\n')
+            logger.error(f'Unrecognized mode [{mode}],only accept the two mode types: train/valid/test.\n')
             raise ce('ModeErorr');
         self.mode = mode;
 

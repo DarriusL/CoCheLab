@@ -102,6 +102,8 @@ CacheLab
 
 ```
 
+
+
 **Dataset acquisition:**
 
 ---
@@ -111,6 +113,8 @@ CacheLab
 [Amazon review lite](https://nijianmo.github.io/amazon/)
 
 [Amazon review](https://cseweb.ucsd.edu/~jmcauley/datasets/amazon_v2/) 
+
+
 
 **Algorithms that have been implemented and algorithms that will be supported soon:**
 
@@ -127,6 +131,10 @@ DL-based:
 
 - [x] PSAC_gen[[4]](#ref4)
 - [x] Caser[[5]](#ref5)
+
+
+
+**Configuration file related**: [CFG_README.md](./config/CFG_README.md)
 
 
 

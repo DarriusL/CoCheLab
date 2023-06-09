@@ -64,7 +64,7 @@
         "lr_max": 1e-06,
         "metric_less": true,
         "save": true,
-        "model_save_path": "./data/saved/egpc/music/post_64_2048_2_2_impts[10]/model.model",
+        "model_save_path": "./data/saved/egpc/music/pre_64_2048_2_2/model.model",
         "end_save": true
     },
     "test": {

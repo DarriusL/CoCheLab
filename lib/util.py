@@ -2,7 +2,7 @@
 # @Author : Darrius Lei
 # @Email  : darrius.lei@outlook.com
 import pydash as ps
-import datetime, time, torch
+import datetime, time
 from matplotlib import pyplot as plt
 
 def set_attr(obj, dict_, keys = None, except_type = None):
@@ -59,6 +59,13 @@ def get_date(separator = '_'):
     '''Quick get formated date
     '''
     return str(datetime.date.today()).replace('-', separator);
+
+def get_time(separator = '_'):
+    '''Quick get formated time
+    '''
+    now = datetime.datetime.now();
+    t = f'{now.hour}-{now.minute}-{now.second}';
+    return t.replace('-', separator);
 
 def s2hms(s):
     '''Convert s to hms
