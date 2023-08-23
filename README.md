@@ -114,6 +114,10 @@ CacheLab
 
 [Amazon review](https://cseweb.ucsd.edu/~jmcauley/datasets/amazon_v2/) 
 
+The original dataset is downloaded and saved in the path:  ./data/datasets/meta/
+
+At the same time, it also provides a redirect link for the Baidu Netdisk dataset, including the [meta dataset](https://pan.baidu.com/#bdlink=Njc2N2Y2Yzg3NzUyNTY0OGVjOWZjNjNmMGQ5YzE1YzYjMzYzMmM1MzA5MDE5NDJjMTRiYzE2YTBkMmY1MTI5YTIjMjA4MDg0NTg5MSNtZXRhLnppcA==) and the [processed dataset](https://pan.baidu.com/#bdlink=ZGExODc3NGE5NGM4OTc1MmNhOTE1ZWYyYWI1YjMyMjAjODc5NTk3ODE0M2IxMzQxOTQ3YzNkOGY0MjRmYmJjNTEjMTMzNDU4Mjc5I3Byb2Nlc3Muemlw).
+
 
 
 **Algorithms that have been implemented and algorithms that will be supported soon:**
