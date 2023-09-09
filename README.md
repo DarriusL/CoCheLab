@@ -271,7 +271,7 @@ python executor.py -cfg='./config/psac/psac_gen_music.json' --mode=train_and_tes
 python executor.py -sc='./data/saved/psac_gen/music/64_8/config.json' --mode=test
 ```
 
-test
+
 
 # Refrence
 
