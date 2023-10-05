@@ -55,13 +55,22 @@ def get_attr(obj, keys):
             dict[key] = getattr(obj, key);
     return dict;
 
+def set_seed(seed):
+    '''
+    '''
+    import torch
+    import numpy as np
+    np.random.seed(seed)
+    torch.manual_seed(seed)
+    torch.cuda.manual_seed(seed) 
+
 def get_date(separator = '_'):
-    '''Quick get formated date
+    '''Quickly get formated date
     '''
     return str(datetime.date.today()).replace('-', separator);
 
 def get_time(separator = '_'):
-    '''Quick get formated time
+    '''Quickly get formated time
     '''
     now = datetime.datetime.now();
     t = f'{now.hour}-{now.minute}-{now.second}';
@@ -71,6 +80,9 @@ def s2hms(s):
     '''Convert s to hms
     '''
     return time.strftime("%H hour - %M min - %S s", time.gmtime(s));
+
+def clear_output():
+    print('\033[F\033[J', end='')
 
 def single_plot(x_data, y_data, x_label, y_label, path):
     plt.figure(figsize = (10, 6));

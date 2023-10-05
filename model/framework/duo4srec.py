@@ -91,7 +91,7 @@ class Duo4SRec(torch.nn.Module):
         super().__init__();
         util.set_attr(self, net_cfg_dict);
         self.encoder = Encoder(self.d, self.d_fc, self.n_heads, self.n_layers, 
-                               self.input_types, self.posenc_buffer_size, self.mask_item);
+                               self.input_types, self.posenc_buffer_size, self.mask_item, self.is_norm_fist);
         self.loss_func = loss.BPRLoss(gamma = glb_var.get_value('eps'));
         self.classfy_func = torch.nn.CrossEntropyLoss(ignore_index = self.mask_item[0]);
         if net_cfg_dict['is_embed_net_manual_init']:
