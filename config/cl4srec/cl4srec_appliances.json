@@ -1,7 +1,7 @@
 {
     "net": {
         "type": "CL4SRec",
-        "is_norm_fist": true,
+        "is_norm_first": true,
         "is_embed_net_manual_init": false,
         "is_cl_method": true,
         "d": 64,
