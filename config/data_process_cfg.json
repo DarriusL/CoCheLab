@@ -31,7 +31,7 @@
     },
     "dp_music":{
         "data_type":"amazon review",
-        "src":"./data/datasets/process/lite/Digital_Music_lite.data",
+        "src":"./data/datasets/meta/lite/Digital_Music_lite.json",
         "tgt":"./data/datasets/process/lite/Digital_Music_lite.data",
         "crop_or_fill": true,
         "fill_mask": 0,
