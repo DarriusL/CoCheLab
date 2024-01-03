@@ -6,7 +6,7 @@ import torch
 from lib import glb_var, util, callback
 
 logger = glb_var.get_value('logger')
-device = glb_var.get_value('device')
+
 
 def attn_pad_msk(seq, expand_len, mask_item = [0]):
     '''Return the mask for pad
@@ -46,7 +46,7 @@ def attn_pad_msk(seq, expand_len, mask_item = [0]):
             msk,
             seq.data.eq(mask_item[i]).unsqueeze(1).repeat(1, expand_len,  1)
         )
-    return msk.to(device);
+    return msk.to(glb_var.get_value('device'));
 
 def attn_subsequence_mask(seq):
     '''Retuen the mask for subsequence(upper triangular matrix)
@@ -63,7 +63,7 @@ def attn_subsequence_mask(seq):
     subsequence_mask: torch.Tensor
         (batch_size, tgt_len, seq_len)
     '''
-    return torch.triu(torch.ones((seq.shape[0], seq.shape[1], seq.shape[1])), diagonal = 1).eq(1).to(device);
+    return torch.triu(torch.ones((seq.shape[0], seq.shape[1], seq.shape[1])), diagonal = 1).eq(1).to(glb_var.get_value('device'));
 
 class PositionEncoding(torch.nn.Module):
     '''generate the positional encoding for Transformer
