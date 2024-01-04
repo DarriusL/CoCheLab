@@ -118,7 +118,7 @@ The original dataset is downloaded and saved in the path:  ./data/datasets/meta/
 
 At the same time, I also provide the google drive link to the [original data set](https://drive.google.com/drive/folders/1W8oUXWaX_rn90s0R78gLNvhQOBgIRgN9?usp=drive_link) and the [processed data set](https://drive.google.com/drive/folders/1dBZQZtmSbVeCLOlM0SimZimaBG0JFWqF?usp=drive_link).
 
-
+If you need to use the provided processed data set, download it to path : ./data/dataset/process/
 
 **Algorithms that have been implemented and algorithms that will be supported soon:**
 
