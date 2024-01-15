@@ -1,0 +1,64 @@
+{
+    "net": {
+        "type": "LRU",
+        "bs_storagy": 1000,
+        "recent_used_n":100
+    },
+    "seed": 6655,
+    "linux_fast_num_workers": 4,
+    "email_reminder": false,
+    "dataset": {
+        "type": "ml1m",
+        "path": "./data/datasets/process/complete/ml_devide_55.data",
+        "crop_or_fill": false,
+        "fill_mask": 0,
+        "limit_length": 55
+    },
+    "train": {
+        "batch_size": 256,
+        "max_epoch": 1000,
+        "valid_step": 10,
+        "stop_train_step_valid_not_improve": 50,
+        "gpu_is_available": false,
+        "use_amp": false,
+        "optimizer_type": "adam",
+        "learning_rate": 0.001,
+        "weight_decay": 1e-08,
+        "betas": [
+            0.9,
+            0.999
+        ],
+        "use_lr_schedule": false,
+        "lr_max": 1e-05,
+        "metric_less": true,
+        "save": true,
+        "model_save_path": "./data/saved/caser/ml1m/64_8/model.model",
+        "end_save": false
+    },
+    "test": {
+        "batch_size": 256,
+        "cache_satisfaction_ratio": 0.2,
+        "bs_storagy": 1000,
+        "slide_T": 3,
+        "alter_topk": 10,
+        "metrics_at_k": [
+            5,
+            10,
+            20
+        ],
+        "cache_size": [
+            0.1,
+            0.2,
+            0.3,
+            0.4,
+            0.5,
+            0.6,
+            0.7,
+            0.8,
+            0.9,
+            1.0
+        ],
+        "gpu_is_available": false,
+        "save": true
+    }
+}
