@@ -2,15 +2,14 @@
 # @Author : Darrius Lei
 # @Email  : darrius.lei@outlook.com
 
-from model.framework.fifo import FIFO
-from collections import deque, Counter
+from model.framework.lru import LRU
+from collections import deque, Counter, OrderedDict
 import numpy as np
 
-class LFU(FIFO):
+class LFU(LRU):
     '''Least Frequently Used Algorithm'''
-    def __init__(self, cache_cfg, type) -> None:
-        super().__init__(cache_cfg, type);
-        self.cache_unique = True;
+    def __init__(self, cache_cfg) -> None:
+        super().__init__(cache_cfg);
         self.recent_used = deque(maxlen = self.recent_used_n);
         self.recent_unique = False;
         self.cache_left = self.bs_storagy;
@@ -18,15 +17,19 @@ class LFU(FIFO):
     def pop_item(self, n:int) -> None:
         if n == 0:
             return;
-        c = Counter(self.recent_used);
-        sort_indx = np.argsort(list(c.values()));
+        c = OrderedDict.fromkeys(self.cache, 1);
+        c_r = Counter(self.recent_used);
+        for key in self.cache:
+            if key in c_r.keys():
+                c[key] += c_r[key];
+        #Make sure that when the frequencies are the same, the data that comes in first will pop up.
+        sort_indx = np.argsort(list(c.values()), kind = 'stable');
         for i in range(n):
             self.cache.remove(list(c.keys())[sort_indx[i]]);
             
     def update(self, seqs) -> None:
         ''''''
         seqs = seqs.tolist();
-        self.extend(self.recent_used, seqs, self.recent_unique);
         n_unique = self.check_unique(seqs);
         if self.cache_left >= n_unique:
             self.cache_left -= n_unique;
@@ -36,3 +39,4 @@ class LFU(FIFO):
             self.pop_item(n_unique - self.cache_left);
             self.cache_left = 0;
         self.extend(self.cache, seqs, self.cache_unique);
+        self.extend(self.recent_used, seqs, self.recent_unique);

@@ -2,7 +2,7 @@
     "net": {
         "type": "LFU",
         "bs_storagy": 1000,
-        "recent_used_n":100
+        "recent_used_n":1200
     },
     "seed": 6655,
     "linux_fast_num_workers": 4,
