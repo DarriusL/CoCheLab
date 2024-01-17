@@ -4,7 +4,7 @@
 
 import torch, time,os
 from lib import glb_var, json_util, util, callback
-from Room.officer import Trainer, Tester, get_save_path
+from Room.officer import Trainer, Tester, ConventionalTester, get_save_path
 from model import *
 from data import *
 
@@ -77,13 +77,23 @@ def run_work(config_path, mode = 'train'):
         config['train']['model_save_path'] = get_save_path(config);
         logger.info(f"Updata save path:[{config['train']['model_save_path']}]")
         json_util.jsonsave(config, config_path);
+    elif mode == 'test' and config['net']['type'].lower() in ['fifo', 'lru', 'lfu']:
+        config['test']['model_save_path'] = get_save_path(config);
+        logger.info(f"Updata save path:[{config['test']['model_save_path']}]")
+        json_util.jsonsave(config, config_path);
 
     report(config, lab_cfg);
     result = None;
     if mode == 'train':
+        if config['net']['type'].lower() in ['fifo', 'lru', 'lfu']:
+            logger.error(f"{config['net']['type']} is not supported using {mode} mode");
+            raise RuntimeError;
         trainer = Trainer(config, model);
         run_train(trainer, dataset);
     elif mode == 'train_and_test':
+        if config['net']['type'].lower() in ['fifo', 'lru', 'lfu']:
+            logger.error(f"{config['net']['type']} is not supported using {mode} mode");
+            raise RuntimeError;
         trainer = Trainer(config, model);
         run_train(trainer, dataset);
         if config['test']['gpu_is_available']:
@@ -97,7 +107,10 @@ def run_work(config_path, mode = 'train'):
             glb_var.set_value('device', torch.device("cuda:0" if torch.cuda.is_available() else "cpu"));
         else:
             glb_var.set_value('device', torch.device("cpu"));
-        tester = Tester(config, model);
+            if config['net']['type'].lower() in ['fifo', 'lru', 'lfu']:
+                tester = ConventionalTester(config, model);
+            else:
+                tester = Tester(config, model);
         result = run_test(tester, dataset);
     else:
         logger.error(f'Unrecognized Mode [{mode}], acceptable:(train/test/train_and_test)');
@@ -166,6 +179,12 @@ def generate_model(cfg):
         model = Caser(net_cfg_dict, cfg['train']['batch_size']);
     elif net_cfg_dict['type'].lower() == 'egpc':
         model = EGPC(net_cfg_dict);
+    elif net_cfg_dict['type'].lower() == 'fifo':
+        model = FIFO(net_cfg_dict);
+    elif net_cfg_dict['type'].lower() == 'lru':
+        model = LRU(net_cfg_dict);
+    elif net_cfg_dict['type'].lower() == 'lfu':
+        model = LFU(net_cfg_dict);
     else:
         logger.error(f'Unrecognized Mode [{net_cfg_dict["type"].lower()}]');
         raise callback.CustomException('ModelTypeError');

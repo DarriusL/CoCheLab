@@ -16,6 +16,8 @@ def get_save_path(cfg):
     '''
     if cfg['net']['type'].lower() in ['caser','psac_gen']:
         return './data/saved/' + cfg['net']['type'].lower() + '/' + cfg['dataset']['type'] + '/' + f'{cfg["net"]["d"]}_{cfg["net"]["n_kernels"]}/model.model';
+    elif cfg['net']['type'].lower() in ['fifo','lru','lfu']:
+        return './data/saved/' + cfg['net']['type'].lower() + '/' + cfg['dataset']['type'] + '/model.model';
     elif cfg['net']['is_norm_fist']:
         norm_type = 'pre';
     else:
@@ -490,7 +492,7 @@ class Tester(AbstractTester):
         TrafficLoad = {};
         for cache_size in cache_size_list:
             cache_num = int(np.round(self.bs_storagy * cache_size));
-            #cache
+            #Get the cache corresponding to cache size
             if len(alter_dict) <= cache_num:
                 cache_set = set(alter_dict.keys());
             else:
@@ -520,9 +522,6 @@ class Tester(AbstractTester):
         -----------
         dataset:dict
         Processed dataset
-        
-        dataset_raw:dict
-        original dataset
         '''
         #Adjust the number of workers of dataloader according to the system CPU and system
         if platform.system().lower() == 'linux':
@@ -576,11 +575,11 @@ class Tester(AbstractTester):
                 logger.debug(f'pre_types:{len(Counter(next_req_pre.reshape(-1).tolist()))}');
 
             #calculate hit rate and ndcg
-            hitrate, ndcg = self._cal_hitrate_and_ndcg_atk(test_data.clone(), next_req_pre.clone(), next_req.clone(), self.metrics_at_k);
+            hitrate, ndcg = self._cal_hitrate_and_ndcg_atk(test_data, next_req_pre, next_req, self.metrics_at_k);
             HitRate += hitrate;
             NDCG += ndcg;
             #calculate qoe and traffic load
-            qoe, trafficload = self._caching_and_cal_qoe_trafficload(data.clone(), self.cache_size);
+            qoe, trafficload = self._caching_and_cal_qoe_trafficload(data, self.cache_size);
             for cs in self.cache_size:
                 result['QoE'][cs] += qoe[cs];
                 qoe_batch.append(qoe[cs]);
@@ -638,6 +637,158 @@ class Tester(AbstractTester):
             f'Overall performance of the model\n'\
             f'--------------------------------------\n'\
             f'         HR              NDCG         \n' + str_show1 +\
+            f'--------------------------------------\n'\
+            f'Performance report of the model\n'\
+            f'--------------------------------------\n'\
+            f'cache_size  -  QoE -- TrafficLoad     \n' + str_show2;
+        logger.info(str);
+        return str;
+
+class ConventionalTester():
+    '''Tester for conventional algorithm: FIFO,LRU,LFU
+
+    Parameters:
+    -----------
+    
+    '''
+    def __init__(self, config, model) -> None:
+        util.set_attr(self, config['test']);
+        self.model = model;
+        self.cfg = config;
+        if self.save:
+            self.save_path, _ = os.path.split(self.model_save_path);
+        else:
+            self.save_path = './cache/unsaved_data/[' + util.get_date('_') + ']';
+        if not os.path.exists(self.save_path):
+            os.makedirs(self.save_path);
+    
+    def _caching_and_cal_qoe_trafficload(self, data, cache_size_list):
+        '''Calculate QoE and Traffice Load at cache_size
+
+        Parameters:
+        -----------
+        data:torch.Tensor
+        (batch_size, req_len)
+
+        cache_size_list:list
+
+        Returns:
+        --------
+        QoE:dict
+
+        TrafficLoad:dict
+        '''
+        batch_size, req_len = data.shape;
+        #cache the item
+        self.model.clear();
+        for batch_id in range(batch_size):
+            #su:(slide_len, T)
+            su = data[batch_id, :].unfold(-1, self.slide_T + 1, self.slide_T)[:, :self.slide_T];
+            self.model.update(su.reshape(1, -1));
+        QoE = {};
+        TrafficLoad = {};
+        for cache_size in cache_size_list:
+            cache_num = int(np.round(self.bs_storagy * cache_size));
+            #Get the cache corresponding to cache size
+            cache_set = self.model.generate_subcache(cache_num);
+            logger.debug('Tester._caching_and_cal_qoe_trafficload\n'
+                            f'cache_num: {cache_num} - len(cache_set): {len(cache_set)}')
+            #calculate qoe and trafficload
+            qoe, userload, allload = 0, 0, 0;
+            for batch_id in range(batch_size):
+                #R:real data set
+                R = set(data[batch_id, :].unfold(-1, self.slide_T + 1, self.slide_T)[:, -1].tolist());
+                if len(cache_set & R) > (req_len - data[batch_id, :].eq(0).sum().item())*self.cache_satisfaction_ratio:
+                    qoe += 1;
+                userload += len(R - cache_set);
+                allload += len(R);
+            QoE[cache_size] = qoe/batch_size;
+            TrafficLoad[cache_size] = userload/allload;
+        return QoE, TrafficLoad;
+
+
+
+    
+    def test(self, dataset):
+        '''Test the conventional model:FIFO/LRU/LFU
+
+        Notes:
+        Conventional algorithms do not have predictive capabilities, 
+        so hit rate and ndcg are no longer calculated here.
+        '''
+        #Adjust the number of workers of dataloader according to the system CPU and system
+        if platform.system().lower() == 'linux':
+            num_workers = self.cfg['linux_fast_num_workers'];
+        else:
+            num_workers = 0;
+        result = {'QoE':{}, 'TrafficLoad':{}};
+        #initial
+        for cs in self.cache_size:
+            result['QoE'][cs] = 0;
+            result['TrafficLoad'][cs] = 0;
+        test_loader = generator.get_dataloader(dataset, self.cfg['net'], num_workers, self.batch_size, shuffle = True, mode = 'test');
+        n_step = int(np.ceil(dataset['u_num']/self.batch_size)) * 2;
+        for i in range(n_step):
+            t_reason = 0;
+            t = time.time();
+            qoe_batch, tl_batch = [], [];
+            #test_data:(batch_size, seq_len)
+            #next_req:(batch_size, 1)
+            _, test_data, next_req = iter(test_loader).__next__();
+            test_data, next_req = test_data.to(self.device), next_req.to(self.device);
+            #next_req_logits:(batch_size, req_types)
+            with torch.no_grad():
+                t_r = time.time();
+                next_req_logits = self.model(test_data);
+                t_reason += (time.time() - t_r);
+            #next_req:(batch_size)
+            next_req_pre = next_req_logits.argmax(dim = -1);
+            logger.debug(f'pre_types:{len(Counter(next_req_pre.tolist()))}');
+            #new data:(batch_size, seq_len + 1)
+            data = torch.cat((test_data, next_req.unsqueeze(-1)), dim = -1);
+            #calculate qoe and traffic load
+            qoe, trafficload = self._caching_and_cal_qoe_trafficload(data, self.cache_size);
+            for cs in self.cache_size:
+                result['QoE'][cs] += qoe[cs];
+                qoe_batch.append(qoe[cs]);
+                result['TrafficLoad'][cs] += trafficload[cs];
+                tl_batch.append(trafficload[cs]);
+            self._report_batch_result(t, i, n_step, qoe_batch, tl_batch);
+        for cs in self.cache_size:
+            result['QoE'][cs] /= n_step;
+            result['TrafficLoad'][cs] /= n_step;
+            result['ReasonTime'] = t_reason/n_step;
+        json_util.jsonsave(result, self.save_path + '/test_result.json');
+        return self._report_result(result);
+
+    def _report_batch_result(self, t_start, cur_step, n_step, qoe, trafficload):
+        '''Report batch test result
+        '''    
+        
+        str_show2 = '';
+        for it in range(len(self.cache_size)):
+            str_show2 += f'  {self.cache_size[it]:.1f}   -   {qoe[it]:.6f} -- {trafficload[it]:.6f}       \n'
+        logger.info(
+            f'batch test[{cur_step+1}/{n_step}] time consuming: {util.s2hms(time.time() - t_start)}\n'
+            f'--------------------------------------\n'
+            f'[{self.model.type}]Result of batch test\n'
+            f'--------------------------------------\n'
+            f'--------------------------------------\n'
+            f'Performance report of the model\n'
+            f'--------------------------------------\n'
+            f'cache_size  -  QoE -- TrafficLoad     \n' + str_show2
+        )
+
+    def _report_result(self, result):
+        '''Report the test result
+        '''
+        
+        for it in self.cache_size:
+            str_show2 += f'  {it:.1f}   -   {result["QoE"][it]:.6f} -- {result["TrafficLoad"][it]:.6f}       \n'
+        str = f'[{self.model.type}]Result of test\n'\
+             f'--------------------------------------\n'\
+            f'Reasoning Time consuming:{result["ReasonTime"]}\n'\
+            f'--------------------------------------\n'\
             f'--------------------------------------\n'\
             f'Performance report of the model\n'\
             f'--------------------------------------\n'\

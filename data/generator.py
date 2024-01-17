@@ -181,7 +181,7 @@ class GeneralDataSet(torch.utils.data.Dataset):
         return self.data[index].squeeze(0).to(torch.int64);
 
 def get_dataloader(dataset, net_cfg, num_workers, loader_batch, shuffle = False, mode = 'train'):
-    if net_cfg['is_cl_method']:
+    if net_cfg['is_cl_method'] or net_cfg['type'].lower() in ['fifo', 'lru', 'lfu']:
         return torch.utils.data.DataLoader(NextReqDataSet(dataset, mode = mode), 
                                                    num_workers = num_workers,
                                                    pin_memory = True,

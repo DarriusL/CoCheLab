@@ -18,14 +18,14 @@ class Cache():
         util.set_attr(self, cache_cfg);
         self.cache = deque(maxlen = self.bs_storagy);
 
-    def extend(self,  cache:deque, __iterable:Iterable, is_unique:bool) -> None:
+    def _extend(self,  cache:deque, __iterable:Iterable, is_unique:bool) -> None:
         if is_unique:
             for item in __iterable:
                 if item in cache:
                     cache.remove(item);
         cache.extend(__iterable);
     
-    def check_unique(self, __iterable:Iterable) -> int:
+    def _check_unique(self, __iterable:Iterable) -> int:
         n = int(0);
         for item in __iterable:
             if item not in self.cache:
@@ -33,5 +33,13 @@ class Cache():
         return n;
     
     def update(self) -> None:
+        logger.error('Method needs to be called after being implemented');
+        raise NotImplementedError;
+
+    def clear(self) -> None:
+        logger.error('Method needs to be called after being implemented');
+        raise NotImplementedError;
+
+    def generate_subcache(self, n) -> set:
         logger.error('Method needs to be called after being implemented');
         raise NotImplementedError;

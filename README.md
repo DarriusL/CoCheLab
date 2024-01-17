@@ -124,6 +124,12 @@ If you need to use the provided processed data set, download it to path : ./data
 
 ----------------------------------------------------
 
+Coventional:
+
+- [ ] FIFO
+- [ ] LRU
+- [ ] LFU
+
 CL-based: 
 
 - [x] CL4SRec[[1]](#ref1)	
