@@ -6,7 +6,6 @@
 *.pyc
 *.log
 *.data
-*.txt
 
 #Data
 __pycache__/

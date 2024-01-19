@@ -18,7 +18,7 @@ def get_save_path(cfg):
         return './data/saved/' + cfg['net']['type'].lower() + '/' + cfg['dataset']['type'] + '/' + f'{cfg["net"]["d"]}_{cfg["net"]["n_kernels"]}/model.model';
     elif cfg['net']['type'].lower() in ['fifo','lru','lfu']:
         return './data/saved/' + cfg['net']['type'].lower() + '/' + cfg['dataset']['type'] + '/model.model';
-    elif cfg['net']['is_norm_fist']:
+    elif cfg['net']['is_norm_first']:
         norm_type = 'pre';
     else:
         norm_type = 'post';
@@ -88,7 +88,11 @@ class AbstractTester():
     def __init__(self, test_cfg_dict, model) -> None:
         util.set_attr(self, test_cfg_dict);
         self.device = glb_var.get_value('device');
-        self.model = model.to(self.device);
+        if model.type.lower() not in ['fifo', 'lru', 'lfu']:
+            self.model = model.to(self.device);
+        else:
+            self.model = model;
+        
 
     def test(self, test_data):
         logger.error('Method needs to be called after being implemented');
@@ -644,7 +648,7 @@ class Tester(AbstractTester):
         logger.info(str);
         return str;
 
-class ConventionalTester():
+class ConventionalTester(AbstractTester):
     '''Tester for conventional algorithm: FIFO,LRU,LFU
 
     Parameters:
@@ -652,8 +656,7 @@ class ConventionalTester():
     
     '''
     def __init__(self, config, model) -> None:
-        util.set_attr(self, config['test']);
-        self.model = model;
+        super().__init__(config['test'], model);
         self.cfg = config;
         if self.save:
             self.save_path, _ = os.path.split(self.model_save_path);
@@ -683,8 +686,8 @@ class ConventionalTester():
         self.model.clear();
         for batch_id in range(batch_size):
             #su:(slide_len, T)
-            su = data[batch_id, :].unfold(-1, self.slide_T + 1, self.slide_T)[:, :self.slide_T];
-            self.model.update(su.reshape(1, -1));
+            su = data[batch_id, :].unfold(-1, self.slide_T + 1, self.slide_T + 1)[:, :self.slide_T];
+            self.model.update(su.reshape(-1));
         QoE = {};
         TrafficLoad = {};
         for cache_size in cache_size_list:
@@ -697,7 +700,7 @@ class ConventionalTester():
             qoe, userload, allload = 0, 0, 0;
             for batch_id in range(batch_size):
                 #R:real data set
-                R = set(data[batch_id, :].unfold(-1, self.slide_T + 1, self.slide_T)[:, -1].tolist());
+                R = set(data[batch_id, :].unfold(-1, self.slide_T + 1, self.slide_T + 1)[:, -1].tolist());
                 if len(cache_set & R) > (req_len - data[batch_id, :].eq(0).sum().item())*self.cache_satisfaction_ratio:
                     qoe += 1;
                 userload += len(R - cache_set);
@@ -736,14 +739,6 @@ class ConventionalTester():
             #next_req:(batch_size, 1)
             _, test_data, next_req = iter(test_loader).__next__();
             test_data, next_req = test_data.to(self.device), next_req.to(self.device);
-            #next_req_logits:(batch_size, req_types)
-            with torch.no_grad():
-                t_r = time.time();
-                next_req_logits = self.model(test_data);
-                t_reason += (time.time() - t_r);
-            #next_req:(batch_size)
-            next_req_pre = next_req_logits.argmax(dim = -1);
-            logger.debug(f'pre_types:{len(Counter(next_req_pre.tolist()))}');
             #new data:(batch_size, seq_len + 1)
             data = torch.cat((test_data, next_req.unsqueeze(-1)), dim = -1);
             #calculate qoe and traffic load
@@ -782,7 +777,7 @@ class ConventionalTester():
     def _report_result(self, result):
         '''Report the test result
         '''
-        
+        str_show2 = ''
         for it in self.cache_size:
             str_show2 += f'  {it:.1f}   -   {result["QoE"][it]:.6f} -- {result["TrafficLoad"][it]:.6f}       \n'
         str = f'[{self.model.type}]Result of test\n'\

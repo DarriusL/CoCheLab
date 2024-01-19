@@ -6,32 +6,73 @@ Code for the **Co**ntent Ca**ch**ing algorithm in edge caching.
 
 ```shell
 git clone https://github.com/DarriusL/CacheLab.git
+```
+
+Create an environment using one of these methods:
+
+### conda
+
+```shell
 cd CacheLab
 conda env create -f cachelab_dev.yml
 conda activate cachelab_dev
-git update-index --assume-unchanged config/lab_cfg.json
-git update-index --assume-unchanged config/data_process_cfg.json
 ```
+
+### pip
+
+```shell
+conda create -n CacheLab python=3.11
+pip install -r requirements.txt
+```
+
+
 
 ## Framework file structure
 
 ```
-CacheLab
 ├── .gitignore
 ├── cache
-│	└── logger
-│		└── logger.log
 ├── cachelab_env.yml
 ├── config
-│	├── caser/.
+│	├── caser
+│	│	├── caser_appliances.json
+│	│	├── caser_ml1m.json
+│	│	└── caser_music.json
 │	├── CFG_README.md
-│	├── cl4srec/.
+│	├── cl4srec
+│	│	├── cl4srec_appliances.json
+│	│	├── cl4srec_ml1m.json
+│	│	└── cl4srec_music.json
 │	├── data_process_cfg.json
-│	├── duo4srec/.
-│	├── ec4srec/.
-│	├── egpc/.
+│	├── duo4srec
+│	│	├── duo4srec_appliances.json
+│	│	├── duo4srec_ml1m.json
+│	│	└── duo4srec_music.json
+│	├── ec4srec
+│	│	├── ec4srec_appliances.json
+│	│	├── ec4srec_ml1m.json
+│	│	└── ec4srec_music.json
+│	├── egpc
+│	│	├── egpc_appliances.json
+│	│	├── egpc_ml1m.json
+│	│	└── egpc_music.json
+│	├── fifo
+│	│	├── fifo_appliances.json
+│	│	├── fifo_ml1m.json
+│	│	└── fifo_music.json
 │	├── lab_cfg.json
-│	└── psac/.
+│	├── lfu
+│	│	├── lfu_appliances.json
+│	│	├── lfu_ml1m.json
+│	│	└── lfu_music.json
+│	├── lru
+│	│	├── lru_appliances.json
+│	│	├── lru_ml1m.json
+│	│	└── lru_music.json
+│	└── psac
+│		├── psac_gen_appliances.json
+│		├── psac_gen_ml1m.json
+│		└── psac_gen_music.json
 ├── data
 │	├── augmentation.py
 │	├── datasets
@@ -73,28 +114,33 @@ CacheLab
 │	│			└── music_devide_25.data
 │	├── generator.py
 │	├── processor.py
-│	├── saved/.
+│	├── saved./
 │	└── __init__.py
-|
 ├── executor.py
 ├── lib
 │	├── callback.py
 │	├── glb_var.py
-│	├── graph_util.py
 │	├── json_util.py
 │	└── util.py
-|
+├── LICENSE
 ├── model
 │	├── attnet.py
 │	├── cnnnet.py
-│	└── framework
-│		├── caser.py
-│		├── cl4srec.py
-│		├── duo4srec.py
-│		├── ec4srec.py
-│		├── egpc.py
-│		└── psac.py
+│	├── framework
+│	│	├── base.py
+│	│	├── caser.py
+│	│	├── cl4srec.py
+│	│	├── duo4srec.py
+│	│	├── ec4srec.py
+│	│	├── egpc.py
+│	│	├── fifo.py
+│	│	├── lfu.py
+│	│	├── lru.py
+│	│	└── psac.py
+│	├── loss.py
+│	└── __init__.py
 ├── README.md
+├── requirements.txt
 └── Room
 	├── officer.py
 	├── work.py
@@ -126,9 +172,9 @@ If you need to use the provided processed data set, download it to path : ./data
 
 Coventional:
 
-- [ ] FIFO
-- [ ] LRU
-- [ ] LFU
+- [x] FIFO
+- [x] LRU
+- [x] LFU
 
 CL-based: 
 
@@ -179,6 +225,30 @@ You need to configure the data processing configuration file yourself:@./config/
 
 ```
 python executor.py --data_process=True
+```
+
+FIFO
+
+```shell
+python executor.py -sc='./config/fifo/fifo_ml1m.json' --mode=test
+python executor.py -sc='./config/fifo/fifo_appliances.json' --mode=test
+python executor.py -sc='./config/fifo/fifo_music.json' --mode=test
+```
+
+LRU
+
+```shell
+python executor.py -sc='./config/lru/lru_ml1m.json' --mode=test
+python executor.py -sc='./config/lru/lru_appliances.json' --mode=test
+python executor.py -sc='./config/lru/lru_music.json' --mode=test
+```
+
+LFU
+
+```shell
+python executor.py -sc='./config/lfu/lfu_ml1m.json' --mode=test
+python executor.py -sc='./config/lfu/lfu_appliances.json' --mode=test
+python executor.py -sc='./config/lfu/lfu_music.json' --mode=test
 ```
 
 CL4SRec

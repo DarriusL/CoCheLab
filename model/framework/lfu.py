@@ -25,7 +25,7 @@ class LFU(LRU):
         else:
             #Select the n items with the highest frequency
             sort_indx, c = self._sort_by_freq();
-            return set(np.asarray(self.cache)[np.asarray(c)[sort_indx[-n:]]].tolist())
+            return set(np.asarray(c)[sort_indx[-n:]].tolist())
     
     def _sort_by_freq(self):
         '''Sort from small to large by frequence
@@ -52,7 +52,7 @@ class LFU(LRU):
         ------
         elements of seqs do not exceed the bs_storagy
         '''
-        seqs = [seqs.tolist()];
+        seqs = seqs.tolist();
         n_unique = self._check_unique(seqs);
         if self.cache_left >= n_unique:
             self.cache_left -= n_unique;

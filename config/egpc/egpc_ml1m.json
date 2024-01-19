@@ -38,7 +38,7 @@
     },
     "seed": 5566,
     "linux_fast_num_workers": 4,
-    "email_reminder": true,
+    "email_reminder": false,
     "dataset": {
         "type": "ml1m",
         "path": "./data/datasets/process/complete/ml.data",

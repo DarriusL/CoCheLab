@@ -29,7 +29,7 @@
     },
     "seed": 5566,
     "linux_fast_num_workers": 4,
-    "email_reminder": true,
+    "email_reminder": false,
     "dataset": {
         "type": "appliances",
         "path": "./data/datasets/process/complete/Appliances.data",

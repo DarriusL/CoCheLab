@@ -8,10 +8,10 @@
     "email_reminder": false,
     "dataset": {
         "type": "ml1m",
-        "path": "./data/datasets/process/complete/ml.data",
+        "path": "./data/datasets/process/complete/Appliances.data",
         "crop_or_fill": true,
         "fill_mask": 0,
-        "limit_length": 55
+        "limit_length": 25
     },
     "test": {
         "batch_size": 256,

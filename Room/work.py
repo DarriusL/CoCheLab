@@ -26,24 +26,30 @@ def run_work(config_path, mode = 'train'):
     lab_cfg = json_util.jsonload('./config/lab_cfg.json');
     if mode == 'test':
         config = json_util.jsonload(config_path);
-        _, config['train']['model_save_path'] = os.path.split(config['train']['model_save_path']);
-        cfg_root, _ = os.path.split(config_path);
-        config['train']['model_save_path'] = cfg_root + '/' + config['train']['model_save_path'];
-        logger.info(f"Updata save path:[{config['train']['model_save_path']}]");
-        json_util.jsonsave(config, config_path);
-        del cfg_root;
+        if config['net']['type'].lower() in ['fifo', 'lru', 'lfu']:
+            config['test']['model_save_path'] = get_save_path(config);
+            logger.info(f"Updata save path:[{config['test']['model_save_path']}]")
+            json_util.jsonsave(config, config_path);
+        else:
+            _, config['train']['model_save_path'] = os.path.split(config['train']['model_save_path']);
+            cfg_root, _ = os.path.split(config_path);
+            config['train']['model_save_path'] = cfg_root + '/' + config['train']['model_save_path'];
+            logger.info(f"Updata save path:[{config['train']['model_save_path']}]");
+            json_util.jsonsave(config, config_path);
+            del cfg_root;
     else:
         config = json_util.jsonload(config_path);
     #set random seed
     torch.manual_seed(config['seed']);
     #initial device 
-    if config['train']['gpu_is_available']:
+    if (mode == 'trian' and config['train']['gpu_is_available']) or (mode == 'test' and config['test']['gpu_is_available']):
         device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu");
     else:
         device = torch.device("cpu");
+    
     glb_var.set_value('device', device);
     #set training constant
-    if config['train']['use_amp']:
+    if mode == 'train' and config['train']['use_amp']:
         glb_var.set_value('mask_to_value', lab_cfg['constant']['use_amp_true']['mask_to_value']);
         glb_var.set_value('eps', lab_cfg['constant']['use_amp_true']['eps']);
     else:
@@ -67,7 +73,7 @@ def run_work(config_path, mode = 'train'):
 
     
     #get model
-    if mode in ['train', 'train_and_test']:
+    if mode in ['train', 'train_and_test'] or config['net']['type'].lower() in ['fifo', 'lru', 'lfu']:
         model = generate_model(config);
     else:
         model  = torch.load(config['train']['model_save_path']);
@@ -77,10 +83,7 @@ def run_work(config_path, mode = 'train'):
         config['train']['model_save_path'] = get_save_path(config);
         logger.info(f"Updata save path:[{config['train']['model_save_path']}]")
         json_util.jsonsave(config, config_path);
-    elif mode == 'test' and config['net']['type'].lower() in ['fifo', 'lru', 'lfu']:
-        config['test']['model_save_path'] = get_save_path(config);
-        logger.info(f"Updata save path:[{config['test']['model_save_path']}]")
-        json_util.jsonsave(config, config_path);
+    
 
     report(config, lab_cfg);
     result = None;
@@ -103,14 +106,10 @@ def run_work(config_path, mode = 'train'):
         tester = Tester(config, torch.load(config['train']['model_save_path']));
         result = run_test(tester, dataset);
     elif mode == 'test':
-        if config['test']['gpu_is_available']:
-            glb_var.set_value('device', torch.device("cuda:0" if torch.cuda.is_available() else "cpu"));
+        if config['net']['type'].lower() in ['fifo', 'lru', 'lfu']:
+            tester = ConventionalTester(config, model);
         else:
-            glb_var.set_value('device', torch.device("cpu"));
-            if config['net']['type'].lower() in ['fifo', 'lru', 'lfu']:
-                tester = ConventionalTester(config, model);
-            else:
-                tester = Tester(config, model);
+            tester = Tester(config, model);
         result = run_test(tester, dataset);
     else:
         logger.error(f'Unrecognized Mode [{mode}], acceptable:(train/test/train_and_test)');
@@ -194,7 +193,7 @@ def report(config, lab_cfg):
     '''print the info and check config
     '''
     #check config
-    keys = ['net', 'dataset', 'linux_fast_num_workers', 'email_reminder', 'seed', 'train', 'test'];
+    keys = ['net', 'dataset', 'linux_fast_num_workers', 'email_reminder', 'seed', 'test'];
     train_keys = ['batch_size', 'max_epoch', 'valid_step', 'stop_train_step_valid_not_improve', 'gpu_is_available', 'use_amp', 
                   'optimizer_type', 'learning_rate', 'weight_decay', 'betas', 'use_lr_schedule', 'lr_max', 'metric_less',
                   'save', 'model_save_path', 'end_save'];
@@ -228,6 +227,7 @@ def report(config, lab_cfg):
         except:
             logger.error('Please enter the config directory to configure the lab_cfg.json file');
             raise callback.CustomException('ConfigError');
+
     logger.info(
     f'CacheLab Configuration report:\n'
     '------------------------------------\n'

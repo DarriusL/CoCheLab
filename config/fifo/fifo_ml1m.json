@@ -9,13 +9,13 @@
     "dataset": {
         "type": "ml1m",
         "path": "./data/datasets/process/complete/ml.data",
-        "crop_or_fill": false,
+        "crop_or_fill": true,
         "fill_mask": 0,
         "limit_length": 55
     },
     "test": {
         "batch_size": 256,
-        "cache_satisfaction_ratio": 0.2,
+        "cache_satisfaction_ratio": 0.3,
         "bs_storagy": 1000,
         "slide_T": 3,
         "cache_size": [
@@ -31,7 +31,7 @@
             1.0
         ],
         "gpu_is_available": false,
-        "save": true,
-        "model_save_path":"./"
+        "save": false,
+        "model_save_path": "./data/saved/fifo/ml1m/model.model"
     }
 }
