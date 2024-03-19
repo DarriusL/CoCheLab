@@ -162,9 +162,11 @@ pip install -r requirements.txt
 
 The original dataset is downloaded and saved in the path:  ./data/datasets/meta/
 
-At the same time, I also provide the google drive link to the [original data set](https://drive.google.com/drive/folders/1W8oUXWaX_rn90s0R78gLNvhQOBgIRgN9?usp=drive_link) and the [processed data set](https://drive.google.com/drive/folders/1dBZQZtmSbVeCLOlM0SimZimaBG0JFWqF?usp=drive_link).
+**At the same time, I also provide the google drive link to the [original data set](https://drive.google.com/drive/folders/1W8oUXWaX_rn90s0R78gLNvhQOBgIRgN9?usp=drive_link) and the [processed data set](https://drive.google.com/drive/folders/1dBZQZtmSbVeCLOlM0SimZimaBG0JFWqF?usp=drive_link).**
 
 If you need to use the provided processed data set, download it to path : ./data/dataset/process/
+
+
 
 **Algorithms that have been implemented and algorithms that will be supported soon:**
 
@@ -219,15 +221,17 @@ For configuration files, see:./config/CFG_README.md
 
 ### quick start
 
-process dataset
+**process dataset**
 
 You need to configure the data processing configuration file yourself:@./config/data_process_cfg.json
+
+If you use original data, please use the command for data processing. Or you can download the processed data, then just skip it.
 
 ```
 python executor.py --data_process=True
 ```
 
-FIFO
+**FIFO**
 
 ```shell
 python executor.py -sc='./config/fifo/fifo_ml1m.json' --mode=test
@@ -235,7 +239,7 @@ python executor.py -sc='./config/fifo/fifo_appliances.json' --mode=test
 python executor.py -sc='./config/fifo/fifo_music.json' --mode=test
 ```
 
-LRU
+**LRU**
 
 ```shell
 python executor.py -sc='./config/lru/lru_ml1m.json' --mode=test
@@ -243,7 +247,7 @@ python executor.py -sc='./config/lru/lru_appliances.json' --mode=test
 python executor.py -sc='./config/lru/lru_music.json' --mode=test
 ```
 
-LFU
+**LFU**
 
 ```shell
 python executor.py -sc='./config/lfu/lfu_ml1m.json' --mode=test
@@ -251,7 +255,7 @@ python executor.py -sc='./config/lfu/lfu_appliances.json' --mode=test
 python executor.py -sc='./config/lfu/lfu_music.json' --mode=test
 ```
 
-CL4SRec
+**CL4SRec**
 
 ```shell
 python executor.py -cfg='./config/cl4srec/cl4srec_ml1m.json' --mode=train
@@ -267,7 +271,7 @@ python executor.py -cfg='./config/cl4srec/cl4srec_music.json' --mode=train_and_t
 python executor.py -sc='./data/saved/cl4srec/music/pre_64_2048_2_2/config.json' --mode=test
 ```
 
-Duo4SRec
+**Duo4SRec**
 
 ```shell
 python executor.py -cfg='./config/duo4srec/duo4srec_ml1m.json' --mode=train
@@ -283,7 +287,7 @@ python executor.py -cfg='./config/duo4srec/duo4srec_music.json' --mode=train_and
 python executor.py -sc='./data/saved/duo4srec/music/pre_64_2048_2_2/config.json' --mode=test
 ```
 
-EC4SRec
+**EC4SRec**
 
 ```shell
 python executor.py -cfg='./config/ec4srec/ec4srec_ml1m.json' --mode=train
@@ -299,7 +303,7 @@ python executor.py -cfg='./config/ec4srec/ec4srec_music.json' --mode=train_and_t
 python executor.py -sc='./data/saved/ec4srec/music/pre_64_2048_2_2/config.json' --mode=test
 ```
 
-EGPC
+**EGPC**
 
 ```shell
 python executor.py -cfg='./config/egpc/egpc_ml1m.json' --mode=train
@@ -315,7 +319,7 @@ python executor.py -cfg='./config/egpc/egpc_music.json' --mode=train_and_test
 python executor.py -sc='./data/saved/egpc/music/pre_64_2048_2_2/config.json' --mode=test
 ```
 
-Caser
+**Caser**
 
 ```shell
 python executor.py -cfg='./config/caser/caser_ml1m.json' --mode=train
@@ -331,7 +335,7 @@ python executor.py -cfg='./config/caser/caser_music.json' --mode=train_and_test
 python executor.py -sc='./data/saved/caser/music/64_8/config.json' --mode=test
 ```
 
-PSAC
+**PSAC**
 
 ```shell
 python executor.py -cfg='./config/psac/psac_gen_ml1m.json' --mode=train
