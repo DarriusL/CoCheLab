@@ -111,7 +111,7 @@ class LearnablePositionEncoding(torch.nn.Module):
         self.register_buffer('Pos_idx', torch.arange(max_len));
 
     def forward(self, x):
-        return self.Embed(self.Pos_idx[x.shape[1] - 1].unsqueeze(0).repeat(x.shape[0], 1));
+        return self.Embed(self.Pos_idx[:x.shape[1]].unsqueeze(0).repeat(x.shape[0], 1));
 
 class PositionwiseFeedForwardNet(torch.nn.Module):
     '''Position-wise Feed-Forward Network for Transformer
